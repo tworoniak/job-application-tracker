@@ -34,7 +34,7 @@ const pillActive: React.CSSProperties = {
 
 export const ApplicationsPage = () => {
   const navigate = useNavigate()
-  const searchRef = useRef<ReturnType<typeof setTimeout>>()
+  const searchRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   const [filters, setFilters] = useState<ApplicationFilters>({})
   const [sort, setSort] = useState<ApplicationSort>({ field: 'DATE_APPLIED', direction: 'DESC' })
