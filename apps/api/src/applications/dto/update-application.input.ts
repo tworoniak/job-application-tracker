@@ -1,6 +1,14 @@
-import { Field, InputType, Int } from '@nestjs/graphql'
-import { IsDateString, IsEnum, IsInt, IsOptional, IsPositive, IsString, MinLength } from 'class-validator'
-import { LocationType, Outcome, RoleType } from '../enums'
+import { Field, InputType, Int } from '@nestjs/graphql';
+import {
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsOptional,
+  IsPositive,
+  IsString,
+  MinLength,
+} from 'class-validator';
+import { LocationType, Outcome, RoleType } from '../enums';
 
 @InputType()
 export class UpdateApplicationInput {
@@ -8,62 +16,63 @@ export class UpdateApplicationInput {
   @IsOptional()
   @IsString()
   @MinLength(1)
-  companyName?: string
+  companyName?: string;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
   @MinLength(1)
-  positionTitle?: string
+  positionTitle?: string;
 
   @Field(() => RoleType, { nullable: true })
   @IsOptional()
   @IsEnum(RoleType)
-  roleType?: RoleType
+  roleType?: RoleType;
 
   @Field(() => LocationType, { nullable: true })
   @IsOptional()
   @IsEnum(LocationType)
-  locationType?: LocationType
+  locationType?: LocationType;
 
   @Field(() => Outcome, { nullable: true })
   @IsOptional()
   @IsEnum(Outcome)
-  outcome?: Outcome
+  outcome?: Outcome;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsDateString()
-  dateApplied?: string
+  dateApplied?: string;
 
-  @Field({ nullable: true })
+  @Field(() => String, { nullable: true })
   @IsOptional()
-  interviewDate?: string | null
-
-  @Field(() => Int, { nullable: true })
-  @IsOptional()
-  @IsInt()
-  @IsPositive()
-  salaryMin?: number
+  @IsDateString()
+  interviewDate?: string;
 
   @Field(() => Int, { nullable: true })
   @IsOptional()
   @IsInt()
   @IsPositive()
-  salaryMax?: number
+  salaryMin?: number;
+
+  @Field(() => Int, { nullable: true })
+  @IsOptional()
+  @IsInt()
+  @IsPositive()
+  salaryMax?: number;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  contactName?: string
+  contactName?: string;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  contactInfo?: string
+  contactInfo?: string;
 
   @Field({ nullable: true })
   @IsOptional()
   @IsString()
-  notes?: string
+  notes?: string;
 }

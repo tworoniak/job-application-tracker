@@ -1,50 +1,50 @@
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql'
-import { LocationType, Outcome, RoleType } from '../enums'
+import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
+import { LocationType, Outcome, RoleType } from '../enums';
 
 @ObjectType()
 export class JobApplication {
   @Field(() => ID)
-  id: string
+  id: string;
 
   @Field()
-  companyName: string
+  companyName: string;
 
   @Field()
-  positionTitle: string
+  positionTitle: string;
 
   @Field(() => RoleType)
-  roleType: RoleType
+  roleType: RoleType;
 
   @Field(() => LocationType)
-  locationType: LocationType
+  locationType: LocationType;
 
   @Field(() => Outcome)
-  outcome: Outcome
+  outcome: Outcome;
 
   @Field()
-  dateApplied: Date
+  dateApplied: Date;
 
-  @Field({ nullable: true })
-  interviewDate: Date | null
+  @Field(() => String, { nullable: true })
+  interviewDate?: string;
 
   @Field(() => Int, { nullable: true })
-  salaryMin: number | null
+  salaryMin: number | null;
 
   @Field(() => Int, { nullable: true })
-  salaryMax: number | null
+  salaryMax: number | null;
 
-  @Field({ nullable: true })
-  contactName: string | null
+  @Field(() => String, { nullable: true })
+  contactName: string | null;
 
-  @Field({ nullable: true })
-  contactInfo: string | null
+  @Field(() => String, { nullable: true })
+  contactInfo: string | null;
 
-  @Field({ nullable: true })
-  notes: string | null
-
-  @Field()
-  createdAt: Date
+  @Field(() => String, { nullable: true })
+  notes: string | null;
 
   @Field()
-  updatedAt: Date
+  createdAt: Date;
+
+  @Field()
+  updatedAt: Date;
 }
