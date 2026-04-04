@@ -1,18 +1,18 @@
-import { Link, Outlet, useLocation } from 'react-router-dom'
+import { Link, Outlet, useLocation } from 'react-router-dom';
 
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/applications', label: 'Applications' },
-]
+];
 
 export const AppLayout = () => {
-  const { pathname } = useLocation()
+  const { pathname } = useLocation();
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className='min-h-screen flex flex-col'>
       {/* Apple-style translucent dark glass nav */}
       <nav
-        className="sticky top-0 z-40 h-12 flex items-center px-6 shrink-0"
+        className='sticky top-0 z-40 h-12 flex items-center px-6 shrink-0'
         style={{
           background: 'rgba(0, 0, 0, 0.8)',
           backdropFilter: 'saturate(180%) blur(20px)',
@@ -20,21 +20,25 @@ export const AppLayout = () => {
         }}
       >
         <span
-          className="text-white text-sm font-semibold tracking-tight shrink-0"
+          className='text-white text-sm font-semibold tracking-tight shrink-0'
           style={{ letterSpacing: '-0.374px' }}
         >
-          Job Tracker
+          JobTrack
         </span>
 
-        <div className="flex items-center gap-1 mx-auto">
+        <div className='flex items-center gap-1 mx-auto'>
           {navLinks.map(({ to, label }) => (
             <Link
               key={to}
               to={to}
-              className="text-xs px-3 py-1 rounded-full transition-colors"
+              className='text-xs px-3 py-1 rounded-full transition-colors'
               style={{
-                color: pathname.startsWith(to) ? '#ffffff' : 'rgba(255,255,255,0.72)',
-                background: pathname.startsWith(to) ? 'rgba(255,255,255,0.12)' : 'transparent',
+                color: pathname.startsWith(to)
+                  ? '#ffffff'
+                  : 'rgba(255,255,255,0.72)',
+                background: pathname.startsWith(to)
+                  ? 'rgba(255,255,255,0.12)'
+                  : 'transparent',
                 letterSpacing: '-0.12px',
               }}
             >
@@ -44,8 +48,8 @@ export const AppLayout = () => {
         </div>
 
         <Link
-          to="/applications/new"
-          className="shrink-0 text-white text-sm px-4 rounded-lg transition-opacity hover:opacity-80"
+          to='/applications/new'
+          className='shrink-0 text-white text-sm px-4 rounded-lg transition-opacity hover:opacity-80'
           style={{
             background: '#0071e3',
             padding: '6px 14px',
@@ -59,9 +63,9 @@ export const AppLayout = () => {
         </Link>
       </nav>
 
-      <main className="flex-1 px-6 py-8 max-w-[980px] mx-auto w-full">
+      <main className='flex-1 px-6 py-8 max-w-245 mx-auto w-full'>
         <Outlet />
       </main>
     </div>
-  )
-}
+  );
+};
