@@ -1,0 +1,16 @@
+node_modules
+dist
+.env
+.env.local
+pnpm-debug.log*
+
+# Generated
+apps/api/src/schema.gql
+apps/web/src/lib/graphql/__generated__
+
+# OS
+.DS_Store
+
+# CLAUDE
+CLAUDE.md
+.claude/*

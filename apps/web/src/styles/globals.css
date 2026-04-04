@@ -1,0 +1,47 @@
+@import "tailwindcss";
+
+@theme {
+  /* Font stacks — SF Pro Display for 20px+, SF Pro Text below */
+  --font-sans: 'SF Pro Text', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  --font-display: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  /* Apple color palette */
+  --color-apple-blue: #0071e3;
+  --color-apple-blue-link: #0066cc;
+  --color-apple-blue-dark: #2997ff;
+  --color-apple-gray: #f5f5f7;
+  --color-apple-text: #1d1d1f;
+  --color-apple-text-secondary: rgba(0, 0, 0, 0.8);
+  --color-apple-text-tertiary: rgba(0, 0, 0, 0.48);
+  --color-apple-surface: #ffffff;
+  --color-apple-dark-surface: #272729;
+  --color-apple-input-bg: #fafafc;
+  --color-apple-input-border: rgba(0, 0, 0, 0.08);
+
+  /* Shadows */
+  --shadow-apple-card: rgba(0, 0, 0, 0.22) 3px 5px 30px 0px;
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #f5f5f7;
+    color: #1d1d1f;
+    font-family: var(--font-sans);
+    letter-spacing: -0.374px;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Apple-style focus rings — only for keyboard navigation */
+  :focus-visible {
+    outline: 2px solid #0071e3;
+    outline-offset: 2px;
+  }
+}

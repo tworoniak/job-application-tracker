@@ -1,0 +1,17 @@
+{
+  "name": "job-application-tracker",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm --parallel --filter=!root run dev",
+    "dev:api": "pnpm --filter api run dev",
+    "dev:web": "pnpm --filter web run dev",
+    "build": "pnpm -r run build",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r run test",
+    "codegen": "pnpm --filter web run codegen"
+  },
+  "engines": {
+    "node": ">=20",
+    "pnpm": ">=9"
+  }
+}
