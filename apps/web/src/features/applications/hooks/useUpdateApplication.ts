@@ -12,6 +12,7 @@ const UPDATE_APPLICATION = gql`
       outcome
       dateApplied
       interviewDate
+      salaryType
       salaryMin
       salaryMax
       contactName
@@ -35,6 +36,7 @@ export const useUpdateApplication = () => {
         id,
         input: {
           ...values,
+          salaryType: values.salaryType ?? undefined,
           salaryMin: values.salaryMin ?? undefined,
           salaryMax: values.salaryMax ?? undefined,
           interviewDate: values.interviewDate || undefined,

@@ -1,3 +1,4 @@
+export type SalaryType = 'ANNUAL' | 'HOURLY'
 export type RoleType = 'FULL_TIME' | 'PART_TIME' | 'CONTRACT' | 'FREELANCE' | 'INTERNSHIP'
 export type LocationType = 'ON_SITE' | 'HYBRID' | 'REMOTE'
 export type Outcome =
@@ -30,6 +31,7 @@ export interface JobApplication {
   outcome: Outcome
   dateApplied: string
   interviewDate: string | null
+  salaryType: SalaryType | null
   salaryMin: number | null
   salaryMax: number | null
   contactName: string | null

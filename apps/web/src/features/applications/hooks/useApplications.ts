@@ -20,6 +20,7 @@ const LIST_APPLICATIONS = gql`
           outcome
           dateApplied
           interviewDate
+          salaryType
           salaryMin
           salaryMax
           createdAt

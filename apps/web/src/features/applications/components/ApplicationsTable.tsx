@@ -16,8 +16,13 @@ interface Props {
 const formatDate = (iso: string) =>
   new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
 
-const formatSalary = (min: number | null, max: number | null) => {
+const formatSalary = (min: number | null, max: number | null, type: JobApplication['salaryType']) => {
   if (!min && !max) return '—'
+  if (type === 'HOURLY') {
+    const fmt = (n: number) => `$${n % 1 === 0 ? n : n.toFixed(2)}/hr`
+    if (min && max) return `${fmt(min)}–${fmt(max)}`
+    return min ? `${fmt(min)}+` : `up to ${fmt(max!)}`
+  }
   const fmt = (n: number) => `$${(n / 1000).toFixed(0)}k`
   if (min && max) return `${fmt(min)}–${fmt(max)}`
   return min ? `${fmt(min)}+` : `up to ${fmt(max!)}`
@@ -117,7 +122,7 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
       ),
       cell: ({ row }) => (
         <span style={{ fontSize: '14px', color: 'rgba(0,0,0,0.72)', letterSpacing: '-0.224px' }}>
-          {formatSalary(row.original.salaryMin, row.original.salaryMax)}
+          {formatSalary(row.original.salaryMin, row.original.salaryMax, row.original.salaryType)}
         </span>
       ),
     },

@@ -1,6 +1,6 @@
-import { Field, InputType, Int } from '@nestjs/graphql'
-import { IsDateString, IsEnum, IsInt, IsOptional, IsPositive, IsString, MinLength } from 'class-validator'
-import { LocationType, Outcome, RoleType } from '../enums'
+import { Field, Float, InputType } from '@nestjs/graphql'
+import { IsDateString, IsEnum, IsNumber, IsOptional, IsString, MinLength } from 'class-validator'
+import { LocationType, Outcome, RoleType, SalaryType } from '../enums'
 
 @InputType()
 export class CreateApplicationInput {
@@ -35,16 +35,19 @@ export class CreateApplicationInput {
   @IsDateString()
   interviewDate?: string
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => SalaryType, { nullable: true })
   @IsOptional()
-  @IsInt()
-  @IsPositive()
+  @IsEnum(SalaryType)
+  salaryType?: SalaryType
+
+  @Field(() => Float, { nullable: true })
+  @IsOptional()
+  @IsNumber()
   salaryMin?: number
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Float, { nullable: true })
   @IsOptional()
-  @IsInt()
-  @IsPositive()
+  @IsNumber()
   salaryMax?: number
 
   @Field({ nullable: true })

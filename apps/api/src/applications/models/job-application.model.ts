@@ -1,5 +1,5 @@
-import { Field, ID, Int, ObjectType } from '@nestjs/graphql';
-import { LocationType, Outcome, RoleType } from '../enums';
+import { Field, Float, ID, ObjectType } from '@nestjs/graphql';
+import { LocationType, Outcome, RoleType, SalaryType } from '../enums';
 
 @ObjectType()
 export class JobApplication {
@@ -27,10 +27,13 @@ export class JobApplication {
   @Field(() => String, { nullable: true })
   interviewDate?: string;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => SalaryType, { nullable: true })
+  salaryType: SalaryType | null;
+
+  @Field(() => Float, { nullable: true })
   salaryMin: number | null;
 
-  @Field(() => Int, { nullable: true })
+  @Field(() => Float, { nullable: true })
   salaryMax: number | null;
 
   @Field(() => String, { nullable: true })

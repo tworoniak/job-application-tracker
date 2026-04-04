@@ -12,6 +12,7 @@ const CREATE_APPLICATION = gql`
       outcome
       dateApplied
       interviewDate
+      salaryType
       salaryMin
       salaryMax
       contactName
@@ -33,6 +34,7 @@ export const useCreateApplication = () => {
       variables: {
         input: {
           ...values,
+          salaryType: values.salaryType ?? undefined,
           salaryMin: values.salaryMin ?? undefined,
           salaryMax: values.salaryMax ?? undefined,
           interviewDate: values.interviewDate || undefined,

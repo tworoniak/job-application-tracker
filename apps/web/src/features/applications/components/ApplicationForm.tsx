@@ -1,4 +1,4 @@
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { applicationSchema, type ApplicationFormValues } from '../schemas/application.schema'
 import type { JobApplication } from '../types'
@@ -69,6 +69,7 @@ export const mapApplicationToFormValues = (app: JobApplication): ApplicationForm
   outcome: app.outcome,
   dateApplied: app.dateApplied.slice(0, 10),
   interviewDate: app.interviewDate ? app.interviewDate.slice(0, 10) : undefined,
+  salaryType: app.salaryType ?? undefined,
   salaryMin: app.salaryMin ?? undefined,
   salaryMax: app.salaryMax ?? undefined,
   contactName: app.contactName ?? undefined,
@@ -80,6 +81,7 @@ export const ApplicationForm = ({ defaultValues, onSubmit, loading, submitLabel 
   const {
     register,
     handleSubmit,
+    control,
     formState: { errors },
   } = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
@@ -91,6 +93,10 @@ export const ApplicationForm = ({ defaultValues, onSubmit, loading, submitLabel 
       ...defaultValues,
     },
   })
+
+  const salaryType = useWatch({ control, name: 'salaryType' })
+  const salaryPlaceholderMin = salaryType === 'HOURLY' ? '45' : '80000'
+  const salaryPlaceholderMax = salaryType === 'HOURLY' ? '75' : '120000'
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -145,12 +151,19 @@ export const ApplicationForm = ({ defaultValues, onSubmit, loading, submitLabel 
         </Field>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+        <Field label="Salary Type" error={errors.salaryType?.message}>
+          <select {...register('salaryType')} style={inputStyle}>
+            <option value="">Not specified</option>
+            <option value="ANNUAL">Annual</option>
+            <option value="HOURLY">Hourly</option>
+          </select>
+        </Field>
         <Field label="Salary Min" error={errors.salaryMin?.message}>
-          <input {...register('salaryMin')} type="number" style={inputStyle} placeholder="80000" />
+          <input {...register('salaryMin')} type="number" step="0.01" style={inputStyle} placeholder={salaryPlaceholderMin} />
         </Field>
         <Field label="Salary Max" error={errors.salaryMax?.message}>
-          <input {...register('salaryMax')} type="number" style={inputStyle} placeholder="120000" />
+          <input {...register('salaryMax')} type="number" step="0.01" style={inputStyle} placeholder={salaryPlaceholderMax} />
         </Field>
       </div>
 

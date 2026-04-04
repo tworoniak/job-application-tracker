@@ -16,8 +16,9 @@ model JobApplication {
   outcome       Outcome      @default(APPLIED)
   dateApplied   DateTime
   interviewDate DateTime?
-  salaryMin     Int?
-  salaryMax     Int?
+  salaryMin     Float?
+  salaryMax     Float?
+  salaryType    SalaryType?
   contactName   String?
   contactInfo   String?
   notes         String?
@@ -39,6 +40,11 @@ enum LocationType {
   ON_SITE
   HYBRID
   REMOTE
+}
+
+enum SalaryType {
+  ANNUAL
+  HOURLY
 }
 
 enum Outcome {

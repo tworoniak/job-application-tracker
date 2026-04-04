@@ -1,9 +1,10 @@
 import { registerEnumType } from '@nestjs/graphql'
-import { LocationType, Outcome, RoleType } from '@prisma/client'
+import { LocationType, Outcome, RoleType, SalaryType } from '@prisma/client'
 
 registerEnumType(RoleType, { name: 'RoleType', description: 'Employment role type' })
 registerEnumType(LocationType, { name: 'LocationType', description: 'Work location arrangement' })
 registerEnumType(Outcome, { name: 'Outcome', description: 'Current application status' })
+registerEnumType(SalaryType, { name: 'SalaryType', description: 'Salary rate type' })
 
 export enum SortField {
   DATE_APPLIED = 'dateApplied',
@@ -21,4 +22,4 @@ export enum SortDirection {
 registerEnumType(SortField, { name: 'SortField' })
 registerEnumType(SortDirection, { name: 'SortDirection' })
 
-export { RoleType, LocationType, Outcome }
+export { RoleType, LocationType, Outcome, SalaryType }
