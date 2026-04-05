@@ -17,7 +17,7 @@ export const ApplicationFormPage = () => {
 
   const handleSubmit = async (values: ApplicationFormValues) => {
     if (isEdit && id) {
-      await updateApplication(id, values)
+      await updateApplication(id, values, application ?? undefined)
     } else {
       await createApplication(values)
     }
@@ -58,6 +58,7 @@ export const ApplicationFormPage = () => {
           onSubmit={handleSubmit}
           loading={createLoading || updateLoading}
           submitLabel={isEdit ? 'Save Changes' : 'Add Application'}
+          draftKey={isEdit ? undefined : 'application-draft'}
         />
       </div>
     </div>

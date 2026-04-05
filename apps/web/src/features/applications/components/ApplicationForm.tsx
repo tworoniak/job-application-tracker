@@ -1,3 +1,4 @@
+import { useEffect } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { applicationSchema, type ApplicationFormValues } from '../schemas/application.schema'
@@ -8,6 +9,7 @@ interface Props {
   onSubmit: (values: ApplicationFormValues) => Promise<void>
   loading: boolean
   submitLabel: string
+  draftKey?: string
 }
 
 const labelStyle: React.CSSProperties = {
@@ -77,11 +79,16 @@ export const mapApplicationToFormValues = (app: JobApplication): ApplicationForm
   notes: app.notes ?? undefined,
 })
 
-export const ApplicationForm = ({ defaultValues, onSubmit, loading, submitLabel }: Props) => {
+export const ApplicationForm = ({ defaultValues, onSubmit, loading, submitLabel, draftKey }: Props) => {
+  const savedDraft = draftKey ? (() => {
+    try { return JSON.parse(localStorage.getItem(draftKey) ?? 'null') } catch { return null }
+  })() : null
+
   const {
     register,
     handleSubmit,
     control,
+    watch,
     formState: { errors },
   } = useForm<ApplicationFormValues>({
     resolver: zodResolver(applicationSchema),
@@ -90,6 +97,7 @@ export const ApplicationForm = ({ defaultValues, onSubmit, loading, submitLabel 
       roleType: 'FULL_TIME',
       locationType: 'REMOTE',
       dateApplied: new Date().toISOString().slice(0, 10),
+      ...savedDraft,
       ...defaultValues,
     },
   })
@@ -98,8 +106,21 @@ export const ApplicationForm = ({ defaultValues, onSubmit, loading, submitLabel 
   const salaryPlaceholderMin = salaryType === 'HOURLY' ? '45' : '80000'
   const salaryPlaceholderMax = salaryType === 'HOURLY' ? '75' : '120000'
 
+  useEffect(() => {
+    if (!draftKey) return
+    const subscription = watch((values) => {
+      localStorage.setItem(draftKey, JSON.stringify(values))
+    })
+    return () => subscription.unsubscribe()
+  }, [draftKey, watch])
+
+  const handleFormSubmit = async (values: ApplicationFormValues) => {
+    await onSubmit(values)
+    if (draftKey) localStorage.removeItem(draftKey)
+  }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+    <form onSubmit={handleSubmit(handleFormSubmit)} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <Field label="Company Name" required error={errors.companyName?.message}>
           <input {...register('companyName')} style={inputStyle} placeholder="Acme Corp" />

@@ -69,6 +69,7 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
   const navigate = useNavigate()
   const { deleteApplication, loading: deleteLoading } = useDeleteApplication()
   const [deleteTarget, setDeleteTarget] = useState<JobApplication | null>(null)
+  const [focusedId, setFocusedId] = useState<string | null>(null)
 
   const columns: ColumnDef<JobApplication>[] = [
     {
@@ -197,11 +198,21 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
             {table.getRowModel().rows.map((row, i) => (
               <tr
                 key={row.id}
+                tabIndex={0}
                 onClick={() => navigate(`/applications/${row.original.id}`)}
+                onFocus={() => setFocusedId(row.original.id)}
+                onBlur={() => setFocusedId(null)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') navigate(`/applications/${row.original.id}`)
+                  if (e.key === 'e' || e.key === 'E') navigate(`/applications/${row.original.id}/edit`)
+                  if (e.key === 'Delete' || e.key === 'Backspace') setDeleteTarget(row.original)
+                }}
                 style={{
                   borderBottom: i < table.getRowModel().rows.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none',
                   cursor: 'pointer',
                   transition: 'background 0.1s',
+                  outline: focusedId === row.original.id ? '2px solid #0071e3' : 'none',
+                  outlineOffset: '-2px',
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.background = '#f5f5f7')}
                 onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
