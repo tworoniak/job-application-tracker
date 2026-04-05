@@ -24,8 +24,8 @@ export class JobApplication {
   @Field()
   dateApplied: Date;
 
-  @Field(() => String, { nullable: true })
-  interviewDate?: string;
+  @Field(() => Date, { nullable: true })
+  interviewDate?: Date | null;
 
   @Field(() => SalaryType, { nullable: true })
   salaryType: SalaryType | null;

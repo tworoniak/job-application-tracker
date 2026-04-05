@@ -36,13 +36,27 @@ const pillActive: React.CSSProperties = {
 export const ApplicationsPage = () => {
   const navigate = useNavigate()
   const searchRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
+  const sentinelRef = useRef<HTMLDivElement>(null)
 
   const [filters, setFilters] = useState<ApplicationFilters>({})
   const [sort, setSort] = useState<ApplicationSort>({ field: 'DATE_APPLIED', direction: 'DESC' })
   const [searchInput, setSearchInput] = useState('')
+  const [dateFrom, setDateFrom] = useState('')
+  const [dateTo, setDateTo] = useState('')
 
   const { applications, totalCount, hasNextPage, loading, loadMore } = useApplications(filters, sort)
   const { exportCsv, loading: exporting } = useExportCsv()
+
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) loadMore() },
+      { rootMargin: '200px' },
+    )
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [loadMore])
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -79,10 +93,26 @@ export const ApplicationsPage = () => {
     })
   }
 
-  const clearFilters = () => { setFilters({}); setSearchInput('') }
+  const handleDateFrom = (value: string) => {
+    setDateFrom(value)
+    setFilters((f) => ({ ...f, dateAppliedFrom: value || undefined }))
+  }
+
+  const handleDateTo = (value: string) => {
+    setDateTo(value)
+    setFilters((f) => ({ ...f, dateAppliedTo: value || undefined }))
+  }
+
+  const clearFilters = () => {
+    setFilters({})
+    setSearchInput('')
+    setDateFrom('')
+    setDateTo('')
+  }
 
   const hasActiveFilters =
-    !!filters.search || !!filters.outcomes?.length || !!filters.roleTypes?.length || !!filters.locationTypes?.length
+    !!filters.search || !!filters.outcomes?.length || !!filters.roleTypes?.length ||
+    !!filters.locationTypes?.length || !!filters.dateAppliedFrom || !!filters.dateAppliedTo
 
   return (
     <div>
@@ -158,6 +188,31 @@ export const ApplicationsPage = () => {
           ))}
         </div>
 
+        <div style={{ marginTop: '16px', display: 'flex', flexWrap: 'wrap', gap: '12px', alignItems: 'flex-end' }}>
+          <div>
+            <p style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+              Applied From
+            </p>
+            <input
+              type="date"
+              value={dateFrom}
+              onChange={(e) => handleDateFrom(e.target.value)}
+              style={{ background: '#fafafc', border: '3px solid rgba(0,0,0,0.04)', borderRadius: '8px', padding: '4px 10px', fontSize: '13px', color: '#1d1d1f', letterSpacing: '-0.12px', outline: 'none' }}
+            />
+          </div>
+          <div>
+            <p style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+              Applied To
+            </p>
+            <input
+              type="date"
+              value={dateTo}
+              onChange={(e) => handleDateTo(e.target.value)}
+              style={{ background: '#fafafc', border: '3px solid rgba(0,0,0,0.04)', borderRadius: '8px', padding: '4px 10px', fontSize: '13px', color: '#1d1d1f', letterSpacing: '-0.12px', outline: 'none' }}
+            />
+          </div>
+        </div>
+
         {hasActiveFilters && (
           <button
             onClick={clearFilters}
@@ -176,17 +231,7 @@ export const ApplicationsPage = () => {
         onSortChange={handleSortChange}
       />
 
-      {hasNextPage && (
-        <div className="mt-5 flex justify-center">
-          <button
-            onClick={loadMore}
-            disabled={loading}
-            style={{ fontSize: '14px', color: '#0071e3', background: 'none', border: 'none', cursor: loading ? 'not-allowed' : 'pointer', opacity: loading ? 0.5 : 1, letterSpacing: '-0.224px' }}
-          >
-            Load more
-          </button>
-        </div>
-      )}
+      <div ref={sentinelRef} style={{ height: '1px' }} />
     </div>
   )
 }
