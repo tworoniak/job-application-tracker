@@ -22,7 +22,7 @@ export class PaginatedApplicationsArgs {
   @IsOptional()
   @IsInt()
   @IsPositive()
-  @Max(100)
+  @Max(10000)
   first?: number
 
   @Field({ nullable: true })
