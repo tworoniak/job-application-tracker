@@ -14,7 +14,7 @@ interface Props {
 }
 
 const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+  new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
 
 const formatSalary = (min: number | null, max: number | null, type: JobApplication['salaryType']) => {
   if (!min && !max) return '—'
