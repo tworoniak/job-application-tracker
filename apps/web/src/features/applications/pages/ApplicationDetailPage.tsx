@@ -5,8 +5,13 @@ import { OutcomeBadge, RoleTypeBadge, LocationTypeBadge, Skeleton } from '@/comp
 const formatDate = (iso: string | null) =>
   iso ? new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) : null
 
-const formatSalary = (min: number | null, max: number | null) => {
+const formatSalary = (min: number | null, max: number | null, type: 'ANNUAL' | 'HOURLY' | null) => {
   if (!min && !max) return null
+  if (type === 'HOURLY') {
+    const fmt = (n: number) => `$${n % 1 === 0 ? n : n.toFixed(2)}/hr`
+    if (min && max) return `${fmt(min)} – ${fmt(max)}`
+    return min ? `${fmt(min)}+` : `Up to ${fmt(max!)}`
+  }
   const fmt = (n: number) => `$${n.toLocaleString()}`
   if (min && max) return `${fmt(min)} – ${fmt(max)}`
   return min ? `${fmt(min)}+` : `Up to ${fmt(max!)}`
@@ -85,7 +90,7 @@ export const ApplicationDetailPage = () => {
           <Field label="Location" value={<LocationTypeBadge locationType={application.locationType} />} />
           <Field label="Date Applied" value={formatDate(application.dateApplied)} />
           <Field label="Interview Date" value={formatDate(application.interviewDate)} />
-          <Field label="Salary Range" value={formatSalary(application.salaryMin, application.salaryMax)} />
+          <Field label="Salary Range" value={formatSalary(application.salaryMin, application.salaryMax, application.salaryType)} />
           <Field label="Contact Name" value={application.contactName} />
           <Field label="Contact Info" value={application.contactInfo} />
         </dl>

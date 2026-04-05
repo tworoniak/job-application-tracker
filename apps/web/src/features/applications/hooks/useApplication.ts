@@ -12,6 +12,7 @@ export const GET_APPLICATION = gql`
       outcome
       dateApplied
       interviewDate
+      salaryType
       salaryMin
       salaryMax
       contactName
