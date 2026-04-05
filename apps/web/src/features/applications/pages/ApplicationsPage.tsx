@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ApplicationsTable } from '../components/ApplicationsTable'
 import { useApplications } from '../hooks/useApplications'
@@ -41,6 +41,17 @@ export const ApplicationsPage = () => {
   const [searchInput, setSearchInput] = useState('')
 
   const { applications, totalCount, hasNextPage, loading, loadMore } = useApplications(filters, sort)
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      const tag = (e.target as HTMLElement).tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
+      if ((e.target as HTMLElement).isContentEditable) return
+      if (e.key === 'n' || e.key === 'N') navigate('/applications/new')
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [navigate])
 
   const handleSortChange = useCallback((field: SortField) => {
     setSort((prev) =>
