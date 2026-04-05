@@ -4,10 +4,12 @@ import type { DashboardMetrics } from '../hooks/useDashboardMetrics'
 type Interview = DashboardMetrics['upcomingInterviews'][number]
 
 const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+  new Date(iso).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC' })
 
 const daysUntil = (iso: string) => {
-  const diff = new Date(iso).getTime() - Date.now()
+  const todayUtc = new Date()
+  todayUtc.setUTCHours(0, 0, 0, 0)
+  const diff = new Date(iso).getTime() - todayUtc.getTime()
   const days = Math.ceil(diff / (1000 * 60 * 60 * 24))
   if (days === 0) return 'Today'
   if (days === 1) return 'Tomorrow'

@@ -3,7 +3,7 @@ import { useApplication } from '../hooks/useApplication'
 import { OutcomeBadge, RoleTypeBadge, LocationTypeBadge, Skeleton } from '@/components/ui'
 
 const formatDate = (iso: string | null) =>
-  iso ? new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }) : null
+  iso ? new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'UTC' }) : null
 
 const formatSalary = (min: number | null, max: number | null) => {
   if (!min && !max) return null
