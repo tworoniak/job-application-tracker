@@ -24,6 +24,9 @@ const LIST_APPLICATIONS = gql`
           salaryType
           salaryMin
           salaryMax
+          contactName
+          contactInfo
+          notes
           createdAt
           updatedAt
         }
