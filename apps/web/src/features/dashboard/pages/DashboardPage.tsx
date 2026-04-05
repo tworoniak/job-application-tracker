@@ -1,9 +1,13 @@
 import { useDashboardMetrics } from '../hooks/useDashboardMetrics'
-import { MetricCard, OutcomeChart, WeeklyChart, UpcomingInterviews } from '../components'
+import { useInterviewReminders } from '../hooks/useInterviewReminders'
+import { MetricCard, OutcomeChart, WeeklyChart, UpcomingInterviews, FunnelChart } from '../components'
 import { Skeleton } from '@/components/ui'
 
 export const DashboardPage = () => {
   const { metrics, loading } = useDashboardMetrics()
+  const { permission, requestPermission, supported } = useInterviewReminders(
+    metrics?.upcomingInterviews ?? [],
+  )
 
   const activeCount = metrics?.byOutcome
     .filter((o) => !['REJECTED', 'WITHDRAWN', 'NO_RESPONSE', 'GHOSTED', 'OFFER_ACCEPTED'].includes(o.outcome))
@@ -58,7 +62,19 @@ export const DashboardPage = () => {
         </div>
 
         <div style={{ background: '#ffffff', borderRadius: '12px', padding: '24px', boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px' }}>
-          {sectionTitle('Upcoming Interviews')}
+          <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', marginBottom: '16px' }}>
+            <h2 style={{ fontFamily: 'var(--font-display,-apple-system)', fontSize: '21px', fontWeight: '600', color: '#1d1d1f', lineHeight: '1.19', letterSpacing: '-0.28px' }}>
+              Upcoming Interviews
+            </h2>
+            {supported && permission === 'default' && (
+              <button
+                onClick={requestPermission}
+                style={{ fontSize: '12px', color: '#0071e3', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px', whiteSpace: 'nowrap' }}
+              >
+                Enable reminders
+              </button>
+            )}
+          </div>
           {loading ? (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               {Array.from({ length: 3 }).map((_, i) => <Skeleton key={i} className="h-12" />)}
@@ -69,10 +85,18 @@ export const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Weekly activity */}
-      <div style={{ background: '#ffffff', borderRadius: '12px', padding: '24px', boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px' }}>
-        {sectionTitle('Applications per Week')}
-        {loading ? <Skeleton className="h-40 w-full" /> : <WeeklyChart data={metrics?.applicationsByWeek ?? []} />}
+      {/* Conversion funnel + weekly activity */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div style={{ background: '#ffffff', borderRadius: '12px', padding: '24px', boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px' }}>
+          {sectionTitle('Conversion Funnel')}
+          {loading
+            ? <Skeleton className="h-40 w-full" />
+            : <FunnelChart data={metrics?.byOutcome ?? []} total={metrics?.totalApplications ?? 0} />}
+        </div>
+        <div style={{ background: '#ffffff', borderRadius: '12px', padding: '24px', boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px' }}>
+          {sectionTitle('Applications per Week')}
+          {loading ? <Skeleton className="h-40 w-full" /> : <WeeklyChart data={metrics?.applicationsByWeek ?? []} />}
+        </div>
       </div>
     </div>
   )

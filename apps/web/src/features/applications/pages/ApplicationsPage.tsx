@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ApplicationsTable } from '../components/ApplicationsTable'
 import { useApplications } from '../hooks/useApplications'
+import { useExportCsv } from '../hooks/useExportCsv'
 import type { ApplicationFilters, ApplicationSort, SortField, Outcome, RoleType, LocationType } from '../types'
 import { OUTCOME_LABELS, ROLE_TYPE_LABELS, LOCATION_TYPE_LABELS } from '../types'
 
@@ -41,6 +42,7 @@ export const ApplicationsPage = () => {
   const [searchInput, setSearchInput] = useState('')
 
   const { applications, totalCount, hasNextPage, loading, loadMore } = useApplications(filters, sort)
+  const { exportCsv, loading: exporting } = useExportCsv()
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -94,12 +96,21 @@ export const ApplicationsPage = () => {
             {totalCount} total
           </p>
         </div>
-        <button
-          onClick={() => navigate('/applications/new')}
-          style={{ padding: '8px 15px', fontSize: '14px', fontWeight: '400', color: '#ffffff', background: '#0071e3', border: '1px solid transparent', borderRadius: '8px', cursor: 'pointer', letterSpacing: '-0.224px' }}
-        >
-          + New Application
-        </button>
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <button
+            onClick={exportCsv}
+            disabled={exporting}
+            style={{ padding: '8px 15px', fontSize: '14px', fontWeight: '400', color: 'rgba(0,0,0,0.72)', background: '#ffffff', border: '1px solid rgba(0,0,0,0.16)', borderRadius: '8px', cursor: exporting ? 'not-allowed' : 'pointer', letterSpacing: '-0.224px', opacity: exporting ? 0.5 : 1 }}
+          >
+            {exporting ? 'Exporting…' : 'Export CSV'}
+          </button>
+          <button
+            onClick={() => navigate('/applications/new')}
+            style={{ padding: '8px 15px', fontSize: '14px', fontWeight: '400', color: '#ffffff', background: '#0071e3', border: '1px solid transparent', borderRadius: '8px', cursor: 'pointer', letterSpacing: '-0.224px' }}
+          >
+            + New Application
+          </button>
+        </div>
       </div>
 
       {/* Search + filters */}
