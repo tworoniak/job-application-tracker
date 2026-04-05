@@ -1,9 +1,45 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
-import { OutcomeBadge, RoleTypeBadge, LocationTypeBadge, ConfirmDialog, TableSkeleton } from '@/components/ui'
+import { RoleTypeBadge, LocationTypeBadge, ConfirmDialog, TableSkeleton } from '@/components/ui'
 import { useDeleteApplication } from '../hooks/useDeleteApplication'
-import type { JobApplication, SortField, SortDirection } from '../types'
+import { useUpdateApplication } from '../hooks/useUpdateApplication'
+import type { JobApplication, Outcome, SortField, SortDirection } from '../types'
+import { OUTCOME_LABELS } from '../types'
+
+const OUTCOMES: Outcome[] = [
+  'APPLIED', 'PHONE_SCREEN', 'INTERVIEW_SCHEDULED', 'INTERVIEW_COMPLETED',
+  'OFFER_RECEIVED', 'OFFER_ACCEPTED', 'REJECTED', 'WITHDRAWN', 'NO_RESPONSE', 'GHOSTED',
+]
+
+const outcomeSelectStyle = (outcome: Outcome): React.CSSProperties => {
+  const styles: Record<Outcome, { bg: string; color: string }> = {
+    APPLIED:              { bg: 'rgba(0,113,227,0.08)', color: '#0071e3' },
+    PHONE_SCREEN:         { bg: 'rgba(0,113,227,0.08)', color: '#0071e3' },
+    INTERVIEW_SCHEDULED:  { bg: 'rgba(0,113,227,0.12)', color: '#0071e3' },
+    INTERVIEW_COMPLETED:  { bg: 'rgba(0,113,227,0.08)', color: '#0071e3' },
+    OFFER_RECEIVED:       { bg: 'rgba(29,29,31,0.08)',  color: '#1d1d1f' },
+    OFFER_ACCEPTED:       { bg: 'rgba(29,29,31,0.10)',  color: '#1d1d1f' },
+    REJECTED:             { bg: 'rgba(0,0,0,0.04)',     color: 'rgba(0,0,0,0.48)' },
+    WITHDRAWN:            { bg: 'rgba(0,0,0,0.04)',     color: 'rgba(0,0,0,0.48)' },
+    NO_RESPONSE:          { bg: 'rgba(0,0,0,0.04)',     color: 'rgba(0,0,0,0.40)' },
+    GHOSTED:              { bg: 'rgba(0,0,0,0.03)',     color: 'rgba(0,0,0,0.32)' },
+  }
+  const { bg, color } = styles[outcome]
+  return {
+    background: bg,
+    color,
+    border: 'none',
+    borderRadius: '980px',
+    padding: '2px 8px',
+    fontSize: '12px',
+    letterSpacing: '-0.12px',
+    cursor: 'pointer',
+    appearance: 'none',
+    WebkitAppearance: 'none',
+    outline: 'none',
+  }
+}
 
 interface Props {
   data: JobApplication[]
@@ -68,6 +104,7 @@ const SortBtn = ({
 export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onSortChange }: Props) => {
   const navigate = useNavigate()
   const { deleteApplication, loading: deleteLoading } = useDeleteApplication()
+  const { updateApplication } = useUpdateApplication()
   const [deleteTarget, setDeleteTarget] = useState<JobApplication | null>(null)
   const [focusedId, setFocusedId] = useState<string | null>(null)
 
@@ -93,7 +130,21 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
       header: () => (
         <SortBtn label="Status" field="OUTCOME" active={sortField === 'OUTCOME'} direction={sortDirection} onClick={() => onSortChange('OUTCOME')} />
       ),
-      cell: ({ getValue }) => <OutcomeBadge outcome={getValue() as JobApplication['outcome']} />,
+      cell: ({ row }) => (
+        <select
+          value={row.original.outcome}
+          style={outcomeSelectStyle(row.original.outcome)}
+          onClick={(e) => e.stopPropagation()}
+          onChange={(e) => {
+            e.stopPropagation()
+            updateApplication(row.original.id, { outcome: e.target.value as Outcome }, row.original)
+          }}
+        >
+          {OUTCOMES.map((o) => (
+            <option key={o} value={o}>{OUTCOME_LABELS[o]}</option>
+          ))}
+        </select>
+      ),
     },
     {
       accessorKey: 'roleType',

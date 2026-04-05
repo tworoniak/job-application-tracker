@@ -1,4 +1,5 @@
 import { gql, useQuery } from '@apollo/client'
+import { useCallback } from 'react'
 import type { ApplicationFilters, ApplicationSort, JobApplicationConnection } from '../types'
 
 const LIST_APPLICATIONS = gql`
@@ -45,12 +46,12 @@ export const useApplications = (filters?: ApplicationFilters, sort?: Application
     variables: { filters, sort, first: 30 },
   })
 
-  const loadMore = () => {
+  const loadMore = useCallback(() => {
     const endCursor = data?.jobApplications.pageInfo.endCursor
     const hasNextPage = data?.jobApplications.pageInfo.hasNextPage
     if (!hasNextPage || !endCursor) return
     fetchMore({ variables: { after: endCursor } })
-  }
+  }, [data, fetchMore])
 
   return {
     applications: data?.jobApplications.edges.map((e) => e.node) ?? [],
