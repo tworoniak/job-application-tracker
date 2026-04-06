@@ -1,6 +1,0 @@
-{
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
-  "buildCommand": "cd ../.. && pnpm --filter web run build",
-  "outputDirectory": "dist",
-  "installCommand": "cd ../.. && pnpm install --filter web..."
-}

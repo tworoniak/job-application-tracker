@@ -58,7 +58,12 @@ export const WeeklyChart = ({ data }: Props) => {
         <Tooltip
           formatter={(v: number) => [v, 'Applications']}
           labelFormatter={formatWeekTooltip}
-          contentStyle={{ fontSize: 12, borderRadius: 6 }}
+          contentStyle={{
+            fontSize: 12,
+            borderRadius: 6,
+            border: 'none',
+            boxShadow: 'rgba(0,0,0,0.16) 0px 4px 16px',
+          }}
           cursor={{ fill: 'transparent' }}
         />
         <Bar dataKey='count' fill='#3b82f6' radius={[3, 3, 0, 0]} />
