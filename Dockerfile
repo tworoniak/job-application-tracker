@@ -34,4 +34,4 @@ RUN pnpm --filter api exec prisma generate
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "pnpm --filter api exec prisma migrate deploy && node apps/api/dist/main.js"]
+CMD ["sh", "-c", "echo '--- Starting migrations ---' && pnpm --filter api exec prisma migrate deploy 2>&1 && echo '--- Migrations done ---' || echo '--- Migration failed, starting app anyway ---'; node apps/api/dist/main.js"]
