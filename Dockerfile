@@ -14,10 +14,10 @@ RUN pnpm --filter api exec prisma generate
 RUN pnpm --filter api run build
 
 
-FROM node:20-alpine AS runner
+FROM node:20-slim AS runner
 WORKDIR /app
 
-RUN apk add --no-cache openssl
+RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
 RUN corepack enable && corepack prepare pnpm@9 --activate
 
 ENV NODE_ENV=production
