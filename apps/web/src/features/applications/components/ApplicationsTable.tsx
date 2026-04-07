@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { RoleTypeBadge, LocationTypeBadge, ConfirmDialog, TableSkeleton } from '@/components/ui'
@@ -47,6 +47,8 @@ interface Props {
   sortField: SortField
   sortDirection: SortDirection
   onSortChange: (field: SortField) => void
+  selectedIds: Set<string>
+  onSelectionChange: (ids: Set<string>) => void
 }
 
 const formatDate = (iso: string) =>
@@ -101,14 +103,74 @@ const SortBtn = ({
   </button>
 )
 
-export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onSortChange }: Props) => {
+// Checkbox with indeterminate support
+const Checkbox = ({
+  checked,
+  indeterminate,
+  onChange,
+}: {
+  checked: boolean
+  indeterminate?: boolean
+  onChange: (checked: boolean) => void
+}) => {
+  const ref = useRef<HTMLInputElement>(null)
+  useEffect(() => {
+    if (ref.current) ref.current.indeterminate = !!indeterminate
+  }, [indeterminate])
+  return (
+    <input
+      ref={ref}
+      type="checkbox"
+      checked={checked}
+      onChange={(e) => onChange(e.target.checked)}
+      style={{ width: '15px', height: '15px', accentColor: '#0071e3', cursor: 'pointer' }}
+    />
+  )
+}
+
+export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onSortChange, selectedIds, onSelectionChange }: Props) => {
   const navigate = useNavigate()
   const { deleteApplication, loading: deleteLoading } = useDeleteApplication()
   const { updateApplication } = useUpdateApplication()
   const [deleteTarget, setDeleteTarget] = useState<JobApplication | null>(null)
   const [focusedId, setFocusedId] = useState<string | null>(null)
 
+  const allVisibleSelected = data.length > 0 && data.every((r) => selectedIds.has(r.id))
+  const someVisibleSelected = data.some((r) => selectedIds.has(r.id))
+
+  const toggleRow = (id: string) => {
+    const next = new Set(selectedIds)
+    if (next.has(id)) next.delete(id)
+    else next.add(id)
+    onSelectionChange(next)
+  }
+
+  const toggleAll = (checked: boolean) => {
+    const next = new Set(selectedIds)
+    if (checked) data.forEach((r) => next.add(r.id))
+    else data.forEach((r) => next.delete(r.id))
+    onSelectionChange(next)
+  }
+
   const columns: ColumnDef<JobApplication>[] = [
+    {
+      id: 'select',
+      header: () => (
+        <Checkbox
+          checked={allVisibleSelected}
+          indeterminate={!allVisibleSelected && someVisibleSelected}
+          onChange={toggleAll}
+        />
+      ),
+      cell: ({ row }) => (
+        <div onClick={(e) => e.stopPropagation()}>
+          <Checkbox
+            checked={selectedIds.has(row.original.id)}
+            onChange={() => toggleRow(row.original.id)}
+          />
+        </div>
+      ),
+    },
     {
       accessorKey: 'companyName',
       header: () => (
@@ -238,7 +300,15 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
             {table.getHeaderGroups().map((hg) => (
               <tr key={hg.id} style={{ borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
                 {hg.headers.map((header) => (
-                  <th key={header.id} style={{ padding: '12px 16px', textAlign: 'left', background: '#fafafc' }}>
+                  <th
+                    key={header.id}
+                    style={{
+                      padding: header.id === 'select' ? '12px 8px 12px 16px' : '12px 16px',
+                      textAlign: 'left',
+                      background: '#fafafc',
+                      width: header.id === 'select' ? '40px' : undefined,
+                    }}
+                  >
                     {flexRender(header.column.columnDef.header, header.getContext())}
                   </th>
                 ))}
@@ -262,14 +332,24 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
                   borderBottom: i < table.getRowModel().rows.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none',
                   cursor: 'pointer',
                   transition: 'background 0.1s',
+                  background: selectedIds.has(row.original.id) ? 'rgba(0,113,227,0.04)' : 'transparent',
                   outline: focusedId === row.original.id ? '2px solid #0071e3' : 'none',
                   outlineOffset: '-2px',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = '#f5f5f7')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+                onMouseEnter={(e) => {
+                  if (!selectedIds.has(row.original.id)) e.currentTarget.style.background = '#f5f5f7'
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = selectedIds.has(row.original.id) ? 'rgba(0,113,227,0.04)' : 'transparent'
+                }}
               >
                 {row.getVisibleCells().map((cell) => (
-                  <td key={cell.id} style={{ padding: '14px 16px' }}>
+                  <td
+                    key={cell.id}
+                    style={{
+                      padding: cell.column.id === 'select' ? '14px 8px 14px 16px' : '14px 16px',
+                    }}
+                  >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}

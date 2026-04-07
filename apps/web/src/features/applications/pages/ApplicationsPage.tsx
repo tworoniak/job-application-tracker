@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom'
 import { ApplicationsTable } from '../components/ApplicationsTable'
 import { useApplications } from '../hooks/useApplications'
 import { useExportCsv } from '../hooks/useExportCsv'
+import { useBulkDeleteApplications } from '../hooks/useBulkDeleteApplications'
+import { useBulkUpdateOutcome } from '../hooks/useBulkUpdateOutcome'
+import { ConfirmDialog } from '@/components/ui'
 import type { ApplicationFilters, ApplicationSort, SortField, Outcome, RoleType, LocationType } from '../types'
 import { OUTCOME_LABELS, ROLE_TYPE_LABELS, LOCATION_TYPE_LABELS } from '../types'
 
@@ -44,8 +47,15 @@ export const ApplicationsPage = () => {
   const [dateFrom, setDateFrom] = useState('')
   const [dateTo, setDateTo] = useState('')
 
+  // Selection state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set())
+  const [bulkOutcome, setBulkOutcome] = useState<Outcome>('APPLIED')
+  const [confirmBulkDelete, setConfirmBulkDelete] = useState(false)
+
   const { applications, totalCount, hasNextPage, loading, loadMore } = useApplications(filters, sort)
   const { exportCsv, loading: exporting } = useExportCsv()
+  const { bulkDelete, loading: bulkDeleting } = useBulkDeleteApplications()
+  const { bulkUpdateOutcome, loading: bulkUpdating } = useBulkUpdateOutcome()
 
   useEffect(() => {
     const sentinel = sentinelRef.current
@@ -64,6 +74,7 @@ export const ApplicationsPage = () => {
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT') return
       if ((e.target as HTMLElement).isContentEditable) return
       if (e.key === 'n' || e.key === 'N') navigate('/applications/new')
+      if (e.key === 'Escape') setSelectedIds(new Set())
     }
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
@@ -110,9 +121,22 @@ export const ApplicationsPage = () => {
     setDateTo('')
   }
 
+  const handleBulkDelete = async () => {
+    await bulkDelete(Array.from(selectedIds))
+    setSelectedIds(new Set())
+    setConfirmBulkDelete(false)
+  }
+
+  const handleBulkUpdateOutcome = async () => {
+    await bulkUpdateOutcome(Array.from(selectedIds), bulkOutcome)
+    setSelectedIds(new Set())
+  }
+
   const hasActiveFilters =
     !!filters.search || !!filters.outcomes?.length || !!filters.roleTypes?.length ||
     !!filters.locationTypes?.length || !!filters.dateAppliedFrom || !!filters.dateAppliedTo
+
+  const selectionCount = selectedIds.size
 
   return (
     <div>
@@ -223,15 +247,83 @@ export const ApplicationsPage = () => {
         )}
       </div>
 
+      {/* Bulk action toolbar */}
+      {selectionCount > 0 && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '10px 16px',
+            marginBottom: '8px',
+            background: '#ffffff',
+            borderRadius: '10px',
+            boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
+            border: '1px solid rgba(0,113,227,0.18)',
+          }}
+        >
+          <span style={{ fontSize: '13px', color: '#0071e3', fontWeight: '600', letterSpacing: '-0.12px', marginRight: '4px' }}>
+            {selectionCount} selected
+          </span>
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <select
+              value={bulkOutcome}
+              onChange={(e) => setBulkOutcome(e.target.value as Outcome)}
+              style={{ fontSize: '13px', color: '#1d1d1f', background: '#fafafc', border: '1px solid rgba(0,0,0,0.12)', borderRadius: '6px', padding: '4px 8px', letterSpacing: '-0.12px', outline: 'none', cursor: 'pointer' }}
+            >
+              {OUTCOMES.map((o) => (
+                <option key={o} value={o}>{OUTCOME_LABELS[o]}</option>
+              ))}
+            </select>
+            <button
+              onClick={handleBulkUpdateOutcome}
+              disabled={bulkUpdating}
+              style={{ fontSize: '13px', color: '#ffffff', background: '#0071e3', border: 'none', borderRadius: '6px', padding: '5px 12px', cursor: bulkUpdating ? 'not-allowed' : 'pointer', letterSpacing: '-0.12px', opacity: bulkUpdating ? 0.6 : 1 }}
+            >
+              {bulkUpdating ? 'Updating…' : 'Update Status'}
+            </button>
+          </div>
+
+          <div style={{ width: '1px', height: '20px', background: 'rgba(0,0,0,0.10)', margin: '0 2px' }} />
+
+          <button
+            onClick={() => setConfirmBulkDelete(true)}
+            style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px' }}
+          >
+            Delete {selectionCount}
+          </button>
+
+          <button
+            onClick={() => setSelectedIds(new Set())}
+            style={{ marginLeft: 'auto', fontSize: '13px', color: 'rgba(0,0,0,0.40)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px' }}
+          >
+            Clear
+          </button>
+        </div>
+      )}
+
       <ApplicationsTable
         data={applications}
         loading={loading}
         sortField={sort.field}
         sortDirection={sort.direction}
         onSortChange={handleSortChange}
+        selectedIds={selectedIds}
+        onSelectionChange={setSelectedIds}
       />
 
       <div ref={sentinelRef} style={{ height: '1px' }} />
+
+      <ConfirmDialog
+        open={confirmBulkDelete}
+        title={`Delete ${selectionCount} application${selectionCount === 1 ? '' : 's'}?`}
+        description={`This will permanently remove ${selectionCount} application${selectionCount === 1 ? '' : 's'}. This cannot be undone.`}
+        confirmLabel={`Delete ${selectionCount}`}
+        loading={bulkDeleting}
+        onCancel={() => setConfirmBulkDelete(false)}
+        onConfirm={handleBulkDelete}
+      />
     </div>
   )
 }
