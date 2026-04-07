@@ -17,6 +17,10 @@ async function bootstrap() {
     credentials: true,
   })
 
+  app.getHttpAdapter().get('/health', (_req: unknown, res: { status: (code: number) => { send: (body: string) => void } }) => {
+    res.status(200).send('ok')
+  })
+
   const port = process.env.PORT ?? 3000
   await app.listen(port, '0.0.0.0')
   console.log(`API running → http://localhost:${port}/graphql`)
