@@ -4,7 +4,7 @@ import { PrismaService } from '../prisma/prisma.service'
 import { CreateApplicationInput } from './dto/create-application.input'
 import { UpdateApplicationInput } from './dto/update-application.input'
 import { PaginatedApplicationsArgs } from './dto/paginated-applications.args'
-import { SortDirection, SortField } from './enums'
+import { Outcome, SortDirection, SortField } from './enums'
 
 const encodeCursor = (id: string) => Buffer.from(id).toString('base64')
 const decodeCursor = (cursor: string) => Buffer.from(cursor, 'base64').toString('utf-8')
@@ -111,5 +111,20 @@ export class ApplicationsService {
     await this.findOne(id)
     await this.prisma.jobApplication.delete({ where: { id } })
     return true
+  }
+
+  async deleteMany(ids: string[]): Promise<number> {
+    const { count } = await this.prisma.jobApplication.deleteMany({
+      where: { id: { in: ids } },
+    })
+    return count
+  }
+
+  async updateManyOutcome(ids: string[], outcome: Outcome): Promise<number> {
+    const { count } = await this.prisma.jobApplication.updateMany({
+      where: { id: { in: ids } },
+      data: { outcome },
+    })
+    return count
   }
 }

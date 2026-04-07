@@ -1,10 +1,11 @@
-import { Args, ID, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, ID, Int, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { ApplicationsService } from './applications.service'
 import { CreateApplicationInput } from './dto/create-application.input'
 import { UpdateApplicationInput } from './dto/update-application.input'
 import { PaginatedApplicationsArgs } from './dto/paginated-applications.args'
 import { JobApplication } from './models/job-application.model'
 import { JobApplicationConnection } from './models/job-application-connection.model'
+import { Outcome } from './enums'
 
 @Resolver(() => JobApplication)
 export class ApplicationsResolver {
@@ -36,5 +37,18 @@ export class ApplicationsResolver {
   @Mutation(() => Boolean)
   deleteJobApplication(@Args('id', { type: () => ID }) id: string) {
     return this.applicationsService.delete(id)
+  }
+
+  @Mutation(() => Int)
+  deleteJobApplications(@Args('ids', { type: () => [ID] }) ids: string[]) {
+    return this.applicationsService.deleteMany(ids)
+  }
+
+  @Mutation(() => Int)
+  updateJobApplicationsOutcome(
+    @Args('ids', { type: () => [ID] }) ids: string[],
+    @Args('outcome', { type: () => Outcome }) outcome: Outcome,
+  ) {
+    return this.applicationsService.updateManyOutcome(ids, outcome)
   }
 }
