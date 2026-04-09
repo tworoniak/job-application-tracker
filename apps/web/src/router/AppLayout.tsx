@@ -1,26 +1,27 @@
-import { useState, useEffect } from 'react'
-import { Link, Outlet, useLocation } from 'react-router-dom'
-import { CommandPalette } from '@/components/ui'
+import { useState, useEffect } from 'react';
+import { Link, Outlet, useLocation } from 'react-router-dom';
+import { CommandPalette } from '@/components/ui';
+import { Plus } from 'lucide-react';
 
 const navLinks = [
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/applications', label: 'Applications' },
-]
+];
 
 export const AppLayout = () => {
-  const { pathname } = useLocation()
-  const [paletteOpen, setPaletteOpen] = useState(false)
+  const { pathname } = useLocation();
+  const [paletteOpen, setPaletteOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault()
-        setPaletteOpen((prev) => !prev)
+        e.preventDefault();
+        setPaletteOpen((prev) => !prev);
       }
-    }
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   return (
     <div className='min-h-screen flex flex-col'>
@@ -65,8 +66,9 @@ export const AppLayout = () => {
           {/* ⌘K hint button */}
           <button
             onClick={() => setPaletteOpen(true)}
+            className='md:flex hidden'
             style={{
-              display: 'flex',
+              // display: 'flex',
               alignItems: 'center',
               gap: '6px',
               padding: '4px 10px',
@@ -80,21 +82,23 @@ export const AppLayout = () => {
               transition: 'color 0.1s, background 0.1s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'rgba(255,255,255,0.72)'
-              e.currentTarget.style.background = 'rgba(255,255,255,0.12)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.72)';
+              e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'rgba(255,255,255,0.48)'
-              e.currentTarget.style.background = 'rgba(255,255,255,0.08)'
+              e.currentTarget.style.color = 'rgba(255,255,255,0.48)';
+              e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
             }}
           >
             <span>Commands</span>
-            <span style={{ fontFamily: 'monospace', fontSize: '11px' }}>⌘K</span>
+            <span style={{ fontFamily: 'monospace', fontSize: '11px' }}>
+              ⌘K
+            </span>
           </button>
 
           <Link
             to='/applications/new'
-            className='shrink-0 text-white text-sm px-4 rounded-lg transition-opacity hover:opacity-80'
+            className='flex shrink-0 text-white text-sm px-4 rounded-lg transition-opacity hover:opacity-80'
             style={{
               background: '#0071e3',
               padding: '6px 14px',
@@ -104,7 +108,7 @@ export const AppLayout = () => {
               borderRadius: '8px',
             }}
           >
-            + New
+            <Plus size={16} /> <span className='hidden sm:block'>New</span>
           </Link>
         </div>
       </nav>
@@ -113,7 +117,10 @@ export const AppLayout = () => {
         <Outlet />
       </main>
 
-      <CommandPalette open={paletteOpen} onClose={() => setPaletteOpen(false)} />
+      <CommandPalette
+        open={paletteOpen}
+        onClose={() => setPaletteOpen(false)}
+      />
     </div>
-  )
-}
+  );
+};
