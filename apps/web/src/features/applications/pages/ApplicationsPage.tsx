@@ -19,7 +19,7 @@ import {
   ROLE_TYPE_LABELS,
   LOCATION_TYPE_LABELS,
 } from '../types';
-import { Download, Plus } from 'lucide-react';
+import { Download, Plus, SlidersHorizontal } from 'lucide-react';
 
 const OUTCOMES: Outcome[] = [
   'APPLIED',
@@ -53,6 +53,7 @@ const pillBase: React.CSSProperties = {
   transition: 'all 0.1s',
   background: 'transparent',
   color: 'rgba(0,0,0,0.72)',
+  whiteSpace: 'nowrap',
 };
 
 const pillActive: React.CSSProperties = {
@@ -60,6 +61,26 @@ const pillActive: React.CSSProperties = {
   background: '#0071e3',
   color: '#ffffff',
   border: '1px solid #0071e3',
+};
+
+const dateInputStyle: React.CSSProperties = {
+  background: '#fafafc',
+  border: '3px solid rgba(0,0,0,0.04)',
+  borderRadius: '8px',
+  padding: '4px 10px',
+  fontSize: '13px',
+  color: '#1d1d1f',
+  letterSpacing: '-0.12px',
+  outline: 'none',
+};
+
+const filterLabelStyle: React.CSSProperties = {
+  fontSize: '11px',
+  fontWeight: '600',
+  color: 'rgba(0,0,0,0.40)',
+  textTransform: 'uppercase',
+  letterSpacing: '0.04em',
+  marginBottom: '8px',
 };
 
 export const ApplicationsPage = () => {
@@ -77,14 +98,17 @@ export const ApplicationsPage = () => {
   const [searchInput, setSearchInput] = useState('');
   const [dateFrom, setDateFrom] = useState('');
   const [dateTo, setDateTo] = useState('');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   // Selection state
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
   const [bulkOutcome, setBulkOutcome] = useState<Outcome>('APPLIED');
   const [confirmBulkDelete, setConfirmBulkDelete] = useState(false);
 
-  const { applications, totalCount, hasNextPage, loading, loadMore } =
-    useApplications(filters, sort);
+  const { applications, totalCount, loading, loadMore } = useApplications(
+    filters,
+    sort,
+  );
   const { exportCsv, loading: exporting } = useExportCsv();
   const { bulkDelete, loading: bulkDeleting } = useBulkDeleteApplications();
   const { bulkUpdateOutcome, loading: bulkUpdating } = useBulkUpdateOutcome();
@@ -179,6 +203,14 @@ export const ApplicationsPage = () => {
     !!filters.dateAppliedFrom ||
     !!filters.dateAppliedTo;
 
+  // Count of non-search active filters (for the mobile Filters button badge)
+  const activeFilterCount =
+    (filters.outcomes?.length ?? 0) +
+    (filters.roleTypes?.length ?? 0) +
+    (filters.locationTypes?.length ?? 0) +
+    (filters.dateAppliedFrom ? 1 : 0) +
+    (filters.dateAppliedTo ? 1 : 0);
+
   const selectionCount = selectedIds.size;
 
   return (
@@ -213,7 +245,7 @@ export const ApplicationsPage = () => {
           <button
             onClick={exportCsv}
             disabled={exporting}
-            className='flex gap-1 items-center'
+            className='flex gap-1 items-center hover:opacity-80'
             style={{
               padding: '8px 15px',
               fontSize: '14px',
@@ -234,7 +266,7 @@ export const ApplicationsPage = () => {
           </button>
           <button
             onClick={() => navigate('/applications/new')}
-            className='flex gap-1 items-center'
+            className='flex gap-1 items-center hover:opacity-80'
             style={{
               padding: '8px 15px',
               fontSize: '14px',
@@ -253,8 +285,181 @@ export const ApplicationsPage = () => {
         </div>
       </div>
 
-      {/* Search + filters */}
+      {/* ── MOBILE: sticky search + filter trigger ── */}
       <div
+        className='sm:hidden sticky z-30'
+        style={{
+          top: '48px', // below the 48px navbar
+          background: 'rgba(245,245,247,0.96)',
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          marginLeft: '-24px',
+          marginRight: '-24px',
+          paddingLeft: '16px',
+          paddingRight: '16px',
+          paddingTop: '8px',
+          paddingBottom: '10px',
+          marginBottom: '12px',
+        }}
+      >
+        {/* Search input + Filters button */}
+        <div style={{ display: 'flex', gap: '8px' }}>
+          <input
+            type='search'
+            value={searchInput}
+            onChange={(e) => handleSearch(e.target.value)}
+            placeholder='Search company or position…'
+            style={{
+              flex: 1,
+              background: '#ffffff',
+              border: '1px solid rgba(0,0,0,0.12)',
+              borderRadius: '10px',
+              padding: '9px 14px',
+              fontSize: '15px',
+              color: '#1d1d1f',
+              letterSpacing: '-0.224px',
+              outline: 'none',
+              minWidth: 0,
+            }}
+          />
+          <button
+            onClick={() => setFiltersOpen((v) => !v)}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '5px',
+              padding: '9px 13px',
+              fontSize: '14px',
+              fontWeight: activeFilterCount > 0 ? '600' : '400',
+              color: activeFilterCount > 0 ? '#0071e3' : 'rgba(0,0,0,0.72)',
+              background:
+                activeFilterCount > 0 ? 'rgba(0,113,227,0.08)' : '#ffffff',
+              border: '1px solid',
+              borderColor:
+                activeFilterCount > 0
+                  ? 'rgba(0,113,227,0.24)'
+                  : 'rgba(0,0,0,0.12)',
+              borderRadius: '10px',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+              letterSpacing: '-0.12px',
+              flexShrink: 0,
+            }}
+          >
+            <SlidersHorizontal size={14} />
+            {activeFilterCount > 0
+              ? `Filters (${activeFilterCount})`
+              : 'Filters'}
+          </button>
+        </div>
+      </div>
+
+      {/* ── MOBILE: collapsible filter panel (Type, Location, Date) ── */}
+      {filtersOpen && (
+        <div
+          className='sm:hidden'
+          style={{
+            background: '#ffffff',
+            borderRadius: '12px',
+            padding: '16px 20px',
+            marginBottom: '12px',
+            boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
+          }}
+        >
+          {[
+            {
+              key: 'outcomes' as const,
+              label: 'Status',
+              items: OUTCOMES,
+              labels: OUTCOME_LABELS,
+              active: filters.outcomes,
+            },
+            {
+              key: 'roleTypes' as const,
+              label: 'Type',
+              items: ROLE_TYPES,
+              labels: ROLE_TYPE_LABELS,
+              active: filters.roleTypes,
+            },
+            {
+              key: 'locationTypes' as const,
+              label: 'Location',
+              items: LOCATION_TYPES,
+              labels: LOCATION_TYPE_LABELS,
+              active: filters.locationTypes,
+            },
+          ].map(({ key, label, items, labels, active }) => (
+            <div key={key} style={{ marginBottom: '16px' }}>
+              <p style={filterLabelStyle}>{label}</p>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                {(items as string[]).map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => toggleFilter(key, item as never)}
+                    style={
+                      (active as string[] | undefined)?.includes(item)
+                        ? pillActive
+                        : pillBase
+                    }
+                  >
+                    {(labels as Record<string, string>)[item]}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          <div
+            style={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '12px',
+              alignItems: 'flex-end',
+            }}
+          >
+            <div>
+              <p style={filterLabelStyle}>Applied From</p>
+              <input
+                type='date'
+                value={dateFrom}
+                onChange={(e) => handleDateFrom(e.target.value)}
+                style={dateInputStyle}
+              />
+            </div>
+            <div>
+              <p style={filterLabelStyle}>Applied To</p>
+              <input
+                type='date'
+                value={dateTo}
+                onChange={(e) => handleDateTo(e.target.value)}
+                style={dateInputStyle}
+              />
+            </div>
+          </div>
+
+          {hasActiveFilters && (
+            <button
+              onClick={clearFilters}
+              style={{
+                marginTop: '14px',
+                fontSize: '13px',
+                color: '#0071e3',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                letterSpacing: '-0.12px',
+                padding: 0,
+              }}
+            >
+              Clear all filters
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* ── DESKTOP: full filter card ── */}
+      <div
+        className='hidden sm:block'
         style={{
           background: '#ffffff',
           borderRadius: '12px',
@@ -370,16 +575,7 @@ export const ApplicationsPage = () => {
               type='date'
               value={dateFrom}
               onChange={(e) => handleDateFrom(e.target.value)}
-              style={{
-                background: '#fafafc',
-                border: '3px solid rgba(0,0,0,0.04)',
-                borderRadius: '8px',
-                padding: '4px 10px',
-                fontSize: '13px',
-                color: '#1d1d1f',
-                letterSpacing: '-0.12px',
-                outline: 'none',
-              }}
+              style={dateInputStyle}
             />
           </div>
           <div>
@@ -399,16 +595,7 @@ export const ApplicationsPage = () => {
               type='date'
               value={dateTo}
               onChange={(e) => handleDateTo(e.target.value)}
-              style={{
-                background: '#fafafc',
-                border: '3px solid rgba(0,0,0,0.04)',
-                borderRadius: '8px',
-                padding: '4px 10px',
-                fontSize: '13px',
-                color: '#1d1d1f',
-                letterSpacing: '-0.12px',
-                outline: 'none',
-              }}
+              style={dateInputStyle}
             />
           </div>
         </div>
@@ -444,6 +631,7 @@ export const ApplicationsPage = () => {
             borderRadius: '10px',
             boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
             border: '1px solid rgba(0,113,227,0.18)',
+            flexWrap: 'wrap',
           }}
         >
           <span

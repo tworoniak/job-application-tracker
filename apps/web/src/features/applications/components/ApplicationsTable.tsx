@@ -128,6 +128,158 @@ const Checkbox = ({
   )
 }
 
+// ── Mobile application card ──────────────────────────────────────────────────
+interface CardProps {
+  app: JobApplication
+  selected: boolean
+  onSelect: () => void
+  onEdit: () => void
+  onDelete: () => void
+  onNavigate: () => void
+  onOutcomeChange: (outcome: Outcome) => void
+}
+
+const ApplicationCard = ({
+  app,
+  selected,
+  onSelect,
+  onEdit,
+  onDelete,
+  onNavigate,
+  onOutcomeChange,
+}: CardProps) => (
+  <div
+    onClick={onNavigate}
+    style={{
+      background: selected ? 'rgba(0,113,227,0.04)' : '#ffffff',
+      borderRadius: '12px',
+      padding: '14px 16px',
+      marginBottom: '8px',
+      boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
+      cursor: 'pointer',
+      border: selected ? '1px solid rgba(0,113,227,0.20)' : '1px solid transparent',
+      transition: 'background 0.1s, border-color 0.1s',
+    }}
+  >
+    {/* Row 1: Company + status select */}
+    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+      <div style={{ minWidth: 0, flex: 1 }}>
+        <div
+          style={{
+            fontSize: '15px',
+            fontWeight: '600',
+            color: '#1d1d1f',
+            letterSpacing: '-0.3px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {app.companyName}
+        </div>
+        <div
+          style={{
+            fontSize: '13px',
+            color: 'rgba(0,0,0,0.48)',
+            marginTop: '2px',
+            letterSpacing: '-0.12px',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {app.positionTitle}
+        </div>
+      </div>
+
+      {/* Status select — stops propagation so card click doesn't navigate */}
+      <div onClick={(e) => e.stopPropagation()} style={{ flexShrink: 0 }}>
+        <select
+          value={app.outcome}
+          style={outcomeSelectStyle(app.outcome)}
+          onChange={(e) => onOutcomeChange(e.target.value as Outcome)}
+        >
+          {OUTCOMES.map((o) => (
+            <option key={o} value={o}>{OUTCOME_LABELS[o]}</option>
+          ))}
+        </select>
+      </div>
+    </div>
+
+    {/* Row 2: Badges + date + actions */}
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '6px',
+        marginTop: '10px',
+        flexWrap: 'wrap',
+      }}
+    >
+      <RoleTypeBadge roleType={app.roleType} />
+      <LocationTypeBadge locationType={app.locationType} />
+
+      <span
+        style={{
+          marginLeft: 'auto',
+          fontSize: '12px',
+          color: 'rgba(0,0,0,0.36)',
+          letterSpacing: '-0.12px',
+          whiteSpace: 'nowrap',
+        }}
+      >
+        {formatDate(app.dateApplied)}
+      </span>
+    </div>
+
+    {/* Row 3: Actions + checkbox — stops propagation */}
+    <div
+      onClick={(e) => e.stopPropagation()}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        marginTop: '10px',
+        paddingTop: '10px',
+        borderTop: '1px solid rgba(0,0,0,0.05)',
+      }}
+    >
+      <Checkbox checked={selected} onChange={onSelect} />
+
+      <div style={{ marginLeft: 'auto', display: 'flex', gap: '16px' }}>
+        <button
+          onClick={onEdit}
+          style={{
+            fontSize: '13px',
+            color: '#0071e3',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            letterSpacing: '-0.12px',
+            padding: '2px 0',
+          }}
+        >
+          Edit
+        </button>
+        <button
+          onClick={onDelete}
+          style={{
+            fontSize: '13px',
+            color: 'rgba(0,0,0,0.36)',
+            background: 'none',
+            border: 'none',
+            cursor: 'pointer',
+            letterSpacing: '-0.12px',
+            padding: '2px 0',
+          }}
+        >
+          Delete
+        </button>
+      </div>
+    </div>
+  </div>
+)
+// ────────────────────────────────────────────────────────────────────────────
+
 export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onSortChange, selectedIds, onSelectionChange }: Props) => {
   const navigate = useNavigate()
   const { deleteApplication, loading: deleteLoading } = useDeleteApplication()
@@ -294,7 +446,26 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
 
   return (
     <>
-      <div style={{ background: '#ffffff', borderRadius: '12px', overflow: 'hidden', boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px' }}>
+      {/* ── Mobile: card list ───────────────────────────────────────────── */}
+      <div className="block sm:hidden" style={{ paddingBottom: '16px' }}>
+        {data.map((app) => (
+          <ApplicationCard
+            key={app.id}
+            app={app}
+            selected={selectedIds.has(app.id)}
+            onSelect={() => toggleRow(app.id)}
+            onNavigate={() => navigate(`/applications/${app.id}`)}
+            onEdit={() => navigate(`/applications/${app.id}/edit`)}
+            onDelete={() => setDeleteTarget(app)}
+            onOutcomeChange={(outcome) =>
+              updateApplication(app.id, { outcome }, app)
+            }
+          />
+        ))}
+      </div>
+
+      {/* ── Desktop: table ──────────────────────────────────────────────── */}
+      <div className="hidden sm:block" style={{ background: '#ffffff', borderRadius: '12px', overflow: 'hidden', boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
             {table.getHeaderGroups().map((hg) => (
