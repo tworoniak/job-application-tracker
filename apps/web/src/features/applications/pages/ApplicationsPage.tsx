@@ -361,6 +361,7 @@ export const ApplicationsPage = () => {
           style={{
             background: '#ffffff',
             borderRadius: '12px',
+            border: '1px solid #0071e3',
             padding: '16px 20px',
             marginBottom: '12px',
             boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
