@@ -190,16 +190,14 @@ export const DashboardPage = () => {
             boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
           }}
         >
-          {sectionTitle('Conversion Funnel')}
+          {sectionTitle('Applications per Week')}
           {loading ? (
             <Skeleton className='h-40 w-full' />
           ) : (
-            <FunnelChart
-              data={metrics?.byOutcome ?? []}
-              total={metrics?.totalApplications ?? 0}
-            />
+            <WeeklyChart data={metrics?.applicationsByWeek ?? []} />
           )}
         </div>
+
         <div
           style={{
             background: '#ffffff',
@@ -208,11 +206,14 @@ export const DashboardPage = () => {
             boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
           }}
         >
-          {sectionTitle('Applications per Week')}
+          {sectionTitle('Conversion Funnel')}
           {loading ? (
             <Skeleton className='h-40 w-full' />
           ) : (
-            <WeeklyChart data={metrics?.applicationsByWeek ?? []} />
+            <FunnelChart
+              data={metrics?.byOutcome ?? []}
+              total={metrics?.totalApplications ?? 0}
+            />
           )}
         </div>
       </div>
