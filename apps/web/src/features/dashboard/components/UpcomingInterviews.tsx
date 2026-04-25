@@ -31,7 +31,7 @@ export function DateBadge({ date, isActive }: DateBadgeProps) {
         'leading-none',
         isActive
           ? 'bg-white border-neutral-300 shadow-sm'
-          : 'bg-blue-50 border-blue-200',
+          : 'bg-blue-50 border-blue-200 border-t-blue-400 border-t-3',
       ].join(' ')}
     >
       <span className='text-xs font-medium tracking-wide text-blue-500 uppercase leading-none'>
