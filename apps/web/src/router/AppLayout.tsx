@@ -112,8 +112,8 @@ export const AppLayout = () => {
           </Link>
         </div>
       </nav>
-
-      <main className='flex-1 px-6 py-8 max-w-245 mx-auto w-full'>
+      {/* max-w-245 */}
+      <main className='flex-1 px-6 py-8 mx-auto w-full'>
         <Outlet />
       </main>
 
