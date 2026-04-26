@@ -43,33 +43,14 @@ export const DashboardPage = () => {
       : null;
 
   const sectionTitle = (text: string) => (
-    <h2
-      style={{
-        fontFamily: 'var(--font-display,-apple-system)',
-        fontSize: '21px',
-        fontWeight: '600',
-        color: '#1d1d1f',
-        lineHeight: '1.19',
-        letterSpacing: '-0.28px',
-        marginBottom: '16px',
-      }}
-    >
+    <h2 className='font-display font-semibold text-xl text-gray-900 mb-4'>
       {text}
     </h2>
   );
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      <h1
-        style={{
-          fontFamily: 'var(--font-display,-apple-system)',
-          fontSize: '40px',
-          fontWeight: '600',
-          color: '#1d1d1f',
-          lineHeight: '1.10',
-          letterSpacing: '-0.28px',
-        }}
-      >
+      <h1 className='font-display font-semibold text-gray-900 text-2xl sm:text-3xl lg:text-4xl'>
         {/* Dashboard */}
         Welcome back, Thomas
       </h1>
@@ -111,15 +92,7 @@ export const DashboardPage = () => {
 
       {/* Charts row */}
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-        <div
-          className='lg:col-span-2'
-          style={{
-            background: '#ffffff',
-            borderRadius: '12px',
-            padding: '24px',
-            boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
-          }}
-        >
+        <div className='lg:col-span-2 rounded-xl p-6 shadow-sm bg-white'>
           {sectionTitle('By Status')}
           {loading ? (
             <Skeleton className='h-52 w-full' />
@@ -128,55 +101,22 @@ export const DashboardPage = () => {
           )}
         </div>
 
-        <div
-          style={{
-            background: '#ffffff',
-            borderRadius: '12px',
-            padding: '24px',
-            boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
-          }}
-        >
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'baseline',
-              justifyContent: 'space-between',
-              marginBottom: '16px',
-            }}
-          >
-            <h2
-              style={{
-                fontFamily: 'var(--font-display,-apple-system)',
-                fontSize: '21px',
-                fontWeight: '600',
-                color: '#1d1d1f',
-                lineHeight: '1.19',
-                letterSpacing: '-0.28px',
-              }}
-            >
+        <div className='rounded-xl p-6 shadow-sm bg-white'>
+          <div className='flex items-baseline justify-between mb-4'>
+            <h2 className='font-display font-semibold text-xl text-gray-900'>
               Upcoming Interviews
             </h2>
             {supported && permission === 'default' && (
               <button
                 onClick={requestPermission}
-                style={{
-                  fontSize: '12px',
-                  color: '#0071e3',
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  letterSpacing: '-0.12px',
-                  whiteSpace: 'nowrap',
-                }}
+                className='text-sm text-blue-600 hover:text-blue-800 transition-colors duration-300'
               >
                 Enable reminders
               </button>
             )}
           </div>
           {loading ? (
-            <div
-              style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}
-            >
+            <div className='flex flex-col gap-3'>
               {Array.from({ length: 3 }).map((_, i) => (
                 <Skeleton key={i} className='h-12' />
               ))}
@@ -191,14 +131,7 @@ export const DashboardPage = () => {
 
       {/* Conversion funnel + weekly activity */}
       <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
-        <div
-          style={{
-            background: '#ffffff',
-            borderRadius: '12px',
-            padding: '24px',
-            boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
-          }}
-        >
+        <div className='rounded-xl p-6 shadow-sm bg-white'>
           {sectionTitle('Applications per Week')}
           {loading ? (
             <Skeleton className='h-40 w-full' />
@@ -207,14 +140,7 @@ export const DashboardPage = () => {
           )}
         </div>
 
-        <div
-          style={{
-            background: '#ffffff',
-            borderRadius: '12px',
-            padding: '24px',
-            boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
-          }}
-        >
+        <div className='rounded-xl p-6 shadow-sm bg-white'>
           {sectionTitle('Conversion Funnel')}
           {loading ? (
             <Skeleton className='h-40 w-full' />
