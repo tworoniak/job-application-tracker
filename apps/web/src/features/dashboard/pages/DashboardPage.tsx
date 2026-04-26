@@ -70,7 +70,8 @@ export const DashboardPage = () => {
           letterSpacing: '-0.28px',
         }}
       >
-        Dashboard
+        {/* Dashboard */}
+        Welcome back, Thomas
       </h1>
 
       {/* Metric cards */}
