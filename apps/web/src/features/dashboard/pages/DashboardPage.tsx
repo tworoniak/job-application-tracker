@@ -67,7 +67,7 @@ export const DashboardPage = () => {
               label='Total'
               value={metrics?.totalApplications ?? 0}
               sub='applications'
-              color='#0071e3'
+              color='#5ac8fa'
             />
             <MetricCard
               label='Active'
@@ -79,12 +79,14 @@ export const DashboardPage = () => {
               label='Interviews'
               value={metrics?.upcomingInterviews.length ?? 0}
               sub='upcoming'
-              color='#FB8F67'
+              color='#0071e3'
+              // color='#FB8F67'
             />
             <MetricCard
               label='Response Rate'
               value={responseRate !== null ? `${responseRate}%` : '—'}
-              color='#D7263D'
+              color='#FB8F67'
+              // color='#D7263D'
             />
           </>
         )}
