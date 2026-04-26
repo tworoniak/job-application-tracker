@@ -1,16 +1,19 @@
 interface MetricCardProps {
-  label: string
-  value: number | string
-  sub?: string
+  label: string;
+  value: number | string;
+  sub?: string;
+  color?: string;
 }
 
-export const MetricCard = ({ label, value, sub }: MetricCardProps) => (
+export const MetricCard = ({ label, value, sub, color }: MetricCardProps) => (
   <div
     style={{
       background: '#ffffff',
       borderRadius: '12px',
       padding: '20px 24px',
       boxShadow: 'rgba(0,0,0,0.08) 0px 2px 12px 0px',
+      borderLeftWidth: '4px',
+      borderColor: color || 'blue',
     }}
   >
     <p
@@ -51,4 +54,4 @@ export const MetricCard = ({ label, value, sub }: MetricCardProps) => (
       </p>
     )}
   </div>
-)
+);
