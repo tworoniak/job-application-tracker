@@ -87,10 +87,12 @@ export const UpcomingInterviews = ({
             <div className='flex items-center gap-2'>
               <DateBadge date={interview.interviewDate} />
               <div>
-                <p className='text-sm font-medium text-gray-900'>
+                <p className='text-md font-semibold text-gray-900'>
+                  {interview.companyName}
+                </p>
+                <p className='text-xs text-gray-500 -mt-0.5'>
                   {interview.positionTitle}
                 </p>
-                <p className='text-xs text-gray-500'>{interview.companyName}</p>
               </div>
             </div>
 
