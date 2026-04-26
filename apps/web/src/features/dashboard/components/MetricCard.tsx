@@ -8,50 +8,16 @@ interface MetricCardProps {
 export const MetricCard = ({ label, value, sub, color }: MetricCardProps) => (
   <div
     style={{
-      background: '#ffffff',
-      borderRadius: '12px',
-      padding: '20px 24px',
-      boxShadow: 'rgba(0,0,0,0.08) 0px 2px 12px 0px',
-      borderLeftWidth: '4px',
       borderColor: color || 'blue',
     }}
+    className='bg-white rounded-xl px-6 py-4 border-l-4 shadow-sm hover:shadow-md transition-shadow duration-300'
   >
-    <p
-      style={{
-        fontSize: '12px',
-        fontWeight: '600',
-        color: 'rgba(0,0,0,0.48)',
-        letterSpacing: '0.02em',
-        textTransform: 'uppercase',
-        lineHeight: '1.33',
-      }}
-    >
+    <p className='tracking-wide text-sm font-semibold text-gray-500 uppercase'>
       {label}
     </p>
-    <p
-      style={{
-        marginTop: '8px',
-        fontFamily: 'var(--font-display, -apple-system)',
-        fontSize: '40px',
-        fontWeight: '600',
-        color: '#1d1d1f',
-        lineHeight: '1.07',
-        letterSpacing: '-0.28px',
-      }}
-    >
+    <p className='leading-none text-4xl font-display font-semibold text-gray-900 mt-2'>
       {value}
     </p>
-    {sub && (
-      <p
-        style={{
-          marginTop: '4px',
-          fontSize: '12px',
-          color: 'rgba(0,0,0,0.40)',
-          letterSpacing: '-0.12px',
-        }}
-      >
-        {sub}
-      </p>
-    )}
+    {sub && <p className='text-xs text-gray-500 mt-1'>{sub}</p>}
   </div>
 );
