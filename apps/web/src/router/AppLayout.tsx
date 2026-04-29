@@ -1,16 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link, Outlet, useLocation } from 'react-router-dom';
+import { Outlet } from 'react-router-dom';
+import { Menu, Briefcase } from 'lucide-react';
 import { CommandPalette } from '@/components/ui';
-import { Plus } from 'lucide-react';
-
-const navLinks = [
-  { to: '/dashboard', label: 'Dashboard' },
-  { to: '/applications', label: 'Applications' },
-];
+import { Sidebar } from './Sidebar';
 
 export const AppLayout = () => {
-  const { pathname } = useLocation();
   const [paletteOpen, setPaletteOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -18,104 +14,55 @@ export const AppLayout = () => {
         e.preventDefault();
         setPaletteOpen((prev) => !prev);
       }
+      if (e.key === 'Escape' && sidebarOpen) {
+        setSidebarOpen(false);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, []);
+  }, [sidebarOpen]);
 
   return (
-    <div className='min-h-screen flex flex-col'>
-      {/* Apple-style translucent dark glass nav */}
-      <nav
-        className='sticky top-0 z-40 h-12 flex items-center px-6 shrink-0'
-        style={{
-          background: 'rgba(0, 0, 0, 0.8)',
-          backdropFilter: 'saturate(180%) blur(20px)',
-          WebkitBackdropFilter: 'saturate(180%) blur(20px)',
-        }}
-      >
-        <span
-          className='text-white text-md font-semibold tracking-tight shrink-0 italic'
-          style={{ letterSpacing: '-0.374px' }}
-        >
-          JobTrack
-        </span>
+    <div className='flex min-h-screen overflow-x-hidden'>
+      {/* Mobile backdrop */}
+      {sidebarOpen && (
+        <div
+          className='fixed inset-0 z-40 bg-black/40 md:hidden'
+          onClick={() => setSidebarOpen(false)}
+          aria-hidden='true'
+        />
+      )}
 
-        <div className='flex items-center gap-1 mx-auto'>
-          {navLinks.map(({ to, label }) => (
-            <Link
-              key={to}
-              to={to}
-              className='text-xs px-3 py-1 rounded-full transition-colors'
-              style={{
-                color: pathname.startsWith(to)
-                  ? '#ffffff'
-                  : 'rgba(255,255,255,0.72)',
-                background: pathname.startsWith(to)
-                  ? 'rgba(255,255,255,0.12)'
-                  : 'transparent',
-                letterSpacing: '-0.12px',
-              }}
-            >
-              {label}
-            </Link>
-          ))}
-        </div>
+      <Sidebar
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        onSearchClick={() => setPaletteOpen(true)}
+      />
 
-        <div className='shrink-0 flex items-center gap-2'>
-          {/* ⌘K hint button */}
+      <div className='flex-1 flex flex-col min-w-0'>
+        {/* Mobile top bar */}
+        <header className='md:hidden sticky top-0 z-30 h-12 bg-white border-b border-neutral-200 flex items-center px-4 gap-3 shrink-0'>
           <button
-            onClick={() => setPaletteOpen(true)}
-            className='md:flex hidden'
-            style={{
-              // display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              padding: '4px 10px',
-              fontSize: '12px',
-              color: 'rgba(255,255,255,0.48)',
-              background: 'rgba(255,255,255,0.08)',
-              border: '1px solid rgba(255,255,255,0.12)',
-              borderRadius: '6px',
-              cursor: 'pointer',
-              letterSpacing: '-0.12px',
-              transition: 'color 0.1s, background 0.1s',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.color = 'rgba(255,255,255,0.72)';
-              e.currentTarget.style.background = 'rgba(255,255,255,0.12)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.color = 'rgba(255,255,255,0.48)';
-              e.currentTarget.style.background = 'rgba(255,255,255,0.08)';
-            }}
+            onClick={() => setSidebarOpen(true)}
+            className='p-1 -ml-1 rounded-md text-neutral-500 hover:bg-neutral-100 transition-colors'
+            aria-label='Open menu'
           >
-            <span>Commands</span>
-            <span style={{ fontFamily: 'monospace', fontSize: '11px' }}>
-              ⌘K
-            </span>
+            <Menu size={20} />
           </button>
+          <div className='flex items-center gap-2'>
+            <div className='w-6 h-6 rounded-md bg-neutral-900 flex items-center justify-center'>
+              <Briefcase size={12} color='white' />
+            </div>
+            <span className='font-display font-semibold text-sm text-neutral-900'>
+              JobTrack
+            </span>
+          </div>
+        </header>
 
-          <Link
-            to='/applications/new'
-            className='flex shrink-0 text-white text-sm px-4 rounded-lg transition-opacity hover:opacity-80'
-            style={{
-              background: '#0071e3',
-              padding: '6px 14px',
-              fontSize: '14px',
-              letterSpacing: '-0.224px',
-              lineHeight: '1',
-              borderRadius: '8px',
-            }}
-          >
-            <Plus size={16} /> <span className='hidden sm:block'>New</span>
-          </Link>
-        </div>
-      </nav>
-      {/* max-w-245 */}
-      <main className='flex-1 px-6 py-8 mx-auto w-full'>
-        <Outlet />
-      </main>
+        <main className='flex-1 px-4 py-6 md:px-8 md:py-8'>
+          <Outlet />
+        </main>
+      </div>
 
       <CommandPalette
         open={paletteOpen}

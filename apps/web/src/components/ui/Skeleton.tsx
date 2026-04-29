@@ -1,7 +1,6 @@
 export const Skeleton = ({ className = '' }: { className?: string }) => (
   <div
-    className={`animate-pulse rounded-xl ${className}`}
-    style={{ background: 'rgba(0,0,0,0.06)' }}
+    className={`animate-pulse rounded-xl bg-[rgba(0,0,0,0.06)] ${className}`}
   />
 )
 

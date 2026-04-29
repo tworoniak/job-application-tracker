@@ -44,19 +44,8 @@ export const OutcomeBadge = ({ outcome }: { outcome: Outcome }) => {
   const { bg, color, weight = '400' } = outcomeStyles[outcome];
   return (
     <span
-      style={{
-        display: 'inline-flex',
-        alignItems: 'center',
-        padding: '2px 8px',
-        borderRadius: '980px',
-        fontSize: '12px',
-        fontWeight: weight,
-        lineHeight: '1.33',
-        letterSpacing: '-0.12px',
-        background: bg,
-        color,
-        whiteSpace: 'nowrap',
-      }}
+      className='inline-flex items-center px-2 py-0.5 rounded-full text-xs leading-[1.33] tracking-[-0.12px] whitespace-nowrap'
+      style={{ background: bg, color, fontWeight: weight }}
     >
       {OUTCOME_LABELS[outcome]}
     </span>
@@ -64,21 +53,7 @@ export const OutcomeBadge = ({ outcome }: { outcome: Outcome }) => {
 };
 
 export const RoleTypeBadge = ({ roleType }: { roleType: RoleType }) => (
-  <span
-    style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      padding: '2px 8px',
-      borderRadius: '980px',
-      fontSize: '12px',
-      fontWeight: '400',
-      lineHeight: '1.33',
-      letterSpacing: '-0.12px',
-      background: 'rgba(0,0,0,0.05)',
-      color: 'rgba(0,0,0,0.72)',
-      whiteSpace: 'nowrap',
-    }}
-  >
+  <span className='inline-flex items-center px-2 py-0.5 rounded-full text-xs font-normal leading-[1.33] tracking-[-0.12px] bg-[rgba(0,0,0,0.05)] text-[rgba(0,0,0,0.72)] whitespace-nowrap'>
     {ROLE_TYPE_LABELS[roleType]}
   </span>
 );
@@ -88,21 +63,7 @@ export const LocationTypeBadge = ({
 }: {
   locationType: LocationType;
 }) => (
-  <span
-    style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      padding: '2px 8px',
-      borderRadius: '980px',
-      fontSize: '12px',
-      fontWeight: '400',
-      lineHeight: '1.33',
-      letterSpacing: '-0.12px',
-      background: 'rgba(0,0,0,0.05)',
-      color: 'rgba(0,0,0,0.72)',
-      whiteSpace: 'nowrap',
-    }}
-  >
+  <span className='inline-flex items-center px-2 py-0.5 rounded-full text-xs font-normal leading-[1.33] tracking-[-0.12px] bg-[rgba(0,0,0,0.05)] text-[rgba(0,0,0,0.72)] whitespace-nowrap'>
     {LOCATION_TYPE_LABELS[locationType]}
   </span>
 );

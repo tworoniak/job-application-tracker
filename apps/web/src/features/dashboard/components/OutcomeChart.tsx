@@ -37,17 +37,7 @@ export const OutcomeChart = ({ data }: Props) => {
 
   if (!chartData.length) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          height: '160px',
-          fontSize: '14px',
-          color: 'rgba(0,0,0,0.40)',
-          letterSpacing: '-0.224px',
-        }}
-      >
+      <div className='flex items-center justify-center h-40 text-sm text-[rgba(0,0,0,0.40)] tracking-[-0.224px]'>
         No data yet
       </div>
     );

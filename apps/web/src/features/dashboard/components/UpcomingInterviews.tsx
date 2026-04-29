@@ -23,6 +23,8 @@ export function DateBadge({ date, isActive }: DateBadgeProps) {
     timeZone: 'UTC',
   });
 
+  const isUrgent = daysUntilCount(date) <= 3;
+
   return (
     <div
       className={[
@@ -31,14 +33,21 @@ export function DateBadge({ date, isActive }: DateBadgeProps) {
         'leading-none',
         isActive
           ? 'bg-white border-neutral-300 shadow-sm'
-          : 'bg-blue-50 border-blue-200 border-t-blue-400 border-t-3',
+          : isUrgent
+            ? 'bg-red-50/60 border-red-200 border-t-red-400 border-t-3'
+            : 'bg-blue-50/50 border-blue-200 border-t-blue-400 border-t-3',
       ].join(' ')}
     >
-      <span className='text-xs font-medium tracking-wide text-blue-500 uppercase leading-none'>
+      <span
+        className={[
+          'text-xs font-medium tracking-wide uppercase leading-none',
+          isActive ? 'text-neutral-400' : isUrgent ? 'text-red-500' : 'text-blue-500',
+        ].join(' ')}
+      >
         {month}
       </span>
 
-      <span className='text-lg font-bold text-neutral-500 leading-none '>
+      <span className='text-lg font-bold text-neutral-500 leading-none'>
         {day}
       </span>
     </div>
@@ -53,11 +62,15 @@ export function DateBadge({ date, isActive }: DateBadgeProps) {
 //     timeZone: 'UTC',
 //   });
 
-const daysUntil = (iso: string) => {
+const daysUntilCount = (iso: string): number => {
   const todayUtc = new Date();
   todayUtc.setUTCHours(0, 0, 0, 0);
   const diff = new Date(iso).getTime() - todayUtc.getTime();
-  const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
+  return Math.ceil(diff / (1000 * 60 * 60 * 24));
+};
+
+const daysUntil = (iso: string) => {
+  const days = daysUntilCount(iso);
   if (days === 0) return 'Today';
   if (days === 1) return 'Tomorrow';
   return `In ${days} days`;
@@ -87,7 +100,7 @@ export const UpcomingInterviews = ({
             <div className='flex items-center gap-2'>
               <DateBadge date={interview.interviewDate} />
               <div>
-                <p className='text-md font-semibold text-gray-900'>
+                <p className='text-sm font-semibold text-gray-900'>
                   {interview.companyName}
                 </p>
                 <p className='text-xs text-gray-500 -mt-0.5'>
@@ -97,7 +110,14 @@ export const UpcomingInterviews = ({
             </div>
 
             <div className='text-right shrink-0 ml-4'>
-              <p className='text-xs font-medium text-blue-600'>
+              <p
+                className={[
+                  'text-xs font-medium',
+                  daysUntilCount(interview.interviewDate!) <= 3
+                    ? 'text-red-500'
+                    : 'text-blue-600',
+                ].join(' ')}
+              >
                 {daysUntil(interview.interviewDate!)}
               </p>
               {/* <p className='text-xs text-gray-400'>

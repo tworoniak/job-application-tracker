@@ -1,5 +1,25 @@
 import { useDashboardMetrics } from '../hooks/useDashboardMetrics';
 import { useInterviewReminders } from '../hooks/useInterviewReminders';
+
+const getGreeting = () => {
+  const hour = new Date().getHours();
+  if (hour < 12) return 'Good morning';
+  if (hour < 17) return 'Good afternoon';
+  return 'Good evening';
+};
+
+const getCurrentISOWeek = (): string => {
+  const now = new Date();
+  const day = now.getDay() || 7;
+  const thursday = new Date(now);
+  thursday.setDate(now.getDate() + 4 - day);
+  const year = thursday.getFullYear();
+  const jan1 = new Date(year, 0, 1);
+  const week = Math.ceil(
+    ((thursday.getTime() - jan1.getTime()) / 86400000 + jan1.getDay() + 1) / 7,
+  );
+  return `${year}-W${String(week).padStart(2, '0')}`;
+};
 import {
   MetricCard,
   OutcomeChart,
@@ -14,6 +34,11 @@ export const DashboardPage = () => {
   const { permission, requestPermission, supported } = useInterviewReminders(
     metrics?.upcomingInterviews ?? [],
   );
+
+  const thisWeekCount =
+    metrics?.applicationsByWeek.find((w) => w.week === getCurrentISOWeek())
+      ?.count ?? 0;
+  const interviewCount = metrics?.upcomingInterviews.length ?? 0;
 
   const activeCount =
     metrics?.byOutcome
@@ -49,11 +74,21 @@ export const DashboardPage = () => {
   );
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
-      <h1 className='font-display font-semibold text-gray-900 text-2xl sm:text-3xl lg:text-4xl'>
-        {/* Dashboard */}
-        Welcome back, Thomas
-      </h1>
+    <div className='flex flex-col gap-8'>
+      <div>
+        <h1 className='font-display font-semibold text-gray-900 text-2xl sm:text-3xl lg:text-4xl'>
+          {getGreeting()}, Thomas
+        </h1>
+        {!loading && (
+          <p className='text-sm text-neutral-500 mt-1'>
+            {thisWeekCount} application{thisWeekCount !== 1 ? 's' : ''} this
+            week
+            {interviewCount > 0
+              ? ` · ${interviewCount} interview${interviewCount !== 1 ? 's' : ''} coming up`
+              : ''}
+          </p>
+        )}
+      </div>
 
       {/* Metric cards */}
       <div className='grid grid-cols-2 sm:grid-cols-4 gap-4'>

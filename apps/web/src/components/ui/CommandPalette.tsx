@@ -81,61 +81,31 @@ export const CommandPalette = ({ open, onClose }: Props) => {
   return createPortal(
     <div
       onClick={onClose}
+      className='fixed inset-0 z-9999 flex items-start justify-center pt-[20vh] bg-[rgba(0,0,0,0.4)]'
       style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        display: 'flex',
-        alignItems: 'flex-start',
-        justifyContent: 'center',
-        paddingTop: '20vh',
-        background: 'rgba(0,0,0,0.4)',
         backdropFilter: 'blur(4px)',
         WebkitBackdropFilter: 'blur(4px)',
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        style={{
-          width: '480px',
-          background: '#ffffff',
-          borderRadius: '12px',
-          boxShadow: 'rgba(0,0,0,0.22) 3px 5px 30px 0px',
-          overflow: 'hidden',
-        }}
+        className='w-120 bg-white rounded-xl shadow-(--shadow-apple-card) overflow-hidden'
       >
         {/* Search input */}
-        <div style={{ padding: '14px 16px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+        <div className='px-4 py-3.5 border-b border-[rgba(0,0,0,0.06)]'>
           <input
             ref={inputRef}
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Type a command…"
-            style={{
-              width: '100%',
-              background: 'transparent',
-              border: 'none',
-              outline: 'none',
-              fontSize: '17px',
-              color: '#1d1d1f',
-              letterSpacing: '-0.374px',
-            }}
+            className='w-full bg-transparent border-none outline-none text-[17px] text-apple-text tracking-[-0.374px]'
           />
         </div>
 
         {/* Command list */}
-        <div style={{ padding: '6px 0', maxHeight: '320px', overflowY: 'auto' }}>
+        <div className='py-1.5 max-h-80 overflow-y-auto'>
           {filtered.length === 0 ? (
-            <p
-              style={{
-                padding: '20px 16px',
-                fontSize: '14px',
-                color: 'rgba(0,0,0,0.40)',
-                letterSpacing: '-0.224px',
-                textAlign: 'center',
-                margin: 0,
-              }}
-            >
+            <p className='px-4 py-5 text-sm text-[rgba(0,0,0,0.40)] tracking-[-0.224px] text-center m-0'>
               No commands found
             </p>
           ) : (
@@ -144,40 +114,19 @@ export const CommandPalette = ({ open, onClose }: Props) => {
                 key={cmd.id}
                 onClick={cmd.action}
                 onMouseEnter={() => setSelectedIndex(i)}
+                className='flex items-center justify-between w-full px-4 py-2.5 border-none cursor-pointer text-left transition-[background] duration-80'
                 style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  width: '100%',
-                  padding: '10px 16px',
                   background: i === selectedIndex ? 'rgba(0,113,227,0.08)' : 'transparent',
-                  border: 'none',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  transition: 'background 0.08s',
                 }}
               >
                 <span
-                  style={{
-                    fontSize: '14px',
-                    color: i === selectedIndex ? '#0071e3' : '#1d1d1f',
-                    letterSpacing: '-0.224px',
-                  }}
+                  className='text-sm tracking-[-0.224px]'
+                  style={{ color: i === selectedIndex ? '#0071e3' : '#1d1d1f' }}
                 >
                   {cmd.label}
                 </span>
                 {cmd.hint && (
-                  <span
-                    style={{
-                      fontSize: '11px',
-                      color: 'rgba(0,0,0,0.40)',
-                      background: '#f5f5f7',
-                      border: '1px solid rgba(0,0,0,0.10)',
-                      borderRadius: '4px',
-                      padding: '1px 6px',
-                      fontFamily: 'monospace',
-                    }}
-                  >
+                  <span className='text-[11px] text-[rgba(0,0,0,0.40)] bg-apple-gray border border-[rgba(0,0,0,0.10)] rounded px-1.5 py-px font-mono'>
                     {cmd.hint}
                   </span>
                 )}
@@ -187,17 +136,10 @@ export const CommandPalette = ({ open, onClose }: Props) => {
         </div>
 
         {/* Footer hints */}
-        <div
-          style={{
-            padding: '8px 16px',
-            borderTop: '1px solid rgba(0,0,0,0.06)',
-            display: 'flex',
-            gap: '16px',
-          }}
-        >
+        <div className='px-4 py-2 border-t border-[rgba(0,0,0,0.06)] flex gap-4'>
           {[['↵', 'select'], ['↑↓', 'navigate'], ['esc', 'close']].map(([key, label]) => (
-            <span key={key} style={{ fontSize: '11px', color: 'rgba(0,0,0,0.40)', letterSpacing: '-0.08px' }}>
-              <span style={{ fontFamily: 'monospace' }}>{key}</span> {label}
+            <span key={key} className='text-[11px] text-[rgba(0,0,0,0.40)] tracking-[-0.08px]'>
+              <span className='font-mono'>{key}</span> {label}
             </span>
           ))}
         </div>
