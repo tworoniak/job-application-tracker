@@ -125,6 +125,9 @@ const RowMenu = ({
     <div ref={ref} style={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
       <button
         onClick={() => setOpen((v) => !v)}
+        aria-label="Application options"
+        aria-expanded={open}
+        aria-haspopup="menu"
         style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           width: '28px', height: '28px', borderRadius: '7px',

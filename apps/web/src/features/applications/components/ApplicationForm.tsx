@@ -59,7 +59,7 @@ const Field = ({
       {label}{required && <span style={{ color: '#0071e3', marginLeft: '2px' }}>*</span>}
     </label>
     {children}
-    {error && <p style={errorStyle}>{error}</p>}
+    {error && <p role="alert" style={errorStyle}>{error}</p>}
   </div>
 )
 

@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react'
+
 interface ConfirmDialogProps {
   open: boolean
   title: string
@@ -17,6 +19,32 @@ export const ConfirmDialog = ({
   onCancel,
   loading,
 }: ConfirmDialogProps) => {
+  const dialogRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const el = dialogRef.current
+    if (!el) return
+    const focusable = el.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    )
+    focusable[0]?.focus()
+
+    const trap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+      const els = Array.from(focusable)
+      const first = els[0]
+      const last = els[els.length - 1]
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus() }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus() }
+      }
+    }
+    document.addEventListener('keydown', trap)
+    return () => document.removeEventListener('keydown', trap)
+  }, [open])
+
   if (!open) return null
 
   return (
@@ -25,8 +53,14 @@ export const ConfirmDialog = ({
         className="absolute inset-0 bg-apple-text-tertiary"
         onClick={onCancel}
       />
-      <div className="relative w-full mx-4 max-w-[320px] bg-white rounded-xl p-6 shadow-(--shadow-apple-card)">
-        <h2 className="font-display text-[17px] font-semibold text-apple-text leading-[1.24] tracking-[-0.374px]">
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="confirm-dialog-title"
+        className="relative w-full mx-4 max-w-[320px] bg-white rounded-xl p-6 shadow-(--shadow-apple-card)"
+      >
+        <h2 id="confirm-dialog-title" className="font-display text-[17px] font-semibold text-apple-text leading-[1.24] tracking-[-0.374px]">
           {title}
         </h2>
         <p className="mt-2 text-sm text-[rgba(0,0,0,0.72)] leading-[1.43] tracking-[-0.224px]">

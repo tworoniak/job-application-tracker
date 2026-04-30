@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { X } from 'lucide-react'
 import { useApplication } from '../hooks/useApplication'
 import { useUpdateApplication } from '../hooks/useUpdateApplication'
@@ -51,6 +51,7 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
   const { application, loading } = useApplication(appId)
   const { updateApplication, loading: saving } = useUpdateApplication()
   const [editMode, setEditMode] = useState(initialEditMode)
+  const panelRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setEditMode(initialEditMode)
@@ -70,6 +71,31 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
   }, [editMode, onClose])
+
+  // Focus trap
+  useEffect(() => {
+    const el = panelRef.current
+    if (!el) return
+    const focusable = () => Array.from(
+      el.querySelectorAll<HTMLElement>(
+        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+      )
+    )
+    focusable()[0]?.focus()
+    const trap = (e: KeyboardEvent) => {
+      if (e.key !== 'Tab') return
+      const els = focusable()
+      const first = els[0]
+      const last = els[els.length - 1]
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last?.focus() }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first?.focus() }
+      }
+    }
+    document.addEventListener('keydown', trap)
+    return () => document.removeEventListener('keydown', trap)
+  }, [loading, editMode])
 
   const handleEditSubmit = async (values: ApplicationFormValues) => {
     if (!application) return
@@ -98,6 +124,11 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
 
       {/* Drawer panel */}
       <div
+        ref={panelRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="drawer-title"
+        className="animate-slide-in-right"
         style={{
           position: 'fixed',
           top: 0,
@@ -129,7 +160,7 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
           /* ── Edit mode ─────────────────────────────── */
           <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
             <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-              <h2 style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px' }}>Edit Application</h2>
+              <h2 id="drawer-title" style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px' }}>Edit Application</h2>
               <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
                 <button
                   onClick={() => setEditMode(false)}
@@ -139,6 +170,7 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
                 </button>
                 <button
                   onClick={onClose}
+                  aria-label="Close drawer"
                   style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.06)', border: 'none', cursor: 'pointer' }}
                 >
                   <X size={14} color="rgba(0,0,0,0.60)" />
@@ -171,7 +203,7 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
                     {initials}
                   </div>
                   <div style={{ minWidth: 0 }}>
-                    <p style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <p id="drawer-title" style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {application.companyName}
                     </p>
                     <p style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '1px' }}>
@@ -189,6 +221,7 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
                   </button>
                   <button
                     onClick={onClose}
+                    aria-label="Close drawer"
                     style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.06)', border: 'none', cursor: 'pointer' }}
                   >
                     <X size={14} color="rgba(0,0,0,0.60)" />

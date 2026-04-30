@@ -17,7 +17,7 @@ const outcomeStyles: Record<
   { bg: string; color: string; weight?: string }
 > = {
   APPLIED: { bg: 'rgba(0,113,227,0.08)', color: '#0071e3' },
-  PHONE_SCREEN: { bg: '#13505B', color: '#13505B' },
+  PHONE_SCREEN: { bg: 'rgba(19,80,91,0.10)', color: '#13505B' },
   INTERVIEW_SCHEDULED: {
     bg: 'rgba(0,113,227,0.12)',
     color: '#00C49A',
