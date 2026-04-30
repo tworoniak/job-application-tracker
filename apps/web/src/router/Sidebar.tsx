@@ -1,4 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
+import { getCurrentISOWeek } from '@/lib/date';
 import {
   Home,
   LayoutList,
@@ -22,19 +23,6 @@ const NAV_ITEMS = [
   { to: '/insights', label: 'Insights', icon: BarChart3, soon: true },
 ] as const;
 
-const getCurrentISOWeek = (): string => {
-  const now = new Date();
-  const day = now.getDay() || 7;
-  const thursday = new Date(now);
-  thursday.setDate(now.getDate() + 4 - day);
-  const year = thursday.getFullYear();
-  const jan1 = new Date(year, 0, 1);
-  const week = Math.ceil(
-    ((thursday.getTime() - jan1.getTime()) / 86400000 + jan1.getDay() + 1) / 7,
-  );
-  return `${year}-W${String(week).padStart(2, '0')}`;
-};
-
 type SidebarProps = {
   isOpen: boolean;
   onClose: () => void;
@@ -50,13 +38,6 @@ export const Sidebar = ({ isOpen, onClose, onSearchClick }: SidebarProps) => {
       ?.count ?? 0;
   const progress = Math.min((thisWeekCount / WEEKLY_GOAL) * 100, 100);
 
-  const handleNavClick = (isDisabled: boolean) => (e: React.MouseEvent) => {
-    if (isDisabled) {
-      e.preventDefault();
-      return;
-    }
-    onClose();
-  };
 
   return (
     <aside
@@ -114,25 +95,36 @@ export const Sidebar = ({ isOpen, onClose, onSearchClick }: SidebarProps) => {
           const isDisabled = isSoon || isPlaceholder;
           const isActive = !isDisabled && pathname.startsWith(to);
 
+          if (isDisabled) {
+            return (
+              <span
+                key={to}
+                aria-disabled='true'
+                className='flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm text-neutral-400 cursor-default select-none'
+              >
+                <Icon size={16} className='shrink-0' />
+                <span className='flex-1'>{label}</span>
+                {isSoon && (
+                  <span className='text-xs text-neutral-400'>Soon</span>
+                )}
+              </span>
+            );
+          }
+
           return (
             <Link
               key={to}
-              to={isDisabled ? '#' : to}
-              onClick={handleNavClick(isDisabled)}
+              to={to}
+              onClick={onClose}
               className={[
                 'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors',
                 isActive
                   ? 'bg-white shadow-sm text-neutral-900 font-medium'
-                  : isSoon
-                    ? 'text-neutral-400 cursor-default'
-                    : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
+                  : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
               ].join(' ')}
             >
               <Icon size={16} className='shrink-0' />
               <span className='flex-1'>{label}</span>
-              {isSoon && (
-                <span className='text-xs text-neutral-400'>Soon</span>
-              )}
             </Link>
           );
         })}

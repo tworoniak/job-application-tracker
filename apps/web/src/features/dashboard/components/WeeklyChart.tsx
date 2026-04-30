@@ -47,6 +47,7 @@ export const WeeklyChart = ({ data }: Props) => {
   }
 
   return (
+    <div role='img' aria-label='Applications submitted per week, bar chart'>
     <ResponsiveContainer width='100%' height={160}>
       <BarChart data={data} margin={{ left: 0, right: 0 }}>
         <XAxis
@@ -66,8 +67,9 @@ export const WeeklyChart = ({ data }: Props) => {
           }}
           cursor={{ fill: 'transparent' }}
         />
-        <Bar dataKey='count' fill='#3b82f6' radius={[3, 3, 0, 0]} />
+        <Bar dataKey='count' fill='#0071e3' radius={[3, 3, 0, 0]} />
       </BarChart>
     </ResponsiveContainer>
+    </div>
   );
 };

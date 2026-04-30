@@ -212,8 +212,8 @@ export const ApplicationForm = ({ defaultValues, onSubmit, loading, submitLabel,
           disabled={loading}
           style={{
             padding: '8px 15px',
-            fontSize: '17px',
-            fontWeight: '400',
+            fontSize: '14px',
+            fontWeight: '500',
             color: '#ffffff',
             background: loading ? 'rgba(0,113,227,0.5)' : '#0071e3',
             border: '1px solid transparent',

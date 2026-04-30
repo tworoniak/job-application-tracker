@@ -270,7 +270,7 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
                 <FieldItem label="Compensation" value={formatSalary(application.salaryMin, application.salaryMax, application.salaryType)} />
                 <FieldItem label="Location" value={LOCATION_TYPE_LABELS[application.locationType]} />
                 <FieldItem label="Role Type" value={ROLE_TYPE_LABELS[application.roleType]} />
-                <FieldItem label="Contact" value={application.contactName || application.contactInfo} />
+                <FieldItem label="Contact" value={[application.contactName, application.contactInfo].filter(Boolean).join(' · ') || null} />
               </dl>
 
               {/* Notes */}
