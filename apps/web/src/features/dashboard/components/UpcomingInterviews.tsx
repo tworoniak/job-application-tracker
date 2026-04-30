@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import type { DashboardMetrics } from '../hooks/useDashboardMetrics';
 
 type Interview = DashboardMetrics['upcomingInterviews'][number];
@@ -41,7 +40,11 @@ export function DateBadge({ date, isActive }: DateBadgeProps) {
       <span
         className={[
           'text-xs font-medium tracking-wide uppercase leading-none',
-          isActive ? 'text-neutral-400' : isUrgent ? 'text-red-500' : 'text-blue-500',
+          isActive
+            ? 'text-neutral-400'
+            : isUrgent
+              ? 'text-red-500'
+              : 'text-blue-500',
         ].join(' ')}
       >
         {month}
@@ -70,8 +73,10 @@ const daysUntil = (iso: string) => {
 
 export const UpcomingInterviews = ({
   interviews,
+  onItemClick,
 }: {
   interviews: Interview[];
+  onItemClick: (id: string) => void;
 }) => {
   if (!interviews.length) {
     return (
@@ -85,9 +90,10 @@ export const UpcomingInterviews = ({
     <ul className='divide-y divide-gray-100'>
       {interviews.map((interview) => (
         <li key={interview.id} className='py-3'>
-          <Link
-            to={`/applications/${interview.id}`}
-            className='flex items-center justify-between hover:bg-gray-50 -mx-2 px-2 py-1 rounded-md transition-colors'
+          <button
+            type='button'
+            onClick={() => onItemClick(interview.id)}
+            className='w-full flex items-center justify-between hover:bg-gray-50 -mx-2 px-2 py-1 rounded-md transition-colors text-left cursor-pointer'
           >
             <div className='flex items-center gap-2'>
               <DateBadge date={interview.interviewDate} />
@@ -113,7 +119,7 @@ export const UpcomingInterviews = ({
                 {daysUntil(interview.interviewDate!)}
               </p>
             </div>
-          </Link>
+          </button>
         </li>
       ))}
     </ul>
