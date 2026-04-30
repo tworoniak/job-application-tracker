@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useDashboardMetrics } from '../hooks/useDashboardMetrics';
 import { useInterviewReminders } from '../hooks/useInterviewReminders';
 import { getCurrentISOWeek } from '@/lib/date';
+import { ApplicationDetailDrawer } from '@/features/applications/components/ApplicationDetailDrawer';
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -20,6 +22,7 @@ import { Skeleton } from '@/components/ui';
 
 export const DashboardPage = () => {
   const { metrics, loading } = useDashboardMetrics();
+  const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
   const { permission, requestPermission, supported } = useInterviewReminders(
     metrics?.upcomingInterviews ?? [],
   );
@@ -63,6 +66,7 @@ export const DashboardPage = () => {
   );
 
   return (
+    <>
     <div className='flex flex-col gap-8'>
       <div>
         <h1 className='font-display font-semibold text-gray-900 text-2xl sm:text-3xl lg:text-4xl'>
@@ -150,6 +154,7 @@ export const DashboardPage = () => {
           ) : (
             <UpcomingInterviews
               interviews={metrics?.upcomingInterviews ?? []}
+              onItemClick={setSelectedAppId}
             />
           )}
         </div>
@@ -179,5 +184,13 @@ export const DashboardPage = () => {
         </div>
       </div>
     </div>
+
+    {selectedAppId && (
+      <ApplicationDetailDrawer
+        appId={selectedAppId}
+        onClose={() => setSelectedAppId(null)}
+      />
+    )}
+    </>
   );
 };
