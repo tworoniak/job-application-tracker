@@ -1,0 +1,932 @@
+- generic [ref=e3]:
+  - complementary [ref=e4]:
+    - generic [ref=e5]:
+      - img [ref=e7]
+      - generic [ref=e10]: JobTrack
+    - button "Quick-add or search ⌘K" [ref=e12]:
+      - img [ref=e13]
+      - generic [ref=e16]: Quick-add or search
+      - generic [ref=e17]: ⌘K
+    - navigation [ref=e18]:
+      - link "Dashboard" [ref=e19] [cursor=pointer]:
+        - /url: /dashboard
+        - img [ref=e20]
+        - generic [ref=e23]: Dashboard
+      - link "Applications" [ref=e24] [cursor=pointer]:
+        - /url: /applications
+        - img [ref=e25]
+        - generic [ref=e28]: Applications
+      - link "Pipeline" [ref=e29] [cursor=pointer]:
+        - /url: /applications
+        - img [ref=e30]
+        - generic [ref=e34]: Pipeline
+      - link "Interviews" [ref=e35] [cursor=pointer]:
+        - /url: /applications
+        - img [ref=e36]
+        - generic [ref=e38]: Interviews
+      - link "Insights Soon" [ref=e39]:
+        - /url: /applications
+        - img [ref=e40]
+        - generic [ref=e42]: Insights
+        - generic [ref=e43]: Soon
+    - generic [ref=e45]:
+      - paragraph [ref=e46]: ✦ This week
+      - paragraph [ref=e47]: "3"
+      - paragraph [ref=e48]: applications · goal 6
+    - generic [ref=e50]:
+      - generic [ref=e52]: TW
+      - generic [ref=e53]:
+        - paragraph [ref=e54]: Thomas Woroniak
+        - paragraph [ref=e55]: thomasworoniak@gmail.com
+      - button [ref=e56]:
+        - img [ref=e57]
+  - main [ref=e62]:
+    - generic [ref=e63]:
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - heading "Applications" [level=1] [ref=e66]
+          - paragraph [ref=e67]: 105 total
+        - generic [ref=e68]:
+          - button "Export" [ref=e69] [cursor=pointer]:
+            - img [ref=e70]
+            - generic [ref=e73]: Export
+          - button "New Application" [ref=e74] [cursor=pointer]:
+            - img [ref=e75]
+            - generic [ref=e76]: New Application
+      - generic [ref=e77]:
+        - generic [ref=e78]:
+          - button "All" [ref=e79] [cursor=pointer]
+          - button "Active" [ref=e80] [cursor=pointer]
+          - button "Interviewing" [ref=e81] [cursor=pointer]
+          - button "Offers" [ref=e82] [cursor=pointer]
+          - button "Closed" [ref=e83] [cursor=pointer]
+        - generic [ref=e84]:
+          - searchbox "Search company, role…" [ref=e85]
+          - button "Filter" [ref=e86] [cursor=pointer]:
+            - img [ref=e87]
+            - text: Filter
+      - table [ref=e100]:
+        - rowgroup [ref=e101]:
+          - row "Company ↕ Status ↕ Type Location Applied ↓ Salary ↕" [ref=e102]:
+            - columnheader [ref=e103]:
+              - checkbox [ref=e2435] [cursor=pointer]
+            - columnheader "Company ↕" [ref=e105]:
+              - button "Company ↕" [ref=e2436] [cursor=pointer]:
+                - text: Company
+                - generic [ref=e2437]: ↕
+            - columnheader "Status ↕" [ref=e108]:
+              - button "Status ↕" [ref=e2438] [cursor=pointer]:
+                - text: Status
+                - generic [ref=e2439]: ↕
+            - columnheader "Type" [ref=e111]
+            - columnheader "Location" [ref=e112]
+            - columnheader "Applied ↓" [ref=e113]:
+              - button "Applied ↓" [ref=e2440] [cursor=pointer]:
+                - text: Applied
+                - generic [ref=e2441]: ↓
+            - columnheader "Salary ↕" [ref=e116]:
+              - button "Salary ↕" [ref=e2442] [cursor=pointer]:
+                - text: Salary
+                - generic [ref=e2443]: ↕
+            - columnheader [ref=e119]
+        - rowgroup [ref=e120]:
+          - row "LMI Frontend Developer Applied Full-time Remote Apr 27, 2026 $101k–$174k" [ref=e121] [cursor=pointer]:
+            - cell [ref=e122]:
+              - checkbox [ref=e2445]
+            - cell "LMI Frontend Developer" [ref=e125]:
+              - generic [ref=e2446]:
+                - generic [ref=e2447]: LMI
+                - generic [ref=e2448]: Frontend Developer
+            - cell "Applied" [ref=e129]:
+              - combobox [ref=e2449]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e131]:
+              - generic [ref=e2450]: Full-time
+            - cell "Remote" [ref=e133]:
+              - generic [ref=e2451]: Remote
+            - cell "Apr 27, 2026" [ref=e135]
+            - cell "$101k–$174k" [ref=e136]
+            - cell [ref=e137]:
+              - button [ref=e2454]:
+                - img [ref=e2455]
+          - row "CBTS UI/UX Designer (REACT) Applied Contract Remote Apr 27, 2026 —" [ref=e145] [cursor=pointer]:
+            - cell [ref=e146]:
+              - checkbox [ref=e2460]
+            - cell "CBTS UI/UX Designer (REACT)" [ref=e149]:
+              - generic [ref=e2461]:
+                - generic [ref=e2462]: CBTS
+                - generic [ref=e2463]: UI/UX Designer (REACT)
+            - cell "Applied" [ref=e153]:
+              - combobox [ref=e2464]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e155]:
+              - generic [ref=e2465]: Contract
+            - cell "Remote" [ref=e157]:
+              - generic [ref=e2466]: Remote
+            - cell "Apr 27, 2026" [ref=e159]
+            - cell "—" [ref=e160]
+            - cell [ref=e161]:
+              - button [ref=e2469]:
+                - img [ref=e2470]
+          - row "Dutchie Senior Software Engineer, Brands Applied Full-time Remote Apr 27, 2026 $149k–$149k" [ref=e169] [cursor=pointer]:
+            - cell [ref=e170]:
+              - checkbox [ref=e2475]
+            - cell "Dutchie Senior Software Engineer, Brands" [ref=e173]:
+              - generic [ref=e2476]:
+                - generic [ref=e2477]: Dutchie
+                - generic [ref=e2478]: Senior Software Engineer, Brands
+            - cell "Applied" [ref=e177]:
+              - combobox [ref=e2479]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e179]:
+              - generic [ref=e2480]: Full-time
+            - cell "Remote" [ref=e181]:
+              - generic [ref=e2481]: Remote
+            - cell "Apr 27, 2026" [ref=e183]
+            - cell "$149k–$149k" [ref=e184]
+            - cell [ref=e185]:
+              - button [ref=e2484]:
+                - img [ref=e2485]
+          - row "Test Software Corp Frontend Engineer Interview Scheduled Full-time Remote Apr 25, 2026 —" [ref=e193] [cursor=pointer]:
+            - cell [ref=e194]:
+              - checkbox [ref=e2490]
+            - cell "Test Software Corp Frontend Engineer" [ref=e197]:
+              - generic [ref=e2491]:
+                - generic [ref=e2492]: Test Software Corp
+                - generic [ref=e2493]: Frontend Engineer
+            - cell "Interview Scheduled" [ref=e201]:
+              - combobox [ref=e2494]:
+                - option "Applied"
+                - option "Phone Screen"
+                - option "Interview Scheduled" [selected]
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e203]:
+              - generic [ref=e2495]: Full-time
+            - cell "Remote" [ref=e205]:
+              - generic [ref=e2496]: Remote
+            - cell "Apr 25, 2026" [ref=e207]
+            - cell "—" [ref=e208]
+            - cell [ref=e209]:
+              - button [ref=e2499]:
+                - img [ref=e2500]
+          - row "Bestow Senior Frontend Software Engineer Applied Full-time Remote Apr 24, 2026 $145k–$170k" [ref=e217] [cursor=pointer]:
+            - cell [ref=e218]:
+              - checkbox [ref=e2505]
+            - cell "Bestow Senior Frontend Software Engineer" [ref=e221]:
+              - generic [ref=e2506]:
+                - generic [ref=e2507]: Bestow
+                - generic [ref=e2508]: Senior Frontend Software Engineer
+            - cell "Applied" [ref=e225]:
+              - combobox [ref=e2509]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e227]:
+              - generic [ref=e2510]: Full-time
+            - cell "Remote" [ref=e229]:
+              - generic [ref=e2511]: Remote
+            - cell "Apr 24, 2026" [ref=e231]
+            - cell "$145k–$170k" [ref=e232]
+            - cell [ref=e233]:
+              - button [ref=e2514]:
+                - img [ref=e2515]
+          - row "Good Day Farm Budtender Applied Part-time On-site Apr 24, 2026 $15/hr–$15/hr" [ref=e241] [cursor=pointer]:
+            - cell [ref=e242]:
+              - checkbox [ref=e2520]
+            - cell "Good Day Farm Budtender" [ref=e245]:
+              - generic [ref=e2521]:
+                - generic [ref=e2522]: Good Day Farm
+                - generic [ref=e2523]: Budtender
+            - cell "Applied" [ref=e249]:
+              - combobox [ref=e2524]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Part-time" [ref=e251]:
+              - generic [ref=e2525]: Part-time
+            - cell "On-site" [ref=e253]:
+              - generic [ref=e2526]: On-site
+            - cell "Apr 24, 2026" [ref=e255]
+            - cell "$15/hr–$15/hr" [ref=e256]
+            - cell [ref=e257]:
+              - button [ref=e2529]:
+                - img [ref=e2530]
+          - row "SS&C Sr. Software Developer Applied Full-time Remote Apr 24, 2026 $53.25/hr–$70.25/hr" [ref=e265] [cursor=pointer]:
+            - cell [ref=e266]:
+              - checkbox [ref=e2535]
+            - cell "SS&C Sr. Software Developer" [ref=e269]:
+              - generic [ref=e2536]:
+                - generic [ref=e2537]: SS&C
+                - generic [ref=e2538]: Sr. Software Developer
+            - cell "Applied" [ref=e273]:
+              - combobox [ref=e2539]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e275]:
+              - generic [ref=e2540]: Full-time
+            - cell "Remote" [ref=e277]:
+              - generic [ref=e2541]: Remote
+            - cell "Apr 24, 2026" [ref=e279]
+            - cell "$53.25/hr–$70.25/hr" [ref=e280]
+            - cell [ref=e281]:
+              - button [ref=e2544]:
+                - img [ref=e2545]
+          - row "Alpine Solutions Group Frontend Developer Applied Contract Remote Apr 24, 2026 $50/hr–$58/hr" [ref=e289] [cursor=pointer]:
+            - cell [ref=e290]:
+              - checkbox [ref=e2550]
+            - cell "Alpine Solutions Group Frontend Developer" [ref=e293]:
+              - generic [ref=e2551]:
+                - generic [ref=e2552]: Alpine Solutions Group
+                - generic [ref=e2553]: Frontend Developer
+            - cell "Applied" [ref=e297]:
+              - combobox [ref=e2554]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e299]:
+              - generic [ref=e2555]: Contract
+            - cell "Remote" [ref=e301]:
+              - generic [ref=e2556]: Remote
+            - cell "Apr 24, 2026" [ref=e303]
+            - cell "$50/hr–$58/hr" [ref=e304]
+            - cell [ref=e305]:
+              - button [ref=e2559]:
+                - img [ref=e2560]
+          - row "AP Recruiters UI Developer Applied Contract Remote Apr 24, 2026 $48.75/hr–$63.50/hr" [ref=e313] [cursor=pointer]:
+            - cell [ref=e314]:
+              - checkbox [ref=e2565]
+            - cell "AP Recruiters UI Developer" [ref=e317]:
+              - generic [ref=e2566]:
+                - generic [ref=e2567]: AP Recruiters
+                - generic [ref=e2568]: UI Developer
+            - cell "Applied" [ref=e321]:
+              - combobox [ref=e2569]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e323]:
+              - generic [ref=e2570]: Contract
+            - cell "Remote" [ref=e325]:
+              - generic [ref=e2571]: Remote
+            - cell "Apr 24, 2026" [ref=e327]
+            - cell "$48.75/hr–$63.50/hr" [ref=e328]
+            - cell [ref=e329]:
+              - button [ref=e2574]:
+                - img [ref=e2575]
+          - row "ServiceTitan Senior Software Engineer, Front-End Applied Full-time Remote Apr 24, 2026 $153k–$204k" [ref=e337] [cursor=pointer]:
+            - cell [ref=e338]:
+              - checkbox [ref=e2580]
+            - cell "ServiceTitan Senior Software Engineer, Front-End" [ref=e341]:
+              - generic [ref=e2581]:
+                - generic [ref=e2582]: ServiceTitan
+                - generic [ref=e2583]: Senior Software Engineer, Front-End
+            - cell "Applied" [ref=e345]:
+              - combobox [ref=e2584]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e347]:
+              - generic [ref=e2585]: Full-time
+            - cell "Remote" [ref=e349]:
+              - generic [ref=e2586]: Remote
+            - cell "Apr 24, 2026" [ref=e351]
+            - cell "$153k–$204k" [ref=e352]
+            - cell [ref=e353]:
+              - button [ref=e2589]:
+                - img [ref=e2590]
+          - row "Robert Half Frontend Developer Applied Full-time Remote Apr 23, 2026 $100k–$120k" [ref=e361] [cursor=pointer]:
+            - cell [ref=e362]:
+              - checkbox [ref=e2595]
+            - cell "Robert Half Frontend Developer" [ref=e365]:
+              - generic [ref=e2596]:
+                - generic [ref=e2597]: Robert Half
+                - generic [ref=e2598]: Frontend Developer
+            - cell "Applied" [ref=e369]:
+              - combobox [ref=e2599]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e371]:
+              - generic [ref=e2600]: Full-time
+            - cell "Remote" [ref=e373]:
+              - generic [ref=e2601]: Remote
+            - cell "Apr 23, 2026" [ref=e375]
+            - cell "$100k–$120k" [ref=e376]
+            - cell [ref=e377]:
+              - button [ref=e2604]:
+                - img [ref=e2605]
+          - row "Nomad eCommerce Front-End Developer/Design-to-Code Specialist Applied Full-time Remote Apr 23, 2026 $70k–$90k" [ref=e385] [cursor=pointer]:
+            - cell [ref=e386]:
+              - checkbox [ref=e2610]
+            - cell "Nomad eCommerce Front-End Developer/Design-to-Code Specialist" [ref=e389]:
+              - generic [ref=e2611]:
+                - generic [ref=e2612]: Nomad eCommerce
+                - generic [ref=e2613]: Front-End Developer/Design-to-Code Specialist
+            - cell "Applied" [ref=e393]:
+              - combobox [ref=e2614]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e395]:
+              - generic [ref=e2615]: Full-time
+            - cell "Remote" [ref=e397]:
+              - generic [ref=e2616]: Remote
+            - cell "Apr 23, 2026" [ref=e399]
+            - cell "$70k–$90k" [ref=e400]
+            - cell [ref=e401]:
+              - button [ref=e2619]:
+                - img [ref=e2620]
+          - row "PropStream Senior front-end developer Applied Full-time Remote Apr 23, 2026 $100k–$120k" [ref=e409] [cursor=pointer]:
+            - cell [ref=e410]:
+              - checkbox [ref=e2625]
+            - cell "PropStream Senior front-end developer" [ref=e413]:
+              - generic [ref=e2626]:
+                - generic [ref=e2627]: PropStream
+                - generic [ref=e2628]: Senior front-end developer
+            - cell "Applied" [ref=e417]:
+              - combobox [ref=e2629]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e419]:
+              - generic [ref=e2630]: Full-time
+            - cell "Remote" [ref=e421]:
+              - generic [ref=e2631]: Remote
+            - cell "Apr 23, 2026" [ref=e423]
+            - cell "$100k–$120k" [ref=e424]
+            - cell [ref=e425]:
+              - button [ref=e2634]:
+                - img [ref=e2635]
+          - row "Robert Half Frontend Developer Applied Contract Remote Apr 23, 2026 —" [ref=e433] [cursor=pointer]:
+            - cell [ref=e434]:
+              - checkbox [ref=e2640]
+            - cell "Robert Half Frontend Developer" [ref=e437]:
+              - generic [ref=e2641]:
+                - generic [ref=e2642]: Robert Half
+                - generic [ref=e2643]: Frontend Developer
+            - cell "Applied" [ref=e441]:
+              - combobox [ref=e2644]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e443]:
+              - generic [ref=e2645]: Contract
+            - cell "Remote" [ref=e445]:
+              - generic [ref=e2646]: Remote
+            - cell "Apr 23, 2026" [ref=e447]
+            - cell "—" [ref=e448]
+            - cell [ref=e449]:
+              - button [ref=e2649]:
+                - img [ref=e2650]
+          - row "Harnham Sr. Frontend Engineer Applied Full-time Remote Apr 23, 2026 $190k–$230k" [ref=e457] [cursor=pointer]:
+            - cell [ref=e458]:
+              - checkbox [ref=e2655]
+            - cell "Harnham Sr. Frontend Engineer" [ref=e461]:
+              - generic [ref=e2656]:
+                - generic [ref=e2657]: Harnham
+                - generic [ref=e2658]: Sr. Frontend Engineer
+            - cell "Applied" [ref=e465]:
+              - combobox [ref=e2659]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e467]:
+              - generic [ref=e2660]: Full-time
+            - cell "Remote" [ref=e469]:
+              - generic [ref=e2661]: Remote
+            - cell "Apr 23, 2026" [ref=e471]
+            - cell "$190k–$230k" [ref=e472]
+            - cell [ref=e473]:
+              - button [ref=e2664]:
+                - img [ref=e2665]
+          - 'row "Dexian React Developer #994728 Rejected Full-time Hybrid Apr 23, 2026 —" [ref=e481] [cursor=pointer]':
+            - cell [ref=e482]:
+              - checkbox [ref=e2670]
+            - 'cell "Dexian React Developer #994728" [ref=e485]':
+              - generic [ref=e2671]:
+                - generic [ref=e2672]: Dexian
+                - generic [ref=e2673]: "React Developer #994728"
+            - cell "Rejected" [ref=e489]:
+              - combobox [ref=e2674]:
+                - option "Applied"
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected" [selected]
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e491]:
+              - generic [ref=e2675]: Full-time
+            - cell "Hybrid" [ref=e493]:
+              - generic [ref=e2676]: Hybrid
+            - cell "Apr 23, 2026" [ref=e495]
+            - cell "—" [ref=e496]
+            - cell [ref=e497]:
+              - button [ref=e2679]:
+                - img [ref=e2680]
+          - row "Robert Half Frontend Developer Applied Contract Remote Apr 23, 2026 —" [ref=e505] [cursor=pointer]:
+            - cell [ref=e506]:
+              - checkbox [ref=e2685]
+            - cell "Robert Half Frontend Developer" [ref=e509]:
+              - generic [ref=e2686]:
+                - generic [ref=e2687]: Robert Half
+                - generic [ref=e2688]: Frontend Developer
+            - cell "Applied" [ref=e513]:
+              - combobox [ref=e2689]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e515]:
+              - generic [ref=e2690]: Contract
+            - cell "Remote" [ref=e517]:
+              - generic [ref=e2691]: Remote
+            - cell "Apr 23, 2026" [ref=e519]
+            - cell "—" [ref=e520]
+            - cell [ref=e521]:
+              - button [ref=e2694]:
+                - img [ref=e2695]
+          - row "Slice Talent Frontend Developer Applied Full-time Hybrid Apr 23, 2026 $200k–$250k" [ref=e529] [cursor=pointer]:
+            - cell [ref=e530]:
+              - checkbox [ref=e2700]
+            - cell "Slice Talent Frontend Developer" [ref=e533]:
+              - generic [ref=e2701]:
+                - generic [ref=e2702]: Slice Talent
+                - generic [ref=e2703]: Frontend Developer
+            - cell "Applied" [ref=e537]:
+              - combobox [ref=e2704]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e539]:
+              - generic [ref=e2705]: Full-time
+            - cell "Hybrid" [ref=e541]:
+              - generic [ref=e2706]: Hybrid
+            - cell "Apr 23, 2026" [ref=e543]
+            - cell "$200k–$250k" [ref=e544]
+            - cell [ref=e545]:
+              - button [ref=e2709]:
+                - img [ref=e2710]
+          - row "Red Hook Interactive LLC Software Engineer, Frontend Applied Full-time Remote Apr 23, 2026 $65k–$125k" [ref=e553] [cursor=pointer]:
+            - cell [ref=e554]:
+              - checkbox [ref=e2715]
+            - cell "Red Hook Interactive LLC Software Engineer, Frontend" [ref=e557]:
+              - generic [ref=e2716]:
+                - generic [ref=e2717]: Red Hook Interactive LLC
+                - generic [ref=e2718]: Software Engineer, Frontend
+            - cell "Applied" [ref=e561]:
+              - combobox [ref=e2719]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e563]:
+              - generic [ref=e2720]: Full-time
+            - cell "Remote" [ref=e565]:
+              - generic [ref=e2721]: Remote
+            - cell "Apr 23, 2026" [ref=e567]
+            - cell "$65k–$125k" [ref=e568]
+            - cell [ref=e569]:
+              - button [ref=e2724]:
+                - img [ref=e2725]
+          - row "Precision Technologies Lead React Developer Rejected Full-time Remote Apr 23, 2026 —" [ref=e577] [cursor=pointer]:
+            - cell [ref=e578]:
+              - checkbox [ref=e2730]
+            - cell "Precision Technologies Lead React Developer" [ref=e581]:
+              - generic [ref=e2731]:
+                - generic [ref=e2732]: Precision Technologies
+                - generic [ref=e2733]: Lead React Developer
+            - cell "Rejected" [ref=e585]:
+              - combobox [ref=e2734]:
+                - option "Applied"
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected" [selected]
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e587]:
+              - generic [ref=e2735]: Full-time
+            - cell "Remote" [ref=e589]:
+              - generic [ref=e2736]: Remote
+            - cell "Apr 23, 2026" [ref=e591]
+            - cell "—" [ref=e592]
+            - cell [ref=e593]:
+              - button [ref=e2739]:
+                - img [ref=e2740]
+          - row "DataAnnotation Frontend Engineer Applied Full-time Remote Apr 23, 2026 $40/hr–$75/hr" [ref=e601] [cursor=pointer]:
+            - cell [ref=e602]:
+              - checkbox [ref=e2745]
+            - cell "DataAnnotation Frontend Engineer" [ref=e605]:
+              - generic [ref=e2746]:
+                - generic [ref=e2747]: DataAnnotation
+                - generic [ref=e2748]: Frontend Engineer
+            - cell "Applied" [ref=e609]:
+              - combobox [ref=e2749]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e611]:
+              - generic [ref=e2750]: Full-time
+            - cell "Remote" [ref=e613]:
+              - generic [ref=e2751]: Remote
+            - cell "Apr 23, 2026" [ref=e615]
+            - cell "$40/hr–$75/hr" [ref=e616]
+            - cell [ref=e617]:
+              - button [ref=e2754]:
+                - img [ref=e2755]
+          - row "UMATR Senior Frontend Engineer (React, Typescript, Next.js) Applied Full-time Remote Apr 23, 2026 —" [ref=e625] [cursor=pointer]:
+            - cell [ref=e626]:
+              - checkbox [ref=e2760]
+            - cell "UMATR Senior Frontend Engineer (React, Typescript, Next.js)" [ref=e629]:
+              - generic [ref=e2761]:
+                - generic [ref=e2762]: UMATR
+                - generic [ref=e2763]: Senior Frontend Engineer (React, Typescript, Next.js)
+            - cell "Applied" [ref=e633]:
+              - combobox [ref=e2764]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e635]:
+              - generic [ref=e2765]: Full-time
+            - cell "Remote" [ref=e637]:
+              - generic [ref=e2766]: Remote
+            - cell "Apr 23, 2026" [ref=e639]
+            - cell "—" [ref=e640]
+            - cell [ref=e641]:
+              - button [ref=e2769]:
+                - img [ref=e2770]
+          - row "Test Data Corp Senior Frontend Developer Phone Screen Full-time Remote Apr 23, 2026 $120k–$150k" [ref=e649] [cursor=pointer]:
+            - cell [ref=e650]:
+              - checkbox [ref=e2775]
+            - cell "Test Data Corp Senior Frontend Developer" [ref=e653]:
+              - generic [ref=e2776]:
+                - generic [ref=e2777]: Test Data Corp
+                - generic [ref=e2778]: Senior Frontend Developer
+            - cell "Phone Screen" [ref=e657]:
+              - combobox [ref=e2779]:
+                - option "Applied"
+                - option "Phone Screen" [selected]
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e659]:
+              - generic [ref=e2780]: Full-time
+            - cell "Remote" [ref=e661]:
+              - generic [ref=e2781]: Remote
+            - cell "Apr 23, 2026" [ref=e663]
+            - cell "$120k–$150k" [ref=e664]
+            - cell [ref=e665]:
+              - button [ref=e2784]:
+                - img [ref=e2785]
+          - row "Robert Half Frontend Developer Applied Contract Remote Apr 23, 2026 $75/hr–$80/hr" [ref=e673] [cursor=pointer]:
+            - cell [ref=e674]:
+              - checkbox [ref=e2790]
+            - cell "Robert Half Frontend Developer" [ref=e677]:
+              - generic [ref=e2791]:
+                - generic [ref=e2792]: Robert Half
+                - generic [ref=e2793]: Frontend Developer
+            - cell "Applied" [ref=e681]:
+              - combobox [ref=e2794]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e683]:
+              - generic [ref=e2795]: Contract
+            - cell "Remote" [ref=e685]:
+              - generic [ref=e2796]: Remote
+            - cell "Apr 23, 2026" [ref=e687]
+            - cell "$75/hr–$80/hr" [ref=e688]
+            - cell [ref=e689]:
+              - button [ref=e2799]:
+                - img [ref=e2800]
+          - row "24-MAG Frontend Engineer Talent Network Applied Contract Remote Apr 23, 2026 $110/hr–$170/hr" [ref=e697] [cursor=pointer]:
+            - cell [ref=e698]:
+              - checkbox [ref=e2805]
+            - cell "24-MAG Frontend Engineer Talent Network" [ref=e701]:
+              - generic [ref=e2806]:
+                - generic [ref=e2807]: 24-MAG
+                - generic [ref=e2808]: Frontend Engineer Talent Network
+            - cell "Applied" [ref=e705]:
+              - combobox [ref=e2809]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e707]:
+              - generic [ref=e2810]: Contract
+            - cell "Remote" [ref=e709]:
+              - generic [ref=e2811]: Remote
+            - cell "Apr 23, 2026" [ref=e711]
+            - cell "$110/hr–$170/hr" [ref=e712]
+            - cell [ref=e713]:
+              - button [ref=e2814]:
+                - img [ref=e2815]
+          - row "Dellfor Technologies UI Developer Applied Contract On-site Apr 23, 2026 $80k–$80k" [ref=e721] [cursor=pointer]:
+            - cell [ref=e722]:
+              - checkbox [ref=e2820]
+            - cell "Dellfor Technologies UI Developer" [ref=e725]:
+              - generic [ref=e2821]:
+                - generic [ref=e2822]: Dellfor Technologies
+                - generic [ref=e2823]: UI Developer
+            - cell "Applied" [ref=e729]:
+              - combobox [ref=e2824]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e731]:
+              - generic [ref=e2825]: Contract
+            - cell "On-site" [ref=e733]:
+              - generic [ref=e2826]: On-site
+            - cell "Apr 23, 2026" [ref=e735]
+            - cell "$80k–$80k" [ref=e736]
+            - cell [ref=e737]:
+              - button [ref=e2829]:
+                - img [ref=e2830]
+          - row "Zortech Solutions Front-End React Developer Applied Contract Remote Apr 23, 2026 $107k–$124k" [ref=e745] [cursor=pointer]:
+            - cell [ref=e746]:
+              - checkbox [ref=e2835]
+            - cell "Zortech Solutions Front-End React Developer" [ref=e749]:
+              - generic [ref=e2836]:
+                - generic [ref=e2837]: Zortech Solutions
+                - generic [ref=e2838]: Front-End React Developer
+            - cell "Applied" [ref=e753]:
+              - combobox [ref=e2839]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Contract" [ref=e755]:
+              - generic [ref=e2840]: Contract
+            - cell "Remote" [ref=e757]:
+              - generic [ref=e2841]: Remote
+            - cell "Apr 23, 2026" [ref=e759]
+            - cell "$107k–$124k" [ref=e760]
+            - cell [ref=e761]:
+              - button [ref=e2844]:
+                - img [ref=e2845]
+          - row "Vannevar Senior Frontend Engineer, Frontend Platform Applied Full-time Remote Apr 22, 2026 $170k–$225k" [ref=e769] [cursor=pointer]:
+            - cell [ref=e770]:
+              - checkbox [ref=e2850]
+            - cell "Vannevar Senior Frontend Engineer, Frontend Platform" [ref=e773]:
+              - generic [ref=e2851]:
+                - generic [ref=e2852]: Vannevar
+                - generic [ref=e2853]: Senior Frontend Engineer, Frontend Platform
+            - cell "Applied" [ref=e777]:
+              - combobox [ref=e2854]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e779]:
+              - generic [ref=e2855]: Full-time
+            - cell "Remote" [ref=e781]:
+              - generic [ref=e2856]: Remote
+            - cell "Apr 22, 2026" [ref=e783]
+            - cell "$170k–$225k" [ref=e784]
+            - cell [ref=e785]:
+              - button [ref=e2859]:
+                - img [ref=e2860]
+          - row "Alteryx Sr. Software Engineer (Front-End, JavaScript/TypeScript, React, AI) Applied Full-time Remote Apr 22, 2026 $119k–$154k" [ref=e793] [cursor=pointer]:
+            - cell [ref=e794]:
+              - checkbox [ref=e2865]
+            - cell "Alteryx Sr. Software Engineer (Front-End, JavaScript/TypeScript, React, AI)" [ref=e797]:
+              - generic [ref=e2866]:
+                - generic [ref=e2867]: Alteryx
+                - generic [ref=e2868]: Sr. Software Engineer (Front-End, JavaScript/TypeScript, React, AI)
+            - cell "Applied" [ref=e801]:
+              - combobox [ref=e2869]:
+                - option "Applied" [selected]
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected"
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e803]:
+              - generic [ref=e2870]: Full-time
+            - cell "Remote" [ref=e805]:
+              - generic [ref=e2871]: Remote
+            - cell "Apr 22, 2026" [ref=e807]
+            - cell "$119k–$154k" [ref=e808]
+            - cell [ref=e809]:
+              - button [ref=e2874]:
+                - img [ref=e2875]
+          - row "Optimal Dynamics Senior Frontend Developer Rejected Full-time Remote Apr 21, 2026 $165k–$195k" [ref=e817] [cursor=pointer]:
+            - cell [ref=e818]:
+              - checkbox [ref=e2880]
+            - cell "Optimal Dynamics Senior Frontend Developer" [ref=e821]:
+              - generic [ref=e2881]:
+                - generic [ref=e2882]: Optimal Dynamics
+                - generic [ref=e2883]: Senior Frontend Developer
+            - cell "Rejected" [ref=e825]:
+              - combobox [ref=e2884]:
+                - option "Applied"
+                - option "Phone Screen"
+                - option "Interview Scheduled"
+                - option "Interview Completed"
+                - option "Offer Received"
+                - option "Offer Accepted"
+                - option "Rejected" [selected]
+                - option "Withdrawn"
+                - option "No Response"
+                - option "Ghosted"
+            - cell "Full-time" [ref=e827]:
+              - generic [ref=e2885]: Full-time
+            - cell "Remote" [ref=e829]:
+              - generic [ref=e2886]: Remote
+            - cell "Apr 21, 2026" [ref=e831]
+            - cell "$165k–$195k" [ref=e832]
+            - cell [ref=e833]:
+              - button [ref=e2889]:
+                - img [ref=e2890]
