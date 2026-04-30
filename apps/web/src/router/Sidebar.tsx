@@ -46,8 +46,8 @@ export const Sidebar = ({ isOpen, onClose, onSearchClick }: SidebarProps) => {
         'fixed inset-y-0 left-0 z-50 w-60 bg-white border-r border-neutral-200 flex flex-col',
         'transition-transform duration-300 ease-in-out',
         isOpen ? 'translate-x-0' : '-translate-x-full',
-        // Desktop: reset to static, always visible
-        'md:static md:inset-auto md:z-auto md:translate-x-0 md:min-h-screen',
+        // Desktop: sticky viewport-height column so bottom section stays visible on tall pages
+        'md:sticky md:top-0 md:h-screen md:overflow-y-auto md:inset-auto md:z-auto md:translate-x-0',
       ].join(' ')}
     >
       {/* Logo */}
