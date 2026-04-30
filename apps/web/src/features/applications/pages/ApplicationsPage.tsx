@@ -162,16 +162,7 @@ export const ApplicationsPage = () => {
       {/* Page header */}
       <div className='flex items-baseline justify-between mb-5'>
         <div>
-          <h1
-            style={{
-              fontFamily: 'var(--font-display,-apple-system)',
-              fontSize: '28px',
-              fontWeight: '600',
-              color: '#1d1d1f',
-              lineHeight: '1.14',
-              letterSpacing: '-0.28px',
-            }}
-          >
+          <h1 className='font-display font-semibold text-gray-900 text-2xl sm:text-3xl leading-tight tracking-tight'>
             Applications
           </h1>
           <p style={{ marginTop: '4px', fontSize: '14px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.224px' }}>
@@ -182,6 +173,7 @@ export const ApplicationsPage = () => {
           <button
             onClick={exportCsv}
             disabled={exporting}
+            aria-label={exporting ? 'Exporting' : 'Export'}
             className='flex gap-1 items-center hover:opacity-80'
             style={{
               padding: '8px 15px', fontSize: '14px', fontWeight: '400',
@@ -196,6 +188,7 @@ export const ApplicationsPage = () => {
           </button>
           <button
             onClick={() => navigate('/applications/new')}
+            aria-label='New Application'
             className='flex gap-1 items-center hover:opacity-80'
             style={{
               padding: '8px 15px', fontSize: '14px', fontWeight: '400',

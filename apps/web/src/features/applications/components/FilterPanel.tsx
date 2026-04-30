@@ -1,6 +1,7 @@
 import { useRef, useEffect } from 'react'
+import { X } from 'lucide-react'
 import type { ApplicationFilters, Outcome, RoleType, LocationType } from '../types'
-import { ROLE_TYPE_LABELS, LOCATION_TYPE_LABELS } from '../types'
+import { ROLE_TYPE_LABELS, LOCATION_TYPE_LABELS, OUTCOMES, OUTCOME_DOT_COLORS } from '../types'
 
 type DatePreset = 'any' | '7d' | '30d' | '90d'
 
@@ -11,10 +12,6 @@ interface Props {
   triggerRef: React.RefObject<HTMLElement | null>
 }
 
-const OUTCOMES: Outcome[] = [
-  'APPLIED', 'PHONE_SCREEN', 'INTERVIEW_SCHEDULED', 'INTERVIEW_COMPLETED',
-  'OFFER_RECEIVED', 'OFFER_ACCEPTED', 'REJECTED', 'WITHDRAWN', 'NO_RESPONSE', 'GHOSTED',
-]
 const ROLE_TYPES: RoleType[] = ['FULL_TIME', 'PART_TIME', 'CONTRACT', 'FREELANCE', 'INTERNSHIP']
 const LOCATION_TYPES: LocationType[] = ['ON_SITE', 'HYBRID', 'REMOTE']
 
@@ -31,18 +28,6 @@ const STATUS_LABELS: Record<Outcome, string> = {
   GHOSTED: 'Ghosted',
 }
 
-const STATUS_DOT: Record<Outcome, string> = {
-  APPLIED: '#0071e3',
-  PHONE_SCREEN: '#0071e3',
-  INTERVIEW_SCHEDULED: '#34c759',
-  INTERVIEW_COMPLETED: '#34c759',
-  OFFER_RECEIVED: '#1d1d1f',
-  OFFER_ACCEPTED: '#1d1d1f',
-  REJECTED: '#ff3b30',
-  WITHDRAWN: '#ff9500',
-  NO_RESPONSE: 'rgba(0,0,0,0.40)',
-  GHOSTED: 'rgba(0,0,0,0.28)',
-}
 
 const DATE_PRESET_LABELS: Record<DatePreset, string> = {
   any: 'Any time',
@@ -131,9 +116,14 @@ export const FilterPanel = ({ filters, onFiltersChange, onClose, triggerRef }: P
       {/* Header */}
       <div style={{ padding: '14px 16px 12px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
         <span style={{ fontSize: '15px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.3px' }}>Filters</span>
-        <button onClick={clearAll} style={{ fontSize: '13px', color: '#0071e3', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px', padding: 0 }}>
-          Reset
-        </button>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <button onClick={clearAll} style={{ fontSize: '13px', color: '#0071e3', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px', padding: 0 }}>
+            Reset
+          </button>
+          <button onClick={onClose} aria-label='Close filters' style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '4px', background: 'none', border: 'none', cursor: 'pointer', color: 'rgba(0,0,0,0.48)', borderRadius: '6px' }}>
+            <X size={16} />
+          </button>
+        </div>
       </div>
 
       {/* Body */}
@@ -151,7 +141,7 @@ export const FilterPanel = ({ filters, onFiltersChange, onClose, triggerRef }: P
                   onChange={() => toggle('outcomes', o)}
                   style={{ width: '14px', height: '14px', accentColor: '#0071e3', cursor: 'pointer', flexShrink: 0 }}
                 />
-                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: STATUS_DOT[o], flexShrink: 0 }} />
+                <span style={{ width: '7px', height: '7px', borderRadius: '50%', background: OUTCOME_DOT_COLORS[o], flexShrink: 0 }} />
                 <span style={{ fontSize: '13px', color: '#1d1d1f', letterSpacing: '-0.12px' }}>{STATUS_LABELS[o]}</span>
               </label>
             ))}

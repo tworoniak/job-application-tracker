@@ -84,6 +84,7 @@ export const FunnelChart = ({ data, total }: Props) => {
   }));
 
   return (
+    <div role='img' aria-label='Application pipeline funnel, bar chart'>
     <ResponsiveContainer width='100%' height={160}>
       <BarChart
         data={chartData}
@@ -138,5 +139,6 @@ export const FunnelChart = ({ data, total }: Props) => {
         </Bar>
       </BarChart>
     </ResponsiveContainer>
+    </div>
   );
 };

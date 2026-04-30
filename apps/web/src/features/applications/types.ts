@@ -68,6 +68,24 @@ export interface ApplicationSort {
   direction: SortDirection
 }
 
+export const OUTCOMES: Outcome[] = [
+  'APPLIED', 'PHONE_SCREEN', 'INTERVIEW_SCHEDULED', 'INTERVIEW_COMPLETED',
+  'OFFER_RECEIVED', 'OFFER_ACCEPTED', 'REJECTED', 'WITHDRAWN', 'NO_RESPONSE', 'GHOSTED',
+]
+
+export const OUTCOME_DOT_COLORS: Record<Outcome, string> = {
+  APPLIED: '#0071e3',
+  PHONE_SCREEN: '#0071e3',
+  INTERVIEW_SCHEDULED: '#34c759',
+  INTERVIEW_COMPLETED: '#34c759',
+  OFFER_RECEIVED: '#1d1d1f',
+  OFFER_ACCEPTED: '#1d1d1f',
+  REJECTED: '#ff3b30',
+  WITHDRAWN: '#ff9500',
+  NO_RESPONSE: 'rgba(0,0,0,0.40)',
+  GHOSTED: 'rgba(0,0,0,0.28)',
+}
+
 export const OUTCOME_LABELS: Record<Outcome, string> = {
   APPLIED: 'Applied',
   PHONE_SCREEN: 'Phone Screen',

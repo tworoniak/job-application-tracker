@@ -34,8 +34,8 @@ export function DateBadge({ date, isActive }: DateBadgeProps) {
         isActive
           ? 'bg-white border-neutral-300 shadow-sm'
           : isUrgent
-            ? 'bg-red-50/60 border-red-200 border-t-red-400 border-t-3'
-            : 'bg-blue-50/50 border-blue-200 border-t-blue-400 border-t-3',
+            ? 'bg-red-50/60 border-red-200 border-t-red-400 border-t-[3px]'
+            : 'bg-blue-50/50 border-blue-200 border-t-blue-400 border-t-[3px]',
       ].join(' ')}
     >
       <span
@@ -53,14 +53,6 @@ export function DateBadge({ date, isActive }: DateBadgeProps) {
     </div>
   );
 }
-
-// const formatDate = (iso: string) =>
-//   new Date(iso).toLocaleDateString('en-US', {
-//     weekday: 'short',
-//     month: 'short',
-//     day: 'numeric',
-//     timeZone: 'UTC',
-//   });
 
 const daysUntilCount = (iso: string): number => {
   const todayUtc = new Date();
@@ -120,9 +112,6 @@ export const UpcomingInterviews = ({
               >
                 {daysUntil(interview.interviewDate!)}
               </p>
-              {/* <p className='text-xs text-gray-400'>
-                {formatDate(interview.interviewDate!)}
-              </p> */}
             </div>
           </Link>
         </li>

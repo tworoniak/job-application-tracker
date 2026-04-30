@@ -44,6 +44,7 @@ export const OutcomeChart = ({ data }: Props) => {
   }
 
   return (
+    <div role='img' aria-label='Applications by outcome, bar chart'>
     <ResponsiveContainer width='100%' height={220}>
       <BarChart
         data={chartData}
@@ -94,5 +95,6 @@ export const OutcomeChart = ({ data }: Props) => {
         </Bar>
       </BarChart>
     </ResponsiveContainer>
+    </div>
   );
 };

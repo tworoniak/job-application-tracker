@@ -10,7 +10,7 @@ export const MetricCard = ({ label, value, sub, color }: MetricCardProps) => (
     style={{
       borderColor: color || 'blue',
     }}
-    className='bg-white rounded-xl px-6 py-4 border-l-4 shadow-sm hover:shadow-md transition-shadow duration-300'
+    className='bg-white rounded-xl px-6 py-4 border-l-4 shadow-sm [@media(hover:hover)]:hover:shadow-md transition-shadow duration-300'
   >
     <p className='tracking-wide text-sm font-semibold text-gray-500 uppercase'>
       {label}
