@@ -1,0 +1,260 @@
+import { useState, useEffect } from 'react'
+import { X } from 'lucide-react'
+import { useApplication } from '../hooks/useApplication'
+import { useUpdateApplication } from '../hooks/useUpdateApplication'
+import { ApplicationForm, mapApplicationToFormValues } from './ApplicationForm'
+import { OutcomeBadge, RoleTypeBadge, LocationTypeBadge, Skeleton } from '@/components/ui'
+import type { ApplicationFormValues } from '../schemas/application.schema'
+import { ROLE_TYPE_LABELS, LOCATION_TYPE_LABELS } from '../types'
+
+interface Props {
+  appId: string
+  initialEditMode?: boolean
+  onClose: () => void
+}
+
+const formatDate = (iso: string | null) =>
+  iso
+    ? new Date(iso).toLocaleDateString('en-US', {
+        year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC',
+      })
+    : null
+
+const formatSalary = (
+  min: number | null,
+  max: number | null,
+  type: 'ANNUAL' | 'HOURLY' | null,
+) => {
+  if (!min && !max) return null
+  if (type === 'HOURLY') {
+    const fmt = (n: number) => `$${n % 1 === 0 ? n : n.toFixed(2)}/hr`
+    if (min && max) return `${fmt(min)}–${fmt(max)}`
+    return min ? `${fmt(min)}+` : `up to ${fmt(max!)}`
+  }
+  const fmt = (n: number) => `$${(n / 1000).toFixed(0)}k`
+  if (min && max) return `${fmt(min)}–${fmt(max)}`
+  return min ? `${fmt(min)}+` : `up to ${fmt(max!)}`
+}
+
+const FieldItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
+  <div>
+    <dt style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
+      {label}
+    </dt>
+    <dd style={{ marginTop: '4px', fontSize: '14px', color: value ? '#1d1d1f' : 'rgba(0,0,0,0.30)', letterSpacing: '-0.224px' }}>
+      {value ?? '—'}
+    </dd>
+  </div>
+)
+
+export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClose }: Props) => {
+  const { application, loading } = useApplication(appId)
+  const { updateApplication, loading: saving } = useUpdateApplication()
+  const [editMode, setEditMode] = useState(initialEditMode)
+
+  useEffect(() => {
+    setEditMode(initialEditMode)
+  }, [appId, initialEditMode])
+
+  useEffect(() => {
+    document.body.style.overflow = 'hidden'
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape') return
+      if (editMode) setEditMode(false)
+      else onClose()
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [editMode, onClose])
+
+  const handleEditSubmit = async (values: ApplicationFormValues) => {
+    if (!application) return
+    await updateApplication(appId, values, application)
+    setEditMode(false)
+  }
+
+  const initials = application
+    ? application.companyName.split(' ').slice(0, 2).map((w) => w[0]).join('').toUpperCase()
+    : '?'
+
+  return (
+    <>
+      {/* Backdrop */}
+      <div
+        onClick={onClose}
+        style={{
+          position: 'fixed',
+          inset: 0,
+          background: 'rgba(0,0,0,0.18)',
+          zIndex: 40,
+          backdropFilter: 'blur(2px)',
+          WebkitBackdropFilter: 'blur(2px)',
+        }}
+      />
+
+      {/* Drawer panel */}
+      <div
+        style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          height: '100dvh',
+          width: '420px',
+          maxWidth: '100vw',
+          background: '#ffffff',
+          zIndex: 50,
+          boxShadow: '-4px 0 32px rgba(0,0,0,0.10)',
+          display: 'flex',
+          flexDirection: 'column',
+          overflowY: 'auto',
+        }}
+      >
+        {loading ? (
+          <div style={{ padding: '24px' }}>
+            <Skeleton className="h-8 w-48 mb-2" />
+            <Skeleton className="h-5 w-32 mb-6" />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              {Array.from({ length: 6 }).map((_, i) => <Skeleton key={i} className="h-12" />)}
+            </div>
+          </div>
+        ) : !application ? (
+          <div style={{ padding: '24px', fontSize: '14px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.224px' }}>
+            Application not found.
+          </div>
+        ) : editMode ? (
+          /* ── Edit mode ─────────────────────────────── */
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+            <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+              <h2 style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px' }}>Edit Application</h2>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <button
+                  onClick={() => setEditMode(false)}
+                  style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px' }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={onClose}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.06)', border: 'none', cursor: 'pointer' }}
+                >
+                  <X size={14} color="rgba(0,0,0,0.60)" />
+                </button>
+              </div>
+            </div>
+            <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>
+              <ApplicationForm
+                defaultValues={mapApplicationToFormValues(application)}
+                onSubmit={handleEditSubmit}
+                loading={saving}
+                submitLabel="Save Changes"
+              />
+            </div>
+          </div>
+        ) : (
+          /* ── View mode ─────────────────────────────── */
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+            {/* Header */}
+            <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)', flexShrink: 0 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', minWidth: 0 }}>
+                  {/* Avatar */}
+                  <div style={{
+                    width: '44px', height: '44px', borderRadius: '12px',
+                    background: 'rgba(0,113,227,0.10)', color: '#0071e3',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    fontSize: '16px', fontWeight: '600', flexShrink: 0, letterSpacing: '-0.3px',
+                  }}>
+                    {initials}
+                  </div>
+                  <div style={{ minWidth: 0 }}>
+                    <p style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      {application.companyName}
+                    </p>
+                    <p style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '1px' }}>
+                      {application.positionTitle}
+                    </p>
+                  </div>
+                </div>
+                {/* Header actions */}
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+                  <button
+                    onClick={() => setEditMode(true)}
+                    style={{ padding: '5px 14px', fontSize: '13px', color: '#0071e3', background: 'transparent', border: '1px solid #0071e3', borderRadius: '7px', cursor: 'pointer', letterSpacing: '-0.12px' }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    onClick={onClose}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.06)', border: 'none', cursor: 'pointer' }}
+                  >
+                    <X size={14} color="rgba(0,0,0,0.60)" />
+                  </button>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div style={{ display: 'flex', gap: '6px', marginTop: '12px', flexWrap: 'wrap' }}>
+                <OutcomeBadge outcome={application.outcome} />
+                <RoleTypeBadge roleType={application.roleType} />
+                <LocationTypeBadge locationType={application.locationType} />
+              </div>
+            </div>
+
+            {/* Body */}
+            <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+
+              {/* Timeline */}
+              <div>
+                <p style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
+                  Timeline
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#1d1d1f', flexShrink: 0 }} />
+                    <div>
+                      <p style={{ fontSize: '13px', fontWeight: '500', color: '#1d1d1f', letterSpacing: '-0.12px' }}>Applied</p>
+                      <p style={{ fontSize: '12px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px' }}>{formatDate(application.dateApplied)}</p>
+                    </div>
+                  </div>
+                  {application.interviewDate && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#0071e3', flexShrink: 0 }} />
+                      <div>
+                        <p style={{ fontSize: '13px', fontWeight: '500', color: '#1d1d1f', letterSpacing: '-0.12px' }}>Interview</p>
+                        <p style={{ fontSize: '12px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px' }}>{formatDate(application.interviewDate)}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Detail grid */}
+              <dl style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                <FieldItem label="Compensation" value={formatSalary(application.salaryMin, application.salaryMax, application.salaryType)} />
+                <FieldItem label="Location" value={LOCATION_TYPE_LABELS[application.locationType]} />
+                <FieldItem label="Role Type" value={ROLE_TYPE_LABELS[application.roleType]} />
+                <FieldItem label="Contact" value={application.contactName || application.contactInfo} />
+              </dl>
+
+              {/* Notes */}
+              {application.notes && (
+                <div>
+                  <p style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+                    Notes
+                  </p>
+                  <p style={{ fontSize: '14px', color: '#1d1d1f', lineHeight: '1.47', letterSpacing: '-0.224px', whiteSpace: 'pre-wrap' }}>
+                    {application.notes}
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+    </>
+  )
+}

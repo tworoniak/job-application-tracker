@@ -1,7 +1,8 @@
 import { useState, useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
+import { MoreHorizontal } from 'lucide-react'
 import { RoleTypeBadge, LocationTypeBadge, ConfirmDialog, TableSkeleton } from '@/components/ui'
+import { useNavigate } from 'react-router-dom'
 import { useDeleteApplication } from '../hooks/useDeleteApplication'
 import { useUpdateApplication } from '../hooks/useUpdateApplication'
 import type { JobApplication, Outcome, SortField, SortDirection } from '../types'
@@ -27,17 +28,9 @@ const outcomeSelectStyle = (outcome: Outcome): React.CSSProperties => {
   }
   const { bg, color } = styles[outcome]
   return {
-    background: bg,
-    color,
-    border: 'none',
-    borderRadius: '980px',
-    padding: '2px 8px',
-    fontSize: '12px',
-    letterSpacing: '-0.12px',
-    cursor: 'pointer',
-    appearance: 'none',
-    WebkitAppearance: 'none',
-    outline: 'none',
+    background: bg, color, border: 'none', borderRadius: '980px',
+    padding: '2px 8px', fontSize: '12px', letterSpacing: '-0.12px',
+    cursor: 'pointer', appearance: 'none', WebkitAppearance: 'none', outline: 'none',
   }
 }
 
@@ -49,6 +42,8 @@ interface Props {
   onSortChange: (field: SortField) => void
   selectedIds: Set<string>
   onSelectionChange: (ids: Set<string>) => void
+  onRowClick: (app: JobApplication) => void
+  onEditClick: (app: JobApplication) => void
 }
 
 const formatDate = (iso: string) =>
@@ -67,33 +62,18 @@ const formatSalary = (min: number | null, max: number | null, type: JobApplicati
 }
 
 const SortBtn = ({
-  label,
-  field,
-  active,
-  direction,
-  onClick,
+  label, active, direction, onClick,
 }: {
-  label: string
-  field: SortField
-  active: boolean
-  direction: SortDirection
-  onClick: () => void
+  label: string; field: SortField; active: boolean; direction: SortDirection; onClick: () => void
 }) => (
   <button
     onClick={onClick}
     style={{
-      display: 'flex',
-      alignItems: 'center',
-      gap: '4px',
-      fontSize: '12px',
-      fontWeight: '600',
+      display: 'flex', alignItems: 'center', gap: '4px',
+      fontSize: '12px', fontWeight: '600',
       color: active ? '#1d1d1f' : 'rgba(0,0,0,0.48)',
-      letterSpacing: '0.02em',
-      textTransform: 'uppercase',
-      background: 'none',
-      border: 'none',
-      cursor: 'pointer',
-      padding: 0,
+      letterSpacing: '0.02em', textTransform: 'uppercase',
+      background: 'none', border: 'none', cursor: 'pointer', padding: 0,
     }}
   >
     {label}
@@ -103,15 +83,10 @@ const SortBtn = ({
   </button>
 )
 
-// Checkbox with indeterminate support
 const Checkbox = ({
-  checked,
-  indeterminate,
-  onChange,
+  checked, indeterminate, onChange,
 }: {
-  checked: boolean
-  indeterminate?: boolean
-  onChange: (checked: boolean) => void
+  checked: boolean; indeterminate?: boolean; onChange: (checked: boolean) => void
 }) => {
   const ref = useRef<HTMLInputElement>(null)
   useEffect(() => {
@@ -128,35 +103,100 @@ const Checkbox = ({
   )
 }
 
+// ── 3-dot row menu ───────────────────────────────────────────────────────────
+const RowMenu = ({
+  onEdit, onDelete,
+}: {
+  onEdit: () => void; onDelete: () => void
+}) => {
+  const [open, setOpen] = useState(false)
+  const ref = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    if (!open) return
+    const handler = (e: MouseEvent) => {
+      if (!ref.current?.contains(e.target as Node)) setOpen(false)
+    }
+    document.addEventListener('mousedown', handler)
+    return () => document.removeEventListener('mousedown', handler)
+  }, [open])
+
+  return (
+    <div ref={ref} style={{ position: 'relative' }} onClick={(e) => e.stopPropagation()}>
+      <button
+        onClick={() => setOpen((v) => !v)}
+        style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: '28px', height: '28px', borderRadius: '7px',
+          background: 'none', border: 'none', cursor: 'pointer',
+          color: 'rgba(0,0,0,0.40)',
+        }}
+        onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.06)' }}
+        onMouseLeave={(e) => { e.currentTarget.style.background = 'none' }}
+      >
+        <MoreHorizontal size={16} />
+      </button>
+
+      {open && (
+        <div
+          style={{
+            position: 'absolute', top: '100%', right: 0, marginTop: '4px',
+            background: '#ffffff', borderRadius: '10px',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.12), 0 1px 4px rgba(0,0,0,0.08)',
+            border: '1px solid rgba(0,0,0,0.08)',
+            zIndex: 30, minWidth: '120px', overflow: 'hidden',
+          }}
+        >
+          <button
+            onMouseDown={(e) => { e.stopPropagation(); onEdit(); setOpen(false); }}
+            style={{
+              display: 'block', width: '100%', textAlign: 'left',
+              padding: '9px 14px', fontSize: '13px', color: '#0071e3',
+              background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,113,227,0.06)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'none' }}
+          >
+            Edit
+          </button>
+          <button
+            onMouseDown={(e) => { e.stopPropagation(); onDelete(); setOpen(false); }}
+            style={{
+              display: 'block', width: '100%', textAlign: 'left',
+              padding: '9px 14px', fontSize: '13px', color: 'rgba(0,0,0,0.48)',
+              background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px',
+              borderTop: '1px solid rgba(0,0,0,0.06)',
+            }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(0,0,0,0.04)' }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'none' }}
+          >
+            Delete
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+// ────────────────────────────────────────────────────────────────────────────
+
 // ── Mobile application card ──────────────────────────────────────────────────
 interface CardProps {
   app: JobApplication
   selected: boolean
   onSelect: () => void
+  onRowClick: () => void
   onEdit: () => void
   onDelete: () => void
-  onNavigate: () => void
   onOutcomeChange: (outcome: Outcome) => void
 }
 
-const ApplicationCard = ({
-  app,
-  selected,
-  onSelect,
-  onEdit,
-  onDelete,
-  onNavigate,
-  onOutcomeChange,
-}: CardProps) => (
+const ApplicationCard = ({ app, selected, onSelect, onRowClick, onEdit, onDelete, onOutcomeChange }: CardProps) => (
   <div
-    onClick={onNavigate}
+    onClick={onRowClick}
     style={{
       background: selected ? 'rgba(0,113,227,0.04)' : '#ffffff',
-      borderRadius: '12px',
-      padding: '14px 16px',
-      marginBottom: '8px',
-      boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px',
-      cursor: 'pointer',
+      borderRadius: '12px', padding: '14px 16px', marginBottom: '8px',
+      boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px', cursor: 'pointer',
       border: selected ? '1px solid rgba(0,113,227,0.20)' : '1px solid transparent',
       transition: 'background 0.1s, border-color 0.1s',
     }}
@@ -164,35 +204,13 @@ const ApplicationCard = ({
     {/* Row 1: Company + status select */}
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
       <div style={{ minWidth: 0, flex: 1 }}>
-        <div
-          style={{
-            fontSize: '15px',
-            fontWeight: '600',
-            color: '#1d1d1f',
-            letterSpacing: '-0.3px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
+        <div style={{ fontSize: '15px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.3px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {app.companyName}
         </div>
-        <div
-          style={{
-            fontSize: '13px',
-            color: 'rgba(0,0,0,0.48)',
-            marginTop: '2px',
-            letterSpacing: '-0.12px',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-            whiteSpace: 'nowrap',
-          }}
-        >
+        <div style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', marginTop: '2px', letterSpacing: '-0.12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {app.positionTitle}
         </div>
       </div>
-
-      {/* Status select — stops propagation so card click doesn't navigate */}
       <div onClick={(e) => e.stopPropagation()} style={{ flexShrink: 0 }}>
         <select
           value={app.outcome}
@@ -206,81 +224,33 @@ const ApplicationCard = ({
       </div>
     </div>
 
-    {/* Row 2: Badges + date + actions */}
-    <div
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        gap: '6px',
-        marginTop: '10px',
-        flexWrap: 'wrap',
-      }}
-    >
+    {/* Row 2: Badges + date */}
+    <div style={{ display: 'flex', alignItems: 'center', gap: '6px', marginTop: '10px', flexWrap: 'wrap' }}>
       <RoleTypeBadge roleType={app.roleType} />
       <LocationTypeBadge locationType={app.locationType} />
-
-      <span
-        style={{
-          marginLeft: 'auto',
-          fontSize: '12px',
-          color: 'rgba(0,0,0,0.36)',
-          letterSpacing: '-0.12px',
-          whiteSpace: 'nowrap',
-        }}
-      >
+      <span style={{ marginLeft: 'auto', fontSize: '12px', color: 'rgba(0,0,0,0.36)', letterSpacing: '-0.12px', whiteSpace: 'nowrap' }}>
         {formatDate(app.dateApplied)}
       </span>
     </div>
 
-    {/* Row 3: Actions + checkbox — stops propagation */}
+    {/* Row 3: Checkbox + 3-dot menu */}
     <div
       onClick={(e) => e.stopPropagation()}
-      style={{
-        display: 'flex',
-        alignItems: 'center',
-        marginTop: '10px',
-        paddingTop: '10px',
-        borderTop: '1px solid rgba(0,0,0,0.05)',
-      }}
+      style={{ display: 'flex', alignItems: 'center', marginTop: '10px', paddingTop: '10px', borderTop: '1px solid rgba(0,0,0,0.05)' }}
     >
       <Checkbox checked={selected} onChange={onSelect} />
-
-      <div style={{ marginLeft: 'auto', display: 'flex', gap: '16px' }}>
-        <button
-          onClick={onEdit}
-          style={{
-            fontSize: '13px',
-            color: '#0071e3',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            letterSpacing: '-0.12px',
-            padding: '2px 0',
-          }}
-        >
-          Edit
-        </button>
-        <button
-          onClick={onDelete}
-          style={{
-            fontSize: '13px',
-            color: 'rgba(0,0,0,0.36)',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            letterSpacing: '-0.12px',
-            padding: '2px 0',
-          }}
-        >
-          Delete
-        </button>
+      <div style={{ marginLeft: 'auto' }}>
+        <RowMenu onEdit={onEdit} onDelete={onDelete} />
       </div>
     </div>
   </div>
 )
 // ────────────────────────────────────────────────────────────────────────────
 
-export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onSortChange, selectedIds, onSelectionChange }: Props) => {
+export const ApplicationsTable = ({
+  data, loading, sortField, sortDirection, onSortChange,
+  selectedIds, onSelectionChange, onRowClick, onEditClick,
+}: Props) => {
   const navigate = useNavigate()
   const { deleteApplication, loading: deleteLoading } = useDeleteApplication()
   const { updateApplication } = useUpdateApplication()
@@ -396,19 +366,11 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
       id: 'actions',
       header: '',
       cell: ({ row }) => (
-        <div className="flex items-center gap-3 justify-end" onClick={(e) => e.stopPropagation()}>
-          <button
-            onClick={() => navigate(`/applications/${row.original.id}/edit`)}
-            style={{ fontSize: '14px', color: '#0071e3', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.224px' }}
-          >
-            Edit
-          </button>
-          <button
-            onClick={() => setDeleteTarget(row.original)}
-            style={{ fontSize: '14px', color: 'rgba(0,0,0,0.40)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.224px' }}
-          >
-            Delete
-          </button>
+        <div className="flex justify-end" onClick={(e) => e.stopPropagation()}>
+          <RowMenu
+            onEdit={() => onEditClick(row.original)}
+            onDelete={() => setDeleteTarget(row.original)}
+          />
         </div>
       ),
     },
@@ -420,17 +382,7 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
 
   if (!loading && data.length === 0) {
     return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '80px 0',
-          background: '#ffffff',
-          borderRadius: '12px',
-        }}
-      >
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '80px 0', background: '#ffffff', borderRadius: '12px' }}>
         <p style={{ fontSize: '17px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.374px' }}>
           No applications yet.
         </p>
@@ -446,7 +398,7 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
 
   return (
     <>
-      {/* ── Mobile: card list ───────────────────────────────────────────── */}
+      {/* ── Mobile: card list ─────────────────────────────────── */}
       <div className="block sm:hidden" style={{ paddingBottom: '16px' }}>
         {data.map((app) => (
           <ApplicationCard
@@ -454,17 +406,15 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
             app={app}
             selected={selectedIds.has(app.id)}
             onSelect={() => toggleRow(app.id)}
-            onNavigate={() => navigate(`/applications/${app.id}`)}
-            onEdit={() => navigate(`/applications/${app.id}/edit`)}
+            onRowClick={() => onRowClick(app)}
+            onEdit={() => onEditClick(app)}
             onDelete={() => setDeleteTarget(app)}
-            onOutcomeChange={(outcome) =>
-              updateApplication(app.id, { outcome }, app)
-            }
+            onOutcomeChange={(outcome) => updateApplication(app.id, { outcome }, app)}
           />
         ))}
       </div>
 
-      {/* ── Desktop: table ──────────────────────────────────────────────── */}
+      {/* ── Desktop: table ────────────────────────────────────── */}
       <div className="hidden sm:block" style={{ background: '#ffffff', borderRadius: '12px', overflow: 'hidden', boxShadow: 'rgba(0,0,0,0.04) 0px 1px 4px 0px' }}>
         <table style={{ width: '100%', borderCollapse: 'collapse' }}>
           <thead>
@@ -475,8 +425,7 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
                     key={header.id}
                     style={{
                       padding: header.id === 'select' ? '12px 8px 12px 16px' : '12px 16px',
-                      textAlign: 'left',
-                      background: '#fafafc',
+                      textAlign: 'left', background: '#fafafc',
                       width: header.id === 'select' ? '40px' : undefined,
                     }}
                   >
@@ -491,18 +440,17 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
               <tr
                 key={row.id}
                 tabIndex={0}
-                onClick={() => navigate(`/applications/${row.original.id}`)}
+                onClick={() => onRowClick(row.original)}
                 onFocus={() => setFocusedId(row.original.id)}
                 onBlur={() => setFocusedId(null)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') navigate(`/applications/${row.original.id}`)
-                  if (e.key === 'e' || e.key === 'E') navigate(`/applications/${row.original.id}/edit`)
+                  if (e.key === 'Enter') onRowClick(row.original)
+                  if (e.key === 'e' || e.key === 'E') onEditClick(row.original)
                   if (e.key === 'Delete' || e.key === 'Backspace') setDeleteTarget(row.original)
                 }}
                 style={{
                   borderBottom: i < table.getRowModel().rows.length - 1 ? '1px solid rgba(0,0,0,0.04)' : 'none',
-                  cursor: 'pointer',
-                  transition: 'background 0.1s',
+                  cursor: 'pointer', transition: 'background 0.1s',
                   background: selectedIds.has(row.original.id) ? 'rgba(0,113,227,0.04)' : 'transparent',
                   outline: focusedId === row.original.id ? '2px solid #0071e3' : 'none',
                   outlineOffset: '-2px',
@@ -517,9 +465,7 @@ export const ApplicationsTable = ({ data, loading, sortField, sortDirection, onS
                 {row.getVisibleCells().map((cell) => (
                   <td
                     key={cell.id}
-                    style={{
-                      padding: cell.column.id === 'select' ? '14px 8px 14px 16px' : '14px 16px',
-                    }}
+                    style={{ padding: cell.column.id === 'select' ? '14px 8px 14px 16px' : '14px 16px' }}
                   >
                     {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
