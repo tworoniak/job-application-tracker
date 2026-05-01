@@ -4,6 +4,8 @@ import { useApplication } from '../hooks/useApplication'
 import { useUpdateApplication } from '../hooks/useUpdateApplication'
 import { ApplicationForm, mapApplicationToFormValues } from './ApplicationForm'
 import { OutcomeBadge, RoleTypeBadge, LocationTypeBadge, Skeleton } from '@/components/ui'
+import { ApplicationField } from './ApplicationField'
+import { formatDate, formatSalary } from '../lib/formatters'
 import type { ApplicationFormValues } from '../schemas/application.schema'
 import { ROLE_TYPE_LABELS, LOCATION_TYPE_LABELS } from '../types'
 
@@ -12,40 +14,6 @@ interface Props {
   initialEditMode?: boolean
   onClose: () => void
 }
-
-const formatDate = (iso: string | null) =>
-  iso
-    ? new Date(iso).toLocaleDateString('en-US', {
-        year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC',
-      })
-    : null
-
-const formatSalary = (
-  min: number | null,
-  max: number | null,
-  type: 'ANNUAL' | 'HOURLY' | null,
-) => {
-  if (!min && !max) return null
-  if (type === 'HOURLY') {
-    const fmt = (n: number) => `$${n % 1 === 0 ? n : n.toFixed(2)}/hr`
-    if (min && max) return `${fmt(min)}–${fmt(max)}`
-    return min ? `${fmt(min)}+` : `up to ${fmt(max!)}`
-  }
-  const fmt = (n: number) => `$${(n / 1000).toFixed(0)}k`
-  if (min && max) return `${fmt(min)}–${fmt(max)}`
-  return min ? `${fmt(min)}+` : `up to ${fmt(max!)}`
-}
-
-const FieldItem = ({ label, value }: { label: string; value: React.ReactNode }) => (
-  <div>
-    <dt style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em' }}>
-      {label}
-    </dt>
-    <dd style={{ marginTop: '4px', fontSize: '14px', color: value ? '#1d1d1f' : 'rgba(0,0,0,0.30)', letterSpacing: '-0.224px' }}>
-      {value ?? '—'}
-    </dd>
-  </div>
-)
 
 export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClose }: Props) => {
   const { application, loading } = useApplication(appId)
@@ -267,10 +235,10 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
 
               {/* Detail grid */}
               <dl style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <FieldItem label="Compensation" value={formatSalary(application.salaryMin, application.salaryMax, application.salaryType)} />
-                <FieldItem label="Location" value={LOCATION_TYPE_LABELS[application.locationType]} />
-                <FieldItem label="Role Type" value={ROLE_TYPE_LABELS[application.roleType]} />
-                <FieldItem label="Contact" value={[application.contactName, application.contactInfo].filter(Boolean).join(' · ') || null} />
+                <ApplicationField label="Compensation" value={formatSalary(application.salaryMin, application.salaryMax, application.salaryType)} />
+                <ApplicationField label="Location" value={LOCATION_TYPE_LABELS[application.locationType]} />
+                <ApplicationField label="Role Type" value={ROLE_TYPE_LABELS[application.roleType]} />
+                <ApplicationField label="Contact" value={[application.contactName, application.contactInfo].filter(Boolean).join(' · ') || null} />
               </dl>
 
               {/* Notes */}

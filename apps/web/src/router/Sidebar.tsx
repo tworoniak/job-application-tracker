@@ -7,11 +7,12 @@ import {
   Calendar,
   BarChart3,
   Search,
-  MoreHorizontal,
+  LogOut,
   Briefcase,
   X,
 } from 'lucide-react';
 import { useDashboardMetrics } from '@/features/dashboard/hooks/useDashboardMetrics';
+import { useAuth } from '@/features/auth/AuthContext';
 
 const WEEKLY_GOAL = 6;
 
@@ -32,6 +33,10 @@ type SidebarProps = {
 export const Sidebar = ({ isOpen, onClose, onSearchClick }: SidebarProps) => {
   const { pathname } = useLocation();
   const { metrics } = useDashboardMetrics();
+  const { user, logout } = useAuth();
+
+  const emailPrefix = user?.email.split('@')[0] ?? ''
+  const initials = emailPrefix.slice(0, 2).toUpperCase()
 
   const thisWeekCount =
     metrics?.applicationsByWeek.find((w) => w.week === getCurrentISOWeek())
@@ -154,18 +159,22 @@ export const Sidebar = ({ isOpen, onClose, onSearchClick }: SidebarProps) => {
       {/* User section */}
       <div className='px-3 pb-4 flex items-center gap-2.5'>
         <div className='w-7 h-7 rounded-full bg-teal-500 flex items-center justify-center shrink-0'>
-          <span className='text-white text-xs font-semibold'>TW</span>
+          <span className='text-white text-xs font-semibold'>{initials}</span>
         </div>
         <div className='flex-1 min-w-0'>
           <p className='text-sm font-medium text-neutral-900 truncate leading-tight'>
-            Thomas Woroniak
+            {emailPrefix}
           </p>
           <p className='text-xs text-neutral-400 truncate leading-tight'>
-            thomasworoniak@gmail.com
+            {user?.email}
           </p>
         </div>
-        <button className='p-1 rounded-md text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 transition-colors shrink-0'>
-          <MoreHorizontal size={14} />
+        <button
+          onClick={logout}
+          aria-label='Log out'
+          className='p-1 rounded-md text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 transition-colors shrink-0'
+        >
+          <LogOut size={14} />
         </button>
       </div>
     </aside>

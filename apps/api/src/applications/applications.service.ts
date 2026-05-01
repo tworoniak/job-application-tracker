@@ -13,10 +13,10 @@ const decodeCursor = (cursor: string) => Buffer.from(cursor, 'base64').toString(
 export class ApplicationsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async findAll(args: PaginatedApplicationsArgs) {
+  async findAll(args: PaginatedApplicationsArgs, userId: string) {
     const { filters, sort, first = 30, after } = args
 
-    const where: Prisma.JobApplicationWhereInput = {}
+    const where: Prisma.JobApplicationWhereInput = { userId }
 
     if (filters) {
       if (filters.outcomes?.length) where.outcome = { in: filters.outcomes }
@@ -74,24 +74,27 @@ export class ApplicationsService {
     }
   }
 
-  async findOne(id: string) {
-    const application = await this.prisma.jobApplication.findUnique({ where: { id } })
+  async findOne(id: string, userId: string) {
+    const application = await this.prisma.jobApplication.findFirst({
+      where: { id, userId },
+    })
     if (!application) throw new NotFoundException(`Application ${id} not found`)
     return application
   }
 
-  async create(input: CreateApplicationInput) {
+  async create(input: CreateApplicationInput, userId: string) {
     return this.prisma.jobApplication.create({
       data: {
         ...input,
+        userId,
         dateApplied: new Date(input.dateApplied),
         interviewDate: input.interviewDate ? new Date(input.interviewDate) : null,
       },
     })
   }
 
-  async update(id: string, input: UpdateApplicationInput) {
-    await this.findOne(id)
+  async update(id: string, input: UpdateApplicationInput, userId: string) {
+    await this.findOne(id, userId)
     return this.prisma.jobApplication.update({
       where: { id },
       data: {
@@ -107,22 +110,22 @@ export class ApplicationsService {
     })
   }
 
-  async delete(id: string) {
-    await this.findOne(id)
+  async delete(id: string, userId: string) {
+    await this.findOne(id, userId)
     await this.prisma.jobApplication.delete({ where: { id } })
     return true
   }
 
-  async deleteMany(ids: string[]): Promise<number> {
+  async deleteMany(ids: string[], userId: string): Promise<number> {
     const { count } = await this.prisma.jobApplication.deleteMany({
-      where: { id: { in: ids } },
+      where: { id: { in: ids }, userId },
     })
     return count
   }
 
-  async updateManyOutcome(ids: string[], outcome: Outcome): Promise<number> {
+  async updateManyOutcome(ids: string[], outcome: Outcome, userId: string): Promise<number> {
     const { count } = await this.prisma.jobApplication.updateMany({
-      where: { id: { in: ids } },
+      where: { id: { in: ids }, userId },
       data: { outcome },
     })
     return count
