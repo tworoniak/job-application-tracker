@@ -23,7 +23,7 @@ export const AppLayout = () => {
   }, [sidebarOpen]);
 
   return (
-    <div className='flex min-h-screen overflow-x-hidden'>
+    <div className='flex min-h-screen'>
       {/* Mobile backdrop */}
       {sidebarOpen && (
         <div
@@ -39,7 +39,7 @@ export const AppLayout = () => {
         onSearchClick={() => setPaletteOpen(true)}
       />
 
-      <div className='flex-1 flex flex-col min-w-0'>
+      <div className='flex-1 flex flex-col min-w-0 overflow-x-hidden'>
         {/* Mobile top bar */}
         <header className='md:hidden sticky top-0 z-30 h-12 bg-white border-b border-neutral-200 flex items-center px-4 gap-3 shrink-0'>
           <button
