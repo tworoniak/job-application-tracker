@@ -5,7 +5,7 @@ import { PrismaService } from '../prisma/prisma.service'
 export class DashboardService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getMetrics() {
+  async getMetrics(userId: string) {
     const [
       totalApplications,
       byOutcomeRaw,
@@ -14,12 +14,12 @@ export class DashboardService {
       upcomingInterviews,
       applicationsByWeekRaw,
     ] = await Promise.all([
-      this.prisma.jobApplication.count(),
-      this.prisma.jobApplication.groupBy({ by: ['outcome'], _count: { _all: true } }),
-      this.prisma.jobApplication.groupBy({ by: ['roleType'], _count: { _all: true } }),
-      this.prisma.jobApplication.groupBy({ by: ['locationType'], _count: { _all: true } }),
+      this.prisma.jobApplication.count({ where: { userId } }),
+      this.prisma.jobApplication.groupBy({ by: ['outcome'], where: { userId }, _count: { _all: true } }),
+      this.prisma.jobApplication.groupBy({ by: ['roleType'], where: { userId }, _count: { _all: true } }),
+      this.prisma.jobApplication.groupBy({ by: ['locationType'], where: { userId }, _count: { _all: true } }),
       this.prisma.jobApplication.findMany({
-        where: { interviewDate: { gte: new Date() } },
+        where: { userId, interviewDate: { gte: new Date() } },
         orderBy: { interviewDate: 'asc' },
         take: 5,
       }),
@@ -29,6 +29,7 @@ export class DashboardService {
           COUNT(*)::int AS count
         FROM job_applications
         WHERE "dateApplied" >= NOW() - INTERVAL '12 weeks'
+          AND "userId" = ${userId}
         GROUP BY DATE_TRUNC('week', "dateApplied")
         ORDER BY DATE_TRUNC('week', "dateApplied") ASC
       `,

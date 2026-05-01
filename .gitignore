@@ -27,3 +27,5 @@ CLAUDE.md
 DESIGN.md
 
 context/
+
+.playwright-mcp/

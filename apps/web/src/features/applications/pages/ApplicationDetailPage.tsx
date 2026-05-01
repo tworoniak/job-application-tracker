@@ -6,58 +6,8 @@ import {
   LocationTypeBadge,
   Skeleton,
 } from '@/components/ui';
-
-const formatDate = (iso: string | null) =>
-  iso
-    ? new Date(iso).toLocaleDateString('en-US', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        timeZone: 'UTC',
-      })
-    : null;
-
-const formatSalary = (
-  min: number | null,
-  max: number | null,
-  type: 'ANNUAL' | 'HOURLY' | null,
-) => {
-  if (!min && !max) return null;
-  if (type === 'HOURLY') {
-    const fmt = (n: number) => `$${n % 1 === 0 ? n : n.toFixed(2)}/hr`;
-    if (min && max) return `${fmt(min)} – ${fmt(max)}`;
-    return min ? `${fmt(min)}+` : `Up to ${fmt(max!)}`;
-  }
-  const fmt = (n: number) => `$${n.toLocaleString()}`;
-  if (min && max) return `${fmt(min)} – ${fmt(max)}`;
-  return min ? `${fmt(min)}+` : `Up to ${fmt(max!)}`;
-};
-
-const Field = ({ label, value }: { label: string; value: React.ReactNode }) => (
-  <div>
-    <dt
-      style={{
-        fontSize: '11px',
-        fontWeight: '600',
-        color: 'rgba(0,0,0,0.40)',
-        textTransform: 'uppercase',
-        letterSpacing: '0.04em',
-      }}
-    >
-      {label}
-    </dt>
-    <dd
-      style={{
-        marginTop: '4px',
-        fontSize: '14px',
-        color: value ? '#1d1d1f' : 'rgba(0,0,0,0.30)',
-        letterSpacing: '-0.224px',
-      }}
-    >
-      {value ?? '—'}
-    </dd>
-  </div>
-);
+import { ApplicationField } from '../components/ApplicationField';
+import { formatDate, formatSalary } from '../lib/formatters';
 
 export const ApplicationDetailPage = () => {
   const { id } = useParams();
@@ -181,29 +131,29 @@ export const ApplicationDetailPage = () => {
         }}
       >
         <dl className='grid grid-cols-1 sm:grid-cols-2 gap-5'>
-          <Field
+          <ApplicationField
             label='Status'
             value={<OutcomeBadge outcome={application.outcome} />}
           />
-          <Field
+          <ApplicationField
             label='Role Type'
             value={<RoleTypeBadge roleType={application.roleType} />}
           />
-          <Field
+          <ApplicationField
             label='Location'
             value={
               <LocationTypeBadge locationType={application.locationType} />
             }
           />
-          <Field
+          <ApplicationField
             label='Date Applied'
             value={formatDate(application.dateApplied)}
           />
-          <Field
+          <ApplicationField
             label='Interview Date'
             value={formatDate(application.interviewDate)}
           />
-          <Field
+          <ApplicationField
             label='Salary Range'
             value={formatSalary(
               application.salaryMin,
@@ -211,8 +161,8 @@ export const ApplicationDetailPage = () => {
               application.salaryType,
             )}
           />
-          <Field label='Contact Name' value={application.contactName} />
-          <Field label='Contact Info' value={application.contactInfo} />
+          <ApplicationField label='Contact Name' value={application.contactName} />
+          <ApplicationField label='Contact Info' value={application.contactInfo} />
         </dl>
 
         {application.notes && (

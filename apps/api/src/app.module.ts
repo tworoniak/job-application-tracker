@@ -5,6 +5,7 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo'
 import { PrismaModule } from './prisma/prisma.module'
 import { ApplicationsModule } from './applications/applications.module'
 import { DashboardModule } from './dashboard/dashboard.module'
+import { AuthModule } from './auth/auth.module'
 
 @Module({
   imports: [
@@ -13,10 +14,12 @@ import { DashboardModule } from './dashboard/dashboard.module'
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
       playground: process.env.NODE_ENV !== 'production',
+      context: (request: any, reply: any) => ({ req: request, res: reply }),
     }),
     PrismaModule,
     ApplicationsModule,
     DashboardModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

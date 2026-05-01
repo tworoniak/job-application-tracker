@@ -45,7 +45,7 @@ export const OutcomeChart = ({ data }: Props) => {
 
   return (
     <div role='img' aria-label='Applications by outcome, bar chart'>
-      <ResponsiveContainer width='100%' height={chartData.length * 40}>
+      <ResponsiveContainer width='100%' height={chartData.length * 50}>
         <BarChart
           data={chartData}
           layout='vertical'

@@ -2,6 +2,7 @@ import 'reflect-metadata'
 import { NestFactory } from '@nestjs/core'
 import { FastifyAdapter, NestFastifyApplication } from '@nestjs/platform-fastify'
 import { ValidationPipe } from '@nestjs/common'
+import fastifyCookie from '@fastify/cookie'
 import { AppModule } from './app.module'
 
 async function bootstrap() {
@@ -9,6 +10,8 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter({ logger: process.env.NODE_ENV !== 'production' }),
   )
+
+  await app.register(fastifyCookie)
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }))
 

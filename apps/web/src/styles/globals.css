@@ -51,6 +51,10 @@
   to   { transform: translateX(0); }
 }
 
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 .animate-slide-in-right {
   animation: slide-in-right 0.28s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }
