@@ -6,10 +6,12 @@ import { CurrentUser } from './current-user.decorator'
 import { AuthUser } from './models/auth-user.model'
 import type { JwtPayload } from './auth.service'
 
+const isProd = process.env.NODE_ENV === 'production'
+
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: 'lax' as const,
+  secure: isProd,
+  sameSite: (isProd ? 'none' : 'lax') as 'none' | 'lax',
   path: '/',
   maxAge: 60 * 60 * 24 * 7,
 }
