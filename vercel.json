@@ -1,5 +1,8 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }],
+  "rewrites": [
+    { "source": "/graphql", "destination": "https://api-production-841e.up.railway.app/graphql" },
+    { "source": "/(.*)", "destination": "/" }
+  ],
   "buildCommand": "pnpm --filter web run build",
   "outputDirectory": "apps/web/dist",
   "installCommand": "pnpm install --filter web..."
