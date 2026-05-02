@@ -3,7 +3,7 @@ import { onError } from '@apollo/client/link/error'
 import { cache } from './cache'
 
 const httpLink = new HttpLink({
-  uri: '/graphql',
+  uri: import.meta.env.VITE_GRAPHQL_URL ?? '/graphql',
   credentials: 'include',
 })
 

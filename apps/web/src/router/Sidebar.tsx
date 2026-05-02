@@ -124,7 +124,7 @@ export const Sidebar = ({ isOpen, onClose, onSearchClick }: SidebarProps) => {
               className={[
                 'flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-colors',
                 isActive
-                  ? 'bg-white shadow-sm text-neutral-900 font-medium'
+                  ? 'bg-blue-50 text-apple-blue font-semibold border-l-2 border-apple-blue pl-2.5'
                   : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900',
               ].join(' ')}
             >
