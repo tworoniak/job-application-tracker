@@ -8,26 +8,11 @@ import {
   Cell,
 } from 'recharts';
 import type { Outcome } from '@/features/applications/types';
-import { OUTCOME_LABELS } from '@/features/applications/types';
+import { OUTCOME_LABELS, OUTCOME_STYLES } from '@/features/applications/types';
 
 interface Props {
   data: Array<{ outcome: Outcome; count: number }>;
 }
-
-// Monochromatic Apple Blue palette — active pipeline full opacity,
-// terminal positive darkened, inactive/negative muted gray
-const OUTCOME_COLORS: Record<Outcome, string> = {
-  APPLIED: '#5ac8fa',
-  PHONE_SCREEN: '#00C49A',
-  INTERVIEW_SCHEDULED: '#0071e3',
-  INTERVIEW_COMPLETED: '#0071e3',
-  OFFER_RECEIVED: '#1d1d1f',
-  OFFER_ACCEPTED: '#1d1d1f',
-  REJECTED: 'rgba(0,0,0,0.20)',
-  WITHDRAWN: 'rgba(0,0,0,0.16)',
-  NO_RESPONSE: 'rgba(0,0,0,0.12)',
-  GHOSTED: 'rgba(0,0,0,0.08)',
-};
 
 export const OutcomeChart = ({ data }: Props) => {
   const chartData = data
@@ -90,7 +75,7 @@ export const OutcomeChart = ({ data }: Props) => {
           />
           <Bar dataKey='count' radius={[0, 4, 4, 0]}>
             {chartData.map((entry) => (
-              <Cell key={entry.outcome} fill={OUTCOME_COLORS[entry.outcome]} />
+              <Cell key={entry.outcome} fill={OUTCOME_STYLES[entry.outcome].color} />
             ))}
           </Bar>
         </BarChart>

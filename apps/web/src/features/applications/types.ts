@@ -73,18 +73,24 @@ export const OUTCOMES: Outcome[] = [
   'OFFER_RECEIVED', 'OFFER_ACCEPTED', 'REJECTED', 'WITHDRAWN', 'NO_RESPONSE', 'GHOSTED',
 ]
 
-export const OUTCOME_DOT_COLORS: Record<Outcome, string> = {
-  APPLIED: '#0071e3',
-  PHONE_SCREEN: '#0071e3',
-  INTERVIEW_SCHEDULED: '#34c759',
-  INTERVIEW_COMPLETED: '#34c759',
-  OFFER_RECEIVED: '#1d1d1f',
-  OFFER_ACCEPTED: '#1d1d1f',
-  REJECTED: '#ff3b30',
-  WITHDRAWN: '#ff9500',
-  NO_RESPONSE: 'rgba(0,0,0,0.40)',
-  GHOSTED: 'rgba(0,0,0,0.28)',
+export type OutcomeStyle = { bg: string; color: string; weight?: string }
+
+export const OUTCOME_STYLES: Record<Outcome, OutcomeStyle> = {
+  APPLIED:             { bg: 'rgba(0,113,227,0.10)',  color: '#0071e3' },
+  PHONE_SCREEN:        { bg: 'rgba(6,148,162,0.10)',  color: '#0694a2' },
+  INTERVIEW_SCHEDULED: { bg: 'rgba(34,197,94,0.12)',  color: '#16a34a', weight: '600' },
+  INTERVIEW_COMPLETED: { bg: 'rgba(34,197,94,0.10)',  color: '#16a34a', weight: '600' },
+  OFFER_RECEIVED:      { bg: 'rgba(234,179,8,0.12)',  color: '#a16207', weight: '600' },
+  OFFER_ACCEPTED:      { bg: 'rgba(16,185,129,0.12)', color: '#047857', weight: '600' },
+  REJECTED:            { bg: 'rgba(0,0,0,0.05)',      color: 'rgba(0,0,0,0.45)' },
+  WITHDRAWN:           { bg: 'rgba(0,0,0,0.05)',      color: 'rgba(0,0,0,0.45)' },
+  NO_RESPONSE:         { bg: 'rgba(0,0,0,0.04)',      color: 'rgba(0,0,0,0.40)' },
+  GHOSTED:             { bg: 'rgba(0,0,0,0.03)',      color: 'rgba(0,0,0,0.32)' },
 }
+
+export const OUTCOME_DOT_COLORS: Record<Outcome, string> = Object.fromEntries(
+  (Object.keys(OUTCOME_STYLES) as Outcome[]).map((o) => [o, OUTCOME_STYLES[o].color])
+) as Record<Outcome, string>
 
 export const OUTCOME_LABELS: Record<Outcome, string> = {
   APPLIED: 'Applied',
