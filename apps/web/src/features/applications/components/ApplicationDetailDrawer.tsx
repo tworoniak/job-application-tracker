@@ -8,6 +8,7 @@ import { OutcomeBadge, RoleTypeBadge, LocationTypeBadge, Skeleton } from '@/comp
 import { ApplicationField } from './ApplicationField'
 import { formatDate, formatSalary } from '../lib/formatters'
 import type { ApplicationFormValues } from '../schemas/application.schema'
+import type { JobApplication } from '../types'
 import { ROLE_TYPE_LABELS, LOCATION_TYPE_LABELS } from '../types'
 
 interface Props {
@@ -15,6 +16,150 @@ interface Props {
   initialEditMode?: boolean
   onClose: () => void
 }
+
+interface EditProps {
+  application: JobApplication
+  saving: boolean
+  onSubmit: (values: ApplicationFormValues) => Promise<void>
+  onCancel: () => void
+  onClose: () => void
+}
+
+interface ViewProps {
+  application: JobApplication
+  initials: string
+  onEdit: () => void
+  onClose: () => void
+}
+
+const DrawerEditContent = ({ application, saving, onSubmit, onCancel, onClose }: EditProps) => (
+  <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+    <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
+      <h2 id="drawer-title" style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px' }}>Edit Application</h2>
+      <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+        <button
+          onClick={onCancel}
+          style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px' }}
+        >
+          Cancel
+        </button>
+        <button
+          onClick={onClose}
+          aria-label="Close drawer"
+          style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.06)', border: 'none', cursor: 'pointer' }}
+        >
+          <X size={14} color="rgba(0,0,0,0.60)" />
+        </button>
+      </div>
+    </div>
+    <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>
+      <ApplicationForm
+        defaultValues={mapApplicationToFormValues(application)}
+        onSubmit={onSubmit}
+        loading={saving}
+        submitLabel="Save Changes"
+      />
+    </div>
+  </div>
+)
+
+const DrawerViewContent = ({ application, initials, onEdit, onClose }: ViewProps) => (
+  <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
+    {/* Header */}
+    <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)', flexShrink: 0 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
+        <div style={{ display: 'flex', gap: '12px', alignItems: 'center', minWidth: 0 }}>
+          <div style={{
+            width: '44px', height: '44px', borderRadius: '12px',
+            background: 'rgba(0,113,227,0.10)', color: '#0071e3',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: '16px', fontWeight: '600', flexShrink: 0, letterSpacing: '-0.3px',
+          }}>
+            {initials}
+          </div>
+          <div style={{ minWidth: 0 }}>
+            <p id="drawer-title" style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+              {application.companyName}
+            </p>
+            <p style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '1px' }}>
+              {application.positionTitle}
+            </p>
+          </div>
+        </div>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
+          <button
+            onClick={onEdit}
+            style={{ padding: '5px 14px', fontSize: '13px', color: '#0071e3', background: 'transparent', border: '1px solid #0071e3', borderRadius: '7px', cursor: 'pointer', letterSpacing: '-0.12px' }}
+          >
+            Edit
+          </button>
+          <button
+            onClick={onClose}
+            aria-label="Close drawer"
+            style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.06)', border: 'none', cursor: 'pointer' }}
+          >
+            <X size={14} color="rgba(0,0,0,0.60)" />
+          </button>
+        </div>
+      </div>
+
+      {/* Tags */}
+      <div style={{ display: 'flex', gap: '6px', marginTop: '12px', flexWrap: 'wrap' }}>
+        <OutcomeBadge outcome={application.outcome} />
+        <RoleTypeBadge roleType={application.roleType} />
+        <LocationTypeBadge locationType={application.locationType} />
+      </div>
+    </div>
+
+    {/* Body */}
+    <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
+      {/* Timeline */}
+      <div>
+        <p style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
+          Timeline
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#1d1d1f', flexShrink: 0 }} />
+            <div>
+              <p style={{ fontSize: '13px', fontWeight: '500', color: '#1d1d1f', letterSpacing: '-0.12px' }}>Applied</p>
+              <p style={{ fontSize: '12px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px' }}>{formatDate(application.dateApplied)}</p>
+            </div>
+          </div>
+          {application.interviewDate && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#0071e3', flexShrink: 0 }} />
+              <div>
+                <p style={{ fontSize: '13px', fontWeight: '500', color: '#1d1d1f', letterSpacing: '-0.12px' }}>Interview</p>
+                <p style={{ fontSize: '12px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px' }}>{formatDate(application.interviewDate)}</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Detail grid */}
+      <dl style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+        <ApplicationField label="Compensation" value={formatSalary(application.salaryMin, application.salaryMax, application.salaryType)} />
+        <ApplicationField label="Location" value={LOCATION_TYPE_LABELS[application.locationType]} />
+        <ApplicationField label="Role Type" value={ROLE_TYPE_LABELS[application.roleType]} />
+        <ApplicationField label="Contact" value={[application.contactName, application.contactInfo].filter(Boolean).join(' · ') || null} />
+      </dl>
+
+      {/* Notes */}
+      {application.notes && (
+        <div>
+          <p style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
+            Notes
+          </p>
+          <p style={{ fontSize: '14px', color: '#1d1d1f', lineHeight: '1.47', letterSpacing: '-0.224px', whiteSpace: 'pre-wrap' }}>
+            {application.notes}
+          </p>
+        </div>
+      )}
+    </div>
+  </div>
+)
 
 export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClose }: Props) => {
   const { application, loading } = useApplication(appId)
@@ -59,12 +204,8 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
       <div
         onClick={onClose}
         style={{
-          position: 'fixed',
-          inset: 0,
-          background: 'rgba(0,0,0,0.18)',
-          zIndex: 40,
-          backdropFilter: 'blur(2px)',
-          WebkitBackdropFilter: 'blur(2px)',
+          position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.18)', zIndex: 40,
+          backdropFilter: 'blur(2px)', WebkitBackdropFilter: 'blur(2px)',
         }}
       />
 
@@ -76,18 +217,10 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
         aria-labelledby="drawer-title"
         className="animate-slide-in-right"
         style={{
-          position: 'fixed',
-          top: 0,
-          right: 0,
-          height: '100dvh',
-          width: '420px',
-          maxWidth: '100vw',
-          background: '#ffffff',
-          zIndex: 50,
-          boxShadow: '-4px 0 32px rgba(0,0,0,0.10)',
-          display: 'flex',
-          flexDirection: 'column',
-          overflowY: 'auto',
+          position: 'fixed', top: 0, right: 0, height: '100dvh',
+          width: '420px', maxWidth: '100vw', background: '#ffffff',
+          zIndex: 50, boxShadow: '-4px 0 32px rgba(0,0,0,0.10)',
+          display: 'flex', flexDirection: 'column', overflowY: 'auto',
         }}
       >
         {loading ? (
@@ -103,135 +236,20 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
             Application not found.
           </div>
         ) : editMode ? (
-          /* ── Edit mode ─────────────────────────────── */
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(0,0,0,0.06)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-              <h2 id="drawer-title" style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px' }}>Edit Application</h2>
-              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <button
-                  onClick={() => setEditMode(false)}
-                  style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', background: 'none', border: 'none', cursor: 'pointer', letterSpacing: '-0.12px' }}
-                >
-                  Cancel
-                </button>
-                <button
-                  onClick={onClose}
-                  aria-label="Close drawer"
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.06)', border: 'none', cursor: 'pointer' }}
-                >
-                  <X size={14} color="rgba(0,0,0,0.60)" />
-                </button>
-              </div>
-            </div>
-            <div style={{ padding: '24px', overflowY: 'auto', flex: 1 }}>
-              <ApplicationForm
-                defaultValues={mapApplicationToFormValues(application)}
-                onSubmit={handleEditSubmit}
-                loading={saving}
-                submitLabel="Save Changes"
-              />
-            </div>
-          </div>
+          <DrawerEditContent
+            application={application}
+            saving={saving}
+            onSubmit={handleEditSubmit}
+            onCancel={() => setEditMode(false)}
+            onClose={onClose}
+          />
         ) : (
-          /* ── View mode ─────────────────────────────── */
-          <div style={{ display: 'flex', flexDirection: 'column', flex: 1 }}>
-            {/* Header */}
-            <div style={{ padding: '20px 24px', borderBottom: '1px solid rgba(0,0,0,0.06)', flexShrink: 0 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '12px' }}>
-                <div style={{ display: 'flex', gap: '12px', alignItems: 'center', minWidth: 0 }}>
-                  {/* Avatar */}
-                  <div style={{
-                    width: '44px', height: '44px', borderRadius: '12px',
-                    background: 'rgba(0,113,227,0.10)', color: '#0071e3',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    fontSize: '16px', fontWeight: '600', flexShrink: 0, letterSpacing: '-0.3px',
-                  }}>
-                    {initials}
-                  </div>
-                  <div style={{ minWidth: 0 }}>
-                    <p id="drawer-title" style={{ fontSize: '17px', fontWeight: '600', color: '#1d1d1f', letterSpacing: '-0.374px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                      {application.companyName}
-                    </p>
-                    <p style={{ fontSize: '13px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginTop: '1px' }}>
-                      {application.positionTitle}
-                    </p>
-                  </div>
-                </div>
-                {/* Header actions */}
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center', flexShrink: 0 }}>
-                  <button
-                    onClick={() => setEditMode(true)}
-                    style={{ padding: '5px 14px', fontSize: '13px', color: '#0071e3', background: 'transparent', border: '1px solid #0071e3', borderRadius: '7px', cursor: 'pointer', letterSpacing: '-0.12px' }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={onClose}
-                    aria-label="Close drawer"
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '28px', height: '28px', borderRadius: '50%', background: 'rgba(0,0,0,0.06)', border: 'none', cursor: 'pointer' }}
-                  >
-                    <X size={14} color="rgba(0,0,0,0.60)" />
-                  </button>
-                </div>
-              </div>
-
-              {/* Tags */}
-              <div style={{ display: 'flex', gap: '6px', marginTop: '12px', flexWrap: 'wrap' }}>
-                <OutcomeBadge outcome={application.outcome} />
-                <RoleTypeBadge roleType={application.roleType} />
-                <LocationTypeBadge locationType={application.locationType} />
-              </div>
-            </div>
-
-            {/* Body */}
-            <div style={{ padding: '20px 24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '24px' }}>
-
-              {/* Timeline */}
-              <div>
-                <p style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '12px' }}>
-                  Timeline
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                    <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#1d1d1f', flexShrink: 0 }} />
-                    <div>
-                      <p style={{ fontSize: '13px', fontWeight: '500', color: '#1d1d1f', letterSpacing: '-0.12px' }}>Applied</p>
-                      <p style={{ fontSize: '12px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px' }}>{formatDate(application.dateApplied)}</p>
-                    </div>
-                  </div>
-                  {application.interviewDate && (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div style={{ width: '10px', height: '10px', borderRadius: '50%', background: '#0071e3', flexShrink: 0 }} />
-                      <div>
-                        <p style={{ fontSize: '13px', fontWeight: '500', color: '#1d1d1f', letterSpacing: '-0.12px' }}>Interview</p>
-                        <p style={{ fontSize: '12px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px' }}>{formatDate(application.interviewDate)}</p>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Detail grid */}
-              <dl style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                <ApplicationField label="Compensation" value={formatSalary(application.salaryMin, application.salaryMax, application.salaryType)} />
-                <ApplicationField label="Location" value={LOCATION_TYPE_LABELS[application.locationType]} />
-                <ApplicationField label="Role Type" value={ROLE_TYPE_LABELS[application.roleType]} />
-                <ApplicationField label="Contact" value={[application.contactName, application.contactInfo].filter(Boolean).join(' · ') || null} />
-              </dl>
-
-              {/* Notes */}
-              {application.notes && (
-                <div>
-                  <p style={{ fontSize: '11px', fontWeight: '600', color: 'rgba(0,0,0,0.40)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '8px' }}>
-                    Notes
-                  </p>
-                  <p style={{ fontSize: '14px', color: '#1d1d1f', lineHeight: '1.47', letterSpacing: '-0.224px', whiteSpace: 'pre-wrap' }}>
-                    {application.notes}
-                  </p>
-                </div>
-              )}
-            </div>
-          </div>
+          <DrawerViewContent
+            application={application}
+            initials={initials}
+            onEdit={() => setEditMode(true)}
+            onClose={onClose}
+          />
         )}
       </div>
     </>
