@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { useFocusTrap } from '@/lib/useFocusTrap'
 import { X } from 'lucide-react'
 import { useApplication } from '../hooks/useApplication'
 import { useUpdateApplication } from '../hooks/useUpdateApplication'
@@ -40,30 +41,7 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
     return () => window.removeEventListener('keydown', handler)
   }, [editMode, onClose])
 
-  // Focus trap
-  useEffect(() => {
-    const el = panelRef.current
-    if (!el) return
-    const focusable = () => Array.from(
-      el.querySelectorAll<HTMLElement>(
-        'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-      )
-    )
-    focusable()[0]?.focus()
-    const trap = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return
-      const els = focusable()
-      const first = els[0]
-      const last = els[els.length - 1]
-      if (e.shiftKey) {
-        if (document.activeElement === first) { e.preventDefault(); last?.focus() }
-      } else {
-        if (document.activeElement === last) { e.preventDefault(); first?.focus() }
-      }
-    }
-    document.addEventListener('keydown', trap)
-    return () => document.removeEventListener('keydown', trap)
-  }, [loading, editMode])
+  useFocusTrap(panelRef, !loading)
 
   const handleEditSubmit = async (values: ApplicationFormValues) => {
     if (!application) return

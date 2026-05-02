@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
+import { useFocusTrap } from '@/lib/useFocusTrap'
 
 interface ConfirmDialogProps {
   open: boolean
@@ -20,30 +21,7 @@ export const ConfirmDialog = ({
   loading,
 }: ConfirmDialogProps) => {
   const dialogRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (!open) return
-    const el = dialogRef.current
-    if (!el) return
-    const focusable = el.querySelectorAll<HTMLElement>(
-      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
-    )
-    focusable[0]?.focus()
-
-    const trap = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return
-      const els = Array.from(focusable)
-      const first = els[0]
-      const last = els[els.length - 1]
-      if (e.shiftKey) {
-        if (document.activeElement === first) { e.preventDefault(); last.focus() }
-      } else {
-        if (document.activeElement === last) { e.preventDefault(); first.focus() }
-      }
-    }
-    document.addEventListener('keydown', trap)
-    return () => document.removeEventListener('keydown', trap)
-  }, [open])
+  useFocusTrap(dialogRef, open)
 
   if (!open) return null
 

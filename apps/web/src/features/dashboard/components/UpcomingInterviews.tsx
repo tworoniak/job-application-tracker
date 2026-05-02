@@ -1,3 +1,4 @@
+import { daysUntil as daysUntilCount } from '@/lib/date';
 import type { DashboardMetrics } from '../hooks/useDashboardMetrics';
 
 type Interview = DashboardMetrics['upcomingInterviews'][number];
@@ -57,14 +58,7 @@ export function DateBadge({ date, isActive }: DateBadgeProps) {
   );
 }
 
-const daysUntilCount = (iso: string): number => {
-  const todayUtc = new Date();
-  todayUtc.setUTCHours(0, 0, 0, 0);
-  const diff = new Date(iso).getTime() - todayUtc.getTime();
-  return Math.ceil(diff / (1000 * 60 * 60 * 24));
-};
-
-const daysUntil = (iso: string) => {
+const daysUntilLabel = (iso: string) => {
   const days = daysUntilCount(iso);
   if (days === 0) return 'Today';
   if (days === 1) return 'Tomorrow';
@@ -116,7 +110,7 @@ export const UpcomingInterviews = ({
                     : 'text-blue-600',
                 ].join(' ')}
               >
-                {daysUntil(interview.interviewDate!)}
+                {daysUntilLabel(interview.interviewDate!)}
               </p>
             </div>
           </button>

@@ -105,6 +105,11 @@ export const OUTCOME_LABELS: Record<Outcome, string> = {
   GHOSTED: 'Ghosted',
 }
 
+export const SALARY_TYPE_LABELS: Record<SalaryType, string> = {
+  ANNUAL: 'Annual',
+  HOURLY: 'Hourly',
+}
+
 export const ROLE_TYPE_LABELS: Record<RoleType, string> = {
   FULL_TIME: 'Full-time',
   PART_TIME: 'Part-time',

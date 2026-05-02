@@ -1,3 +1,9 @@
+export const daysUntil = (iso: string): number => {
+  const todayUtc = new Date();
+  todayUtc.setUTCHours(0, 0, 0, 0);
+  return Math.ceil((new Date(iso).getTime() - todayUtc.getTime()) / (1000 * 60 * 60 * 24));
+};
+
 export const getCurrentISOWeek = (): string => {
   const now = new Date();
   const day = now.getDay() || 7;
