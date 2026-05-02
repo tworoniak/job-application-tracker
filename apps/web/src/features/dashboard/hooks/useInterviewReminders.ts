@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { daysUntil } from '@/lib/date'
 import type { DashboardMetrics } from './useDashboardMetrics'
 
 type Interview = DashboardMetrics['upcomingInterviews'][number]
@@ -14,11 +15,6 @@ const markFired = (id: string) => {
   if (!fired.includes(id)) sessionStorage.setItem(SESSION_KEY, JSON.stringify([...fired, id]))
 }
 
-const daysUntil = (iso: string) => {
-  const todayUtc = new Date()
-  todayUtc.setUTCHours(0, 0, 0, 0)
-  return Math.ceil((new Date(iso).getTime() - todayUtc.getTime()) / (1000 * 60 * 60 * 24))
-}
 
 const fireNotifications = (interviews: Interview[]) => {
   if (Notification.permission !== 'granted') return

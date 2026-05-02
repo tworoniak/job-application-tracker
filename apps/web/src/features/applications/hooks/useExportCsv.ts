@@ -1,21 +1,12 @@
 import { useLazyQuery } from '@apollo/client'
 import { LIST_APPLICATIONS } from './useApplications'
 import type { JobApplicationConnection } from '../types'
-
-const SALARY_TYPE_LABELS: Record<string, string> = { ANNUAL: 'Annual', HOURLY: 'Hourly' }
-const ROLE_TYPE_LABELS: Record<string, string> = {
-  FULL_TIME: 'Full-time', PART_TIME: 'Part-time', CONTRACT: 'Contract',
-  FREELANCE: 'Freelance', INTERNSHIP: 'Internship',
-}
-const LOCATION_TYPE_LABELS: Record<string, string> = {
-  ON_SITE: 'On-site', HYBRID: 'Hybrid', REMOTE: 'Remote',
-}
-const OUTCOME_LABELS: Record<string, string> = {
-  APPLIED: 'Applied', PHONE_SCREEN: 'Phone Screen',
-  INTERVIEW_SCHEDULED: 'Interview Scheduled', INTERVIEW_COMPLETED: 'Interview Completed',
-  OFFER_RECEIVED: 'Offer Received', OFFER_ACCEPTED: 'Offer Accepted',
-  REJECTED: 'Rejected', WITHDRAWN: 'Withdrawn', NO_RESPONSE: 'No Response', GHOSTED: 'Ghosted',
-}
+import {
+  SALARY_TYPE_LABELS,
+  ROLE_TYPE_LABELS,
+  LOCATION_TYPE_LABELS,
+  OUTCOME_LABELS,
+} from '../types'
 
 const esc = (val: unknown) => {
   const s = val == null ? '' : String(val)

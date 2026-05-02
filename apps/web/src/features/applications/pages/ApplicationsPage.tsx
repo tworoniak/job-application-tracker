@@ -4,6 +4,7 @@ import { ApplicationsTable } from '../components/ApplicationsTable';
 import { FilterPanel } from '../components/FilterPanel';
 import { ApplicationDetailDrawer } from '../components/ApplicationDetailDrawer';
 import { useApplications } from '../hooks/useApplications';
+import { useDrawer } from '../hooks/useDrawer';
 import { useExportCsv } from '../hooks/useExportCsv';
 import { useBulkDeleteApplications } from '../hooks/useBulkDeleteApplications';
 import { useBulkUpdateOutcome } from '../hooks/useBulkUpdateOutcome';
@@ -15,7 +16,7 @@ import type {
   Outcome,
   JobApplication,
 } from '../types';
-import { OUTCOME_LABELS } from '../types';
+import { OUTCOME_LABELS, OUTCOMES } from '../types';
 import { Download, Plus, SlidersHorizontal } from 'lucide-react';
 
 type QuickFilter = 'all' | 'active' | 'interviewing' | 'offers' | 'closed';
@@ -35,10 +36,6 @@ const QUICK_FILTER_LABELS: Record<QuickFilter, string> = {
   closed: 'Closed',
 };
 
-const OUTCOMES: Outcome[] = [
-  'APPLIED', 'PHONE_SCREEN', 'INTERVIEW_SCHEDULED', 'INTERVIEW_COMPLETED',
-  'OFFER_RECEIVED', 'OFFER_ACCEPTED', 'REJECTED', 'WITHDRAWN', 'NO_RESPONSE', 'GHOSTED',
-];
 
 function deriveQuickFilter(outcomes: Outcome[] | undefined): QuickFilter {
   if (!outcomes?.length) return 'all';
@@ -61,9 +58,7 @@ export const ApplicationsPage = () => {
   const [searchInput, setSearchInput] = useState('');
   const [filterPanelOpen, setFilterPanelOpen] = useState(false);
 
-  // Detail drawer
-  const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
-  const [drawerEditMode, setDrawerEditMode] = useState(false);
+  const { selectedAppId, editMode: drawerEditMode, openView, openEdit, close: closeDrawer } = useDrawer();
 
   // Bulk selection
   const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
@@ -126,15 +121,8 @@ export const ApplicationsPage = () => {
     setSearchInput('');
   };
 
-  const handleRowClick = (app: JobApplication) => {
-    setSelectedAppId(app.id);
-    setDrawerEditMode(false);
-  };
-
-  const handleEditClick = (app: JobApplication) => {
-    setSelectedAppId(app.id);
-    setDrawerEditMode(true);
-  };
+  const handleRowClick = (app: JobApplication) => openView(app.id);
+  const handleEditClick = (app: JobApplication) => openEdit(app.id);
 
   const handleBulkDelete = async () => {
     await bulkDelete(Array.from(selectedIds));
@@ -379,7 +367,7 @@ export const ApplicationsPage = () => {
         <ApplicationDetailDrawer
           appId={selectedAppId}
           initialEditMode={drawerEditMode}
-          onClose={() => setSelectedAppId(null)}
+          onClose={closeDrawer}
         />
       )}
 

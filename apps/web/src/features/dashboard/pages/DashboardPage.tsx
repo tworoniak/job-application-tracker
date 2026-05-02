@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useDrawer } from '@/features/applications/hooks/useDrawer';
 import { useDashboardMetrics } from '../hooks/useDashboardMetrics';
 import { useInterviewReminders } from '../hooks/useInterviewReminders';
 import { getCurrentISOWeek } from '@/lib/date';
@@ -22,7 +22,7 @@ import { Skeleton } from '@/components/ui';
 
 export const DashboardPage = () => {
   const { metrics, loading } = useDashboardMetrics();
-  const [selectedAppId, setSelectedAppId] = useState<string | null>(null);
+  const { selectedAppId, openView, close: closeDrawer } = useDrawer();
   const { permission, requestPermission, supported } = useInterviewReminders(
     metrics?.upcomingInterviews ?? [],
   );
@@ -154,7 +154,7 @@ export const DashboardPage = () => {
           ) : (
             <UpcomingInterviews
               interviews={metrics?.upcomingInterviews ?? []}
-              onItemClick={setSelectedAppId}
+              onItemClick={openView}
             />
           )}
         </div>
@@ -188,7 +188,7 @@ export const DashboardPage = () => {
     {selectedAppId && (
       <ApplicationDetailDrawer
         appId={selectedAppId}
-        onClose={() => setSelectedAppId(null)}
+        onClose={closeDrawer}
       />
     )}
     </>
