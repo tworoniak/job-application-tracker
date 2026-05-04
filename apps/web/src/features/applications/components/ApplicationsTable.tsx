@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { toast } from 'sonner'
 import { ColumnDef, flexRender, getCoreRowModel, useReactTable } from '@tanstack/react-table'
 import { RoleTypeBadge, LocationTypeBadge, ConfirmDialog, TableSkeleton, Checkbox } from '@/components/ui'
 import { useNavigate } from 'react-router-dom'
@@ -114,9 +115,14 @@ export const ApplicationsTable = ({
           value={row.original.outcome}
           style={outcomeSelectStyle(row.original.outcome)}
           onClick={(e) => e.stopPropagation()}
-          onChange={(e) => {
+          onChange={async (e) => {
             e.stopPropagation()
-            updateApplication(row.original.id, { outcome: e.target.value as Outcome }, row.original)
+            try {
+              await updateApplication(row.original.id, { outcome: e.target.value as Outcome }, row.original)
+              toast.success('Status updated')
+            } catch {
+              toast.error('Something went wrong')
+            }
           }}
         >
           {OUTCOMES.map((o) => (
@@ -204,7 +210,14 @@ export const ApplicationsTable = ({
             onRowClick={() => onRowClick(app)}
             onEdit={() => onEditClick(app)}
             onDelete={() => setDeleteTarget(app)}
-            onOutcomeChange={(outcome) => updateApplication(app.id, { outcome }, app)}
+            onOutcomeChange={async (outcome) => {
+              try {
+                await updateApplication(app.id, { outcome }, app)
+                toast.success('Status updated')
+              } catch {
+                toast.error('Something went wrong')
+              }
+            }}
           />
         ))}
       </div>
@@ -277,7 +290,12 @@ export const ApplicationsTable = ({
         onCancel={() => setDeleteTarget(null)}
         onConfirm={async () => {
           if (!deleteTarget) return
-          await deleteApplication(deleteTarget.id)
+          try {
+            await deleteApplication(deleteTarget.id)
+            toast.success('Application deleted')
+          } catch {
+            toast.error('Something went wrong')
+          }
           setDeleteTarget(null)
         }}
       />
