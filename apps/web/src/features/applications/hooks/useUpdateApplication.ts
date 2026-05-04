@@ -41,7 +41,7 @@ export const useUpdateApplication = () => {
       salaryType: values.salaryType ?? undefined,
       salaryMin: values.salaryMin ?? undefined,
       salaryMax: values.salaryMax ?? undefined,
-      interviewDate: values.interviewDate || undefined,
+      interviewDate: values.interviewDate !== undefined ? (values.interviewDate || null) : undefined,
     }
 
     const optimisticResponse = currentApplication
