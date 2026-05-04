@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Outlet } from 'react-router-dom';
 import { Menu, Briefcase } from 'lucide-react';
+import { Toaster } from 'sonner';
 import { CommandPalette } from '@/components/ui';
 import { Sidebar } from './Sidebar';
 
@@ -68,6 +69,7 @@ export const AppLayout = () => {
         open={paletteOpen}
         onClose={() => setPaletteOpen(false)}
       />
+      <Toaster position="bottom-right" richColors />
     </div>
   );
 };

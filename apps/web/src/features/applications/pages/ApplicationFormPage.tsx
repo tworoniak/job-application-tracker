@@ -1,4 +1,5 @@
 import { useNavigate, useParams } from 'react-router-dom'
+import { toast } from 'sonner'
 import { ApplicationForm, mapApplicationToFormValues } from '../components/ApplicationForm'
 import { useApplication } from '../hooks/useApplication'
 import { useCreateApplication } from '../hooks/useCreateApplication'
@@ -16,12 +17,18 @@ export const ApplicationFormPage = () => {
   const { updateApplication, loading: updateLoading } = useUpdateApplication()
 
   const handleSubmit = async (values: ApplicationFormValues) => {
-    if (isEdit && id) {
-      await updateApplication(id, values, application ?? undefined)
-    } else {
-      await createApplication(values)
+    try {
+      if (isEdit && id) {
+        await updateApplication(id, values, application ?? undefined)
+        toast.success('Application saved')
+      } else {
+        await createApplication(values)
+        toast.success('Application added')
+      }
+      navigate('/applications')
+    } catch {
+      toast.error('Something went wrong')
     }
-    navigate('/applications')
   }
 
   if (isEdit && fetchLoading) {

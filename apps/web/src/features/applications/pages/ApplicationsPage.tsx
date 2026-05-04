@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 import { ApplicationsTable } from '../components/ApplicationsTable';
 import { FilterPanel } from '../components/FilterPanel';
 import { ApplicationDetailDrawer } from '../components/ApplicationDetailDrawer';
@@ -125,13 +126,25 @@ export const ApplicationsPage = () => {
   const handleEditClick = (app: JobApplication) => openEdit(app.id);
 
   const handleBulkDelete = async () => {
-    await bulkDelete(Array.from(selectedIds));
+    const count = selectedIds.size;
+    try {
+      await bulkDelete(Array.from(selectedIds));
+      toast.success(count === 1 ? 'Application deleted' : `${count} applications deleted`);
+    } catch {
+      toast.error('Something went wrong');
+    }
     setSelectedIds(new Set());
     setConfirmBulkDelete(false);
   };
 
   const handleBulkUpdateOutcome = async () => {
-    await bulkUpdateOutcome(Array.from(selectedIds), bulkOutcome);
+    const count = selectedIds.size;
+    try {
+      await bulkUpdateOutcome(Array.from(selectedIds), bulkOutcome);
+      toast.success(count === 1 ? 'Status updated' : `${count} statuses updated`);
+    } catch {
+      toast.error('Something went wrong');
+    }
     setSelectedIds(new Set());
   };
 

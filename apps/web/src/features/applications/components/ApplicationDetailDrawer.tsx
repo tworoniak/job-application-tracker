@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
+import { toast } from 'sonner'
 import { useFocusTrap } from '@/lib/useFocusTrap'
 import { X } from 'lucide-react'
 import { useApplication } from '../hooks/useApplication'
@@ -190,8 +191,13 @@ export const ApplicationDetailDrawer = ({ appId, initialEditMode = false, onClos
 
   const handleEditSubmit = async (values: ApplicationFormValues) => {
     if (!application) return
-    await updateApplication(appId, values, application)
-    setEditMode(false)
+    try {
+      await updateApplication(appId, values, application)
+      toast.success('Application saved')
+      setEditMode(false)
+    } catch {
+      toast.error('Something went wrong')
+    }
   }
 
   const initials = application
