@@ -16,4 +16,20 @@ export class UsersService {
     const passwordHash = await bcrypt.hash(password, 12)
     return this.prisma.user.create({ data: { email, passwordHash } })
   }
+
+  async findOrCreateByGoogle(profile: {
+    googleId: string
+    email: string
+  }): Promise<{ id: string; email: string }> {
+    const byGoogleId = await this.prisma.user.findUnique({ where: { googleId: profile.googleId } })
+    if (byGoogleId) return byGoogleId
+
+    // Link to existing email/password account — preserves all associated applications
+    const byEmail = await this.prisma.user.findUnique({ where: { email: profile.email } })
+    if (byEmail) {
+      return this.prisma.user.update({ where: { id: byEmail.id }, data: { googleId: profile.googleId } })
+    }
+
+    return this.prisma.user.create({ data: { email: profile.email, googleId: profile.googleId } })
+  }
 }

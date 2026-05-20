@@ -18,6 +18,9 @@ export class AuthService {
   async login(email: string, password: string): Promise<JwtPayload> {
     const user = await this.usersService.findByEmail(email)
     if (!user) throw new UnauthorizedException('Invalid credentials')
+    if (!user.passwordHash) {
+      throw new UnauthorizedException('This account uses Google sign-in. Please sign in with Google.')
+    }
     const valid = await bcrypt.compare(password, user.passwordHash)
     if (!valid) throw new UnauthorizedException('Invalid credentials')
     return { id: user.id, email: user.email }
