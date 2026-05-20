@@ -1,8 +1,9 @@
 [build]
-builder = "DOCKERFILE"
-dockerfilePath = "Dockerfile"
+builder = "NIXPACKS"
+buildCommand = "pnpm install --frozen-lockfile && pnpm --filter api exec prisma generate && pnpm --filter api run build"
 
 [deploy]
+startCommand = "pnpm --filter api exec prisma migrate deploy && node apps/api/dist/main.js"
 healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
