@@ -1,6 +1,7 @@
 FROM node:20-alpine AS builder
 WORKDIR /app
 
+ENV BUILDKIT_INLINE_CACHE=0
 RUN corepack enable && corepack prepare pnpm@9 --activate
 
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml* ./
