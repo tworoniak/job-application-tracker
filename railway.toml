@@ -1,6 +1,6 @@
 [build]
 builder = "NIXPACKS"
-buildCommand = "pnpm install --frozen-lockfile --prod=false && pnpm --filter api exec prisma generate && pnpm --filter api exec nest build"
+buildCommand = "pnpm install --frozen-lockfile --prod=false && pnpm --filter api exec prisma generate && pnpm --filter api run build"
 
 [deploy]
 startCommand = "pnpm --filter api exec prisma migrate deploy && node apps/api/dist/main.js"
