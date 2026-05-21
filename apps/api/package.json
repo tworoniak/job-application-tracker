@@ -11,6 +11,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@nestjs/cli": "^10.4.9",
     "@apollo/server": "^4.11.3",
     "@as-integrations/fastify": "^3.1.0",
     "@fastify/cookie": "^9.4.0",
@@ -34,7 +35,6 @@
     "rxjs": "^7.8.1"
   },
   "devDependencies": {
-    "@nestjs/cli": "^10.4.9",
     "@nestjs/schematics": "^10.2.3",
     "@nestjs/testing": "^10.4.15",
     "@types/bcryptjs": "^3.0.0",
