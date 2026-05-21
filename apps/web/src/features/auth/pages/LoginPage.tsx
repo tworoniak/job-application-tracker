@@ -152,19 +152,20 @@ export const LoginPage = () => {
             <div style={{ flex: 1, height: '1px', background: 'rgba(0,0,0,0.08)' }} />
           </div>
 
-          <a
-            href={`${import.meta.env.VITE_API_URL ?? 'http://localhost:3000'}/auth/google`}
+          <button
+            type="button"
+            onClick={() => { window.location.href = `${import.meta.env.VITE_API_URL ?? 'http://localhost:3000'}/auth/google` }}
             style={{
               display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
               width: '100%', padding: '11px', fontSize: '15px', fontWeight: '500', marginTop: '12px',
               color: '#1d1d1f', background: '#f5f5f7', border: '1px solid rgba(0,0,0,0.12)',
-              borderRadius: '10px', cursor: 'pointer', textDecoration: 'none', letterSpacing: '-0.2px',
+              borderRadius: '10px', cursor: 'pointer', letterSpacing: '-0.2px',
               boxSizing: 'border-box',
             }}
           >
             <GoogleIcon />
             Continue with Google
-          </a>
+          </button>
         </div>
 
         <p style={{ marginTop: '20px', textAlign: 'center', fontSize: '13px', color: 'rgba(0,0,0,0.48)', letterSpacing: '-0.12px' }}>
