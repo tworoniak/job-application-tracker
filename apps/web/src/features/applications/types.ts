@@ -123,3 +123,9 @@ export const LOCATION_TYPE_LABELS: Record<LocationType, string> = {
   HYBRID: 'Hybrid',
   REMOTE: 'Remote',
 }
+
+export const LOCATION_TYPE_COLORS: Record<LocationType, string> = {
+  ON_SITE: '#0071e3',
+  HYBRID: '#5ac8fa',
+  REMOTE: '#00C49A',
+}

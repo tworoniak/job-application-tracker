@@ -17,6 +17,7 @@ import {
   WeeklyChart,
   UpcomingInterviews,
   FunnelChart,
+  LocationTypeChart,
 } from '../components';
 import { Skeleton } from '@/components/ui';
 
@@ -160,8 +161,8 @@ export const DashboardPage = () => {
         </div>
       </div>
 
-      {/* Conversion funnel + weekly activity */}
-      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+      {/* Conversion funnel + weekly activity + location type */}
+      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         <div className='rounded-xl p-6 shadow-sm bg-white'>
           {sectionTitle('Applications per Week')}
           {loading ? (
@@ -180,6 +181,15 @@ export const DashboardPage = () => {
               data={metrics?.byOutcome ?? []}
               total={metrics?.totalApplications ?? 0}
             />
+          )}
+        </div>
+
+        <div className='rounded-xl p-6 shadow-sm bg-white'>
+          {sectionTitle('By Location')}
+          {loading ? (
+            <Skeleton className='h-40 w-full' />
+          ) : (
+            <LocationTypeChart data={metrics?.byLocationType ?? []} />
           )}
         </div>
       </div>
