@@ -4,7 +4,7 @@ import { gql, useMutation } from '@apollo/client'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { client } from '@/lib/graphql/client'
+import { client, AUTH_TOKEN_KEY } from '@/lib/graphql/client'
 
 const loginSchema = z.object({
   email: z.string().email('Enter a valid email'),
@@ -18,6 +18,7 @@ const LOGIN_MUTATION = gql`
     login(email: $email, password: $password) {
       id
       email
+      token
     }
   }
 `
@@ -27,6 +28,7 @@ const REGISTER_MUTATION = gql`
     register(email: $email, password: $password) {
       id
       email
+      token
     }
   }
 `
@@ -56,11 +58,15 @@ export const LoginPage = () => {
   const onSubmit = async ({ email, password }: LoginFormValues) => {
     setServerError(null)
     try {
+      let token: string | null = null
       if (mode === 'login') {
-        await login({ variables: { email, password } })
+        const { data } = await login({ variables: { email, password } })
+        token = data?.login?.token ?? null
       } else {
-        await register({ variables: { email, password } })
+        const { data } = await register({ variables: { email, password } })
+        token = data?.register?.token ?? null
       }
+      if (token) localStorage.setItem(AUTH_TOKEN_KEY, token)
       await client.resetStore()
       navigate('/dashboard', { replace: true })
     } catch (err: any) {

@@ -25,11 +25,11 @@ export class AuthResolver {
     @Args('email') email: string,
     @Args('password') password: string,
     @Context() ctx: any,
-  ): Promise<JwtPayload> {
+  ): Promise<JwtPayload & { token: string }> {
     const user = await this.authService.login(email, password)
     const token = this.authService.signToken(user)
     ctx.res.setCookie('access_token', token, COOKIE_OPTIONS)
-    return user
+    return { ...user, token }
   }
 
   @Mutation(() => AuthUser)
@@ -37,11 +37,11 @@ export class AuthResolver {
     @Args('email') email: string,
     @Args('password') password: string,
     @Context() ctx: any,
-  ): Promise<JwtPayload> {
+  ): Promise<JwtPayload & { token: string }> {
     const user = await this.authService.register(email, password)
     const token = this.authService.signToken(user)
     ctx.res.setCookie('access_token', token, COOKIE_OPTIONS)
-    return user
+    return { ...user, token }
   }
 
   @Mutation(() => Boolean)
@@ -51,10 +51,15 @@ export class AuthResolver {
   }
 
   @Query(() => AuthUser, { nullable: true })
-  me(@Context() ctx: any): JwtPayload | null {
-    const token = ctx.req.cookies?.access_token
+  me(@Context() ctx: any): (JwtPayload & { token: null }) | null {
+    const cookieToken = ctx.req.cookies?.access_token
+    const authHeader = ctx.req.headers?.authorization as string | undefined
+    const bearerToken = authHeader?.startsWith('Bearer ') ? authHeader.slice(7) : null
+    const token = cookieToken ?? bearerToken
     if (!token) return null
-    return this.authService.verifyToken(token)
+    const payload = this.authService.verifyToken(token)
+    if (!payload) return null
+    return { ...payload, token: null }
   }
 
   @UseGuards(JwtAuthGuard)

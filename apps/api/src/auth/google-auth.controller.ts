@@ -62,7 +62,7 @@ export class GoogleAuthController {
 
       const token = this.authService.signToken({ id: user.id, email: user.email })
       res.setCookie('access_token', token, COOKIE_OPTIONS)
-      res.code(302).header('location', `${clientUrl}/dashboard`).send()
+      res.code(302).header('location', `${clientUrl}/auth/callback#token=${token}`).send()
     } catch {
       res.code(302).header('location', `${clientUrl}/login?error=oauth_failed`).send()
     }

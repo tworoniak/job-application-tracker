@@ -2,6 +2,7 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { AppLayout } from './AppLayout'
 import { ProtectedRoute } from '@/features/auth/ProtectedRoute'
 import { LoginPage } from '@/features/auth/pages/LoginPage'
+import { AuthCallbackPage } from '@/features/auth/pages/AuthCallbackPage'
 import { DashboardPage } from '@/features/dashboard/pages/DashboardPage'
 import { ApplicationsPage } from '@/features/applications/pages/ApplicationsPage'
 import { ApplicationFormPage } from '@/features/applications/pages/ApplicationFormPage'
@@ -10,6 +11,7 @@ import { ApplicationDetailPage } from '@/features/applications/pages/Application
 export const AppRouter = () => (
   <Routes>
     <Route path="login" element={<LoginPage />} />
+    <Route path="auth/callback" element={<AuthCallbackPage />} />
     <Route element={<ProtectedRoute />}>
       <Route element={<AppLayout />}>
         <Route index element={<Navigate to="/dashboard" replace />} />

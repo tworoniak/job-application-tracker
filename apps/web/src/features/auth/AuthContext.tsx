@@ -1,6 +1,6 @@
 import { createContext, useContext, useCallback } from 'react'
 import { gql, useQuery, useMutation } from '@apollo/client'
-import { client } from '@/lib/graphql/client'
+import { client, AUTH_TOKEN_KEY } from '@/lib/graphql/client'
 
 interface AuthUser {
   id: string
@@ -42,6 +42,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const logout = useCallback(async () => {
     await logoutMutation()
+    localStorage.removeItem(AUTH_TOKEN_KEY)
     await client.clearStore()
     window.location.href = '/login'
   }, [logoutMutation])

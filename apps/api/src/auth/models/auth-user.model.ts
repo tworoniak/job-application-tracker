@@ -7,4 +7,7 @@ export class AuthUser {
 
   @Field()
   email: string
+
+  @Field(() => String, { nullable: true })
+  token: string | null
 }
