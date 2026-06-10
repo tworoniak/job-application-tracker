@@ -1,12 +1,3 @@
-import {
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Cell,
-} from 'recharts';
 import type { Outcome } from '@/features/applications/types';
 import { OUTCOME_LABELS, OUTCOME_STYLES } from '@/features/applications/types';
 
@@ -28,58 +19,35 @@ export const OutcomeChart = ({ data }: Props) => {
     );
   }
 
+  const max = chartData[0].count;
+
   return (
-    <div role='img' aria-label='Applications by outcome, bar chart'>
-      <ResponsiveContainer width='100%' height={chartData.length * 50}>
-        <BarChart
-          data={chartData}
-          layout='vertical'
-          margin={{ left: 8, right: 24, top: 0, bottom: 0 }}
-        >
-          <XAxis
-            type='number'
-            allowDecimals={false}
-            tick={{
-              fontSize: 11,
-              fill: 'rgba(0,0,0,0.40)',
-              fontFamily: 'var(--font-sans,-apple-system)',
-              letterSpacing: '-0.12px',
-            }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <YAxis
-            type='category'
-            dataKey='label'
-            width={148}
-            tick={{
-              fontSize: 12,
-              fill: 'rgba(0,0,0,0.72)',
-              fontFamily: 'var(--font-sans,-apple-system)',
-              letterSpacing: '-0.12px',
-            }}
-            axisLine={false}
-            tickLine={false}
-          />
-          <Tooltip
-            formatter={(value: number) => [value, 'Applications']}
-            contentStyle={{
-              fontSize: 12,
-              borderRadius: 8,
-              border: 'none',
-              boxShadow: 'rgba(0,0,0,0.16) 0px 4px 16px',
-              fontFamily: 'var(--font-sans,-apple-system)',
-              letterSpacing: '-0.12px',
-            }}
-            cursor={{ fill: 'rgba(0,0,0,0.03)' }}
-          />
-          <Bar dataKey='count' radius={[0, 4, 4, 0]}>
-            {chartData.map((entry) => (
-              <Cell key={entry.outcome} fill={OUTCOME_STYLES[entry.outcome].color} />
-            ))}
-          </Bar>
-        </BarChart>
-      </ResponsiveContainer>
+    <div
+      role='img'
+      aria-label='Applications by outcome, bar chart'
+      className='flex flex-col gap-3'
+    >
+      {chartData.map((entry) => (
+        <div key={entry.outcome}>
+          <div className='flex items-baseline justify-between mb-1'>
+            <span className='text-[13px] text-[rgba(0,0,0,0.72)] tracking-[-0.12px]'>
+              {entry.label}
+            </span>
+            <span className='text-[13px] font-medium text-apple-text-tertiary tracking-[-0.12px] tabular-nums'>
+              {entry.count}
+            </span>
+          </div>
+          <div className='h-2.5 md:h-5 w-full rounded-full bg-[rgba(0,0,0,0.06)]'>
+            <div
+              className='h-2.5 md:h-5 rounded-full transition-all duration-500'
+              style={{
+                width: `${(entry.count / max) * 100}%`,
+                backgroundColor: OUTCOME_STYLES[entry.outcome].color,
+              }}
+            />
+          </div>
+        </div>
+      ))}
     </div>
   );
 };
