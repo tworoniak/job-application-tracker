@@ -19,8 +19,20 @@ const WEEKLY_GOAL = 6;
 const NAV_ITEMS = [
   { to: '/dashboard', label: 'Dashboard', icon: Home },
   { to: '/applications', label: 'Applications', icon: LayoutList },
-  { to: '/pipeline', label: 'Pipeline', icon: Workflow, placeholder: true },
-  { to: '/interviews', label: 'Interviews', icon: Calendar, placeholder: true },
+  {
+    to: '/pipeline',
+    label: 'Pipeline',
+    icon: Workflow,
+    placeholder: true,
+    soon: true,
+  },
+  {
+    to: '/interviews',
+    label: 'Interviews',
+    icon: Calendar,
+    placeholder: true,
+    soon: true,
+  },
   { to: '/insights', label: 'Insights', icon: BarChart3, soon: true },
 ] as const;
 
@@ -35,14 +47,13 @@ export const Sidebar = ({ isOpen, onClose, onSearchClick }: SidebarProps) => {
   const { metrics } = useDashboardMetrics();
   const { user, logout } = useAuth();
 
-  const emailPrefix = user?.email.split('@')[0] ?? ''
-  const initials = emailPrefix.slice(0, 2).toUpperCase()
+  const emailPrefix = user?.email.split('@')[0] ?? '';
+  const initials = emailPrefix.slice(0, 2).toUpperCase();
 
   const thisWeekCount =
     metrics?.applicationsByWeek.find((w) => w.week === getCurrentISOWeek())
       ?.count ?? 0;
   const progress = Math.min((thisWeekCount / WEEKLY_GOAL) * 100, 100);
-
 
   return (
     <aside
